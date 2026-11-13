@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#234c3b">
+  <title>阵线 · IZE 布阵实验室</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div class="page-wrap">
+    <main>
+      <div class="workspace">
+        <aside class="panel palette-panel" aria-labelledby="palette-heading">
+          <div class="panel-heading"><span class="section-no">01</span><h2 id="palette-heading">植物 / 僵尸 / 特殊物件</h2><span id="roster-count" class="muted"></span></div>
+          <div class="side-tabs" role="group" aria-label="单位阵营"><button type="button" id="plants-tab" class="active" aria-pressed="true">植物</button><button type="button" id="zombies-tab" aria-pressed="false">僵尸</button><button type="button" id="special-tab" aria-pressed="false">特殊物件</button></div>
+          <label class="search-field"><span class="sr-only">搜索单位名称或英文名</span><span aria-hidden="true">⌕</span><input id="unit-search" type="search" placeholder="搜索单位名称…" autocomplete="off"></label>
+          <div id="unit-palette" class="unit-palette" aria-label="可放置单位"></div>
+          <div class="palette-tools"><button type="button" id="quick-rake" class="secondary-button">＋ 放置钉耙</button><button type="button" id="add-ladder" class="secondary-button" hidden>＋ 放置梯子</button></div><p class="palette-footnote">选中单位后点击棋盘放置。<br>同格可容纳多个僵尸与不同植物层。</p>
+        </aside>
+
+        <div class="board-inspector">
+        <section class="panel board-panel" aria-labelledby="board-heading">
+          <div class="panel-heading"><span class="section-no">02</span><h2 id="board-heading">地图</h2><span class="coordinate-label">5 ROWS × 9 COLS</span></div>
+          <div class="board-toolbar"><div id="tool-group" class="tool-group" role="group" aria-label="棋盘操作模式"><button type="button" id="place-tool" class="active" aria-pressed="true">＋ 放置</button><button type="button" id="inspect-tool" aria-pressed="false">↗ 查看</button></div><div class="history-actions"><button type="button" id="undo-button" title="撤销" aria-label="撤销上一步" disabled>↶</button><button type="button" id="redo-button" title="重做" aria-label="重做上一步" disabled>↷</button><button type="button" id="clear-button" class="text-button">清空</button></div></div>
+          <div class="board-scroll"><div class="board-frame"><div class="column-labels" aria-hidden="true"><span></span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></div><div id="board" class="board" aria-label="五行九列布阵棋盘"></div><div class="board-baseline" aria-hidden="true"><span>← 脑子 / 家</span><span>僵尸行进方向 ←</span></div></div></div>
+          <div class="board-caption"><span id="placement-hint">加载单位目录中…</span><span><i class="legend-dot plant-dot"></i>植物 <i class="legend-dot zombie-dot"></i>僵尸</span></div>
+          <div class="scenario-controls">
+            <label>结算规则<select id="mode-input"><option value="who_will_win">谁会赢 · 第三行</option><option value="ize">IZE · 多行脑子</option></select></label>
+            <label>随机种子<input id="seed-input" type="number" value="2026" step="1"></label>
+            <label>帧数上限<input id="frames-input" type="number" min="1" max="10000000" step="1" value="100000"></label>
+            <label>模拟轮数<input id="runs-input" type="number" min="1" max="100000" step="1" value="1"></label>
+          </div>
+          <details class="advanced-settings"><summary>场景进阶设置 <span>脑子 / 步行 / 叠放 / 钉耙</span></summary><div class="advanced-body"><label>步行模型<select id="movement-input"><option value="animation">动画步行</option><option value="mean">均速步行</option></select></label><label>磁铁距离<select id="magnet-input"><option value="horizontal">横向距离</option><option value="source">原版距离权重</option></select></label><label class="check-label"><input id="stacking-input" type="checkbox">允许同层植物叠放</label><fieldset class="brain-settings"><legend>脑子所在行与血量</legend><div id="brain-controls"></div></fieldset><fieldset class="brain-settings rake-settings"><legend>钉耙（一次性，默认第 3 行第 8 列）</legend><div id="rake-controls"></div><button type="button" id="add-rake" class="secondary-button">＋ 添加钉耙</button></fieldset></div></details>
+          <div class="run-row"><p><span class="small-caps">NOTE</span> 帧数是计算预算，不是游戏限时。<br>预算耗尽仍存活的对局将标记为「未决」。</p><button type="button" id="simulate-button" class="primary-button">开始推演 <span aria-hidden="true">↗</span></button></div>
+        </section>
+
+        <aside class="panel inspector-panel" aria-labelledby="inspector-heading">
+          <div class="panel-heading"><span class="section-no">03</span><h2 id="inspector-heading">格子详情</h2><span id="selected-coordinate" class="muted">—</span></div>
+          <div id="cell-units" class="cell-units"></div>
+          <div id="inspector-empty" class="empty-state"><div class="empty-cross" aria-hidden="true">＋</div><h3>落子，或选中一格</h3><p>血量、护甲、位置与特殊状态<br>都可以在这里逐项调整。</p></div>
+          <div id="unit-inspector" hidden><div id="selected-unit-title" class="selected-unit-title"></div><form id="property-form" class="property-form" autocomplete="off"></form><details class="raw-unit-details"><summary>查看 / 编辑单位 JSON</summary><label class="sr-only" for="unit-json">当前单位完整 JSON</label><textarea id="unit-json" spellcheck="false" rows="8"></textarea><button type="button" id="apply-unit-json" class="secondary-button">应用单位 JSON</button></details><button type="button" id="delete-unit" class="danger-button">移除此单位</button></div>
+        </aside>
+        </div>
+      </div>
+
+      <div class="bottom-grid">
+        <section class="panel code-panel" aria-labelledby="code-heading"><div class="panel-heading"><span class="section-no">04</span><h2 id="code-heading">导入 / 导出</h2><span class="muted">IMPORT / EXPORT</span></div><p class="panel-description">粘贴原版九格代码，或包含全部单位属性的场景 JSON。完整 JSON 不会丢失血量、计时与位置参数。</p><label class="sr-only" for="formation-code">九格代码或完整场景 JSON</label><textarea id="formation-code" rows="5" spellcheck="false" placeholder="P7|_|_|Z0|_|_|_|_|_&#10;或粘贴完整 JSON 初态…"></textarea><div class="code-actions"><label class="file-button secondary-button">打开文件<input id="import-file" type="file" accept=".json,.txt,application/json,text/plain"></label><button type="button" id="import-button" class="secondary-button">解析并载入</button><button type="button" id="show-json" class="text-button">查看完整 JSON</button><button type="button" id="copy-json" class="text-button">复制 JSON</button><button type="button" id="download-json" class="text-button">下载 JSON ↓</button></div></section>
+        <section class="panel results-panel" aria-labelledby="results-heading"><div class="panel-heading"><span class="section-no">05</span><h2 id="results-heading">模拟结果</h2><span id="result-tag" class="result-tag">尚未运行</span></div><div id="result-body" class="result-body"><p class="result-placeholder">阵型准备好了？<br><em>看看谁能留到最后。</em></p></div><p class="model-note">离线近似模型，不代表实机准确率。批量比例是模型样本频率，不是游戏胜率保证。</p></section>
+      </div>
+      <div id="status" class="status-line" role="status" aria-live="polite">正在连接本地模拟器…</div>
+    </main>
+    <footer><span>阵线 <b>／</b> IZE FIELD NOTES</span><span>从一格开始，把每个假设留成记录。</span><span id="model-label">LOCAL PREDICTION WORKBENCH</span></footer>
+  </div>
+</body>
+</html>

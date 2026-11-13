@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "seed": 42,
+  "brains": [2, 4],
+  "plants": [],
+  "zombies": [{"type": "normal", "row": 2, "col": 2}]
+}

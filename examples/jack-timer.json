@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "seed": 2026,
+  "mode": "who_will_win",
+  "max_frames": 1000,
+  "zombies": [
+    {"type": "jack_in_the_box", "row": 3, "x": 600, "jack_countdown_frames": 300}
+  ]
+}

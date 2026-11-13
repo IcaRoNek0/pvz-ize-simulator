@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "seed": 2026,
+  "brains": [3],
+  "plants": [
+    {"type": "starfruit", "row": 2, "col": 2},
+    {"type": "kernelpult", "row": 3, "col": 1},
+    {"type": "magnet_shroom", "row": 3, "col": 2},
+    {"type": "wallnut", "row": 3, "col": 4},
+    {"type": "umbrella_leaf", "row": 4, "col": 3},
+    {"type": "sunflower", "row": 4, "col": 4}
+  ],
+  "zombies": [
+    {"type": "pole_vaulting", "row": 3, "col": 6},
+    {"type": "ladder", "row": 3, "col": 7},
+    {"type": "digger", "row": 3, "col": 8},
+    {"type": "dancing", "row": 2, "col": 6},
+    {"type": "bungee", "row": 4, "col": 4}
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "seed": 12,
+  "runs": 20,
+  "movement_mode": "animation",
+  "max_frames": 10000,
+  "brains": [3],
+  "plants": [{"type": "kernelpult", "row": 3, "col": 1}],
+  "zombies": [{"type": "conehead", "row": 3, "col": 5, "helmet_hp": 150}]
+}

@@ -1,0 +1,61 @@
+{
+  "version": 2,
+  "seed": 2026,
+  "runs": 20,
+  "max_frames": 10000,
+  "movement_mode": "mean",
+  "brains": [
+    2
+  ],
+  "plants": [
+    {
+      "id": "garlic",
+      "type": "garlic",
+      "row": 3,
+      "col": 4,
+      "hp": 200,
+      "garlic_direction": "random"
+    },
+    {
+      "id": "corn",
+      "type": "kernelpult",
+      "row": 3,
+      "col": 2,
+      "hp": 250,
+      "layer": "main"
+    },
+    {
+      "id": "shell",
+      "type": "pumpkin",
+      "row": 3,
+      "col": 2,
+      "hp": 1000,
+      "layer": "shell"
+    }
+  ],
+  "zombies": [
+    {
+      "id": "digger",
+      "type": "digger",
+      "row": 5,
+      "col": 7,
+      "underground": false,
+      "hp": 200
+    },
+    {
+      "id": "enemy",
+      "type": "normal",
+      "row": 3,
+      "col": 6,
+      "hp": 200
+    },
+    {
+      "id": "friend",
+      "type": "normal",
+      "row": 1,
+      "col": 5,
+      "hypnotized": true,
+      "hp": 180
+    }
+  ]
+}

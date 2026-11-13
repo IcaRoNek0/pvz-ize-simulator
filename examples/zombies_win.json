@@ -1,0 +1,6 @@
+{
+  "version": 1,
+  "seed": 42,
+  "plants": [{"type": "sunflower", "row": 3, "col": 3}],
+  "zombies": [{"type": "imp", "row": 3, "col": 6}]
+}

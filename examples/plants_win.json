@@ -1,0 +1,6 @@
+{
+  "version": 1,
+  "seed": 42,
+  "plants": [{"type": "peashooter", "row": 3, "col": 1, "cooldown": 1}],
+  "zombies": [{"type": "normal", "row": 3, "col": 8}]
+}

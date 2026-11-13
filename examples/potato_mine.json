@@ -1,0 +1,5 @@
+{
+  "version": 1,
+  "plants": [{"type": "potato_mine", "row": 3, "col": 2}],
+  "zombies": [{"type": "buckethead", "row": 3, "col": 3}]
+}

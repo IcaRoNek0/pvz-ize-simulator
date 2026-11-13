@@ -1,0 +1,6 @@
+{
+  "version": 1,
+  "brains": [3],
+  "plants": [],
+  "zombies": [{"type": "imp", "row": 1, "col": 6}]
+}

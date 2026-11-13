@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "seed": 2026,
+  "brains": [3],
+  "plants": [
+    {"type": "threepeater", "row": 3, "col": 1},
+    {"type": "snow_pea", "row": 3, "col": 2},
+    {"type": "wallnut", "row": 3, "col": 4},
+    {"type": "fume_shroom", "row": 2, "col": 3},
+    {"type": "magnet_shroom", "row": 4, "col": 3},
+    {"type": "spikeweed", "row": 4, "col": 4}
+  ],
+  "zombies": [
+    {"type": "buckethead", "row": 3, "col": 6},
+    {"type": "conehead", "row": 3, "col": 7},
+    {"type": "screen_door", "row": 2, "col": 6},
+    {"type": "football", "row": 4, "col": 6}
+  ]
+}
