@@ -9,7 +9,7 @@
 - `Screen Recording 2026-11-13 20.14.webm` 0 秒显示 **3/10**，第三行，多个单位重叠；该轮含紫色自定义物件和大型黄色自定义/无法确认物件，不计入自动准确率。
 - 该视频 90–180 秒的下一轮可见植物获胜，但初始位置与部分单位无法从压缩视频可靠还原，保留为观察记录，不直接计入自动评分。
 
-完整机器可读记录见 [`outputs/video_accuracy.json`](../outputs/video_accuracy.json)。
+完整机器可读录像观察见 [`outputs/video_accuracy.json`](../outputs/video_accuracy.json)；可复现对照结果见 [`docs/video_accuracy.latest.json`](video_accuracy.latest.json)。
 
 ## 评分规则
 
@@ -18,3 +18,13 @@
 3. 含无法确认或模拟器不支持的特殊物件的轮次不计入准确率。
 4. 结果不确定时保留 `unknown`，不强行判定。
 5. 当前可复现对照：`run/7` 模型为僵尸胜，与用户复核一致；`run/5` 模型为植物胜，与用户复核的僵尸胜不一致，仍需机制校准。
+
+## 当前统计（可复现命令）
+
+```sh
+python3 scripts/audit_recorded_rounds.py \
+  examples/video_round_observations.json \
+  --out docs/video_accuracy.latest.json
+```
+
+当前结果：`match=1`、`mismatch=1`、`skipped=4`。准确率按可评分对局计算为 **1/2 = 50%**；4 个跳过项含自定义/不支持物件或无法从录像可靠还原初态，不进入分母。

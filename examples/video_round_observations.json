@@ -1,0 +1,43 @@
+[
+  {
+    "id": "demo1-round7",
+    "scenario": "../examples/video_round_7.json",
+    "expected": "zombies",
+    "timestamp": "目标示范1.mov 0-80s",
+    "notes": "用户逐帧复核：两个矿工先后出土并被处理，铁桶进入家；同格矿工保留。"
+  },
+  {
+    "id": "run5-reference",
+    "scenario": "../examples/video_round_5.json",
+    "expected": "zombies",
+    "timestamp": "reference video: round 5",
+    "notes": "用户复核为后方僵尸进家；用于记录当前模型偏差。"
+  },
+  {
+    "id": "screen20-round3",
+    "expected": "plants",
+    "timestamp": "Screen Recording 2026-11-13 20.14.webm 0-90s",
+    "unsupported_or_custom": ["紫色自定义物件", "大型黄色自定义/无法确认物件"],
+    "notes": "结果可见但含不支持/无法确认物件，按规则跳过。"
+  },
+  {
+    "id": "screen20-round4",
+    "expected": "unknown",
+    "timestamp": "Screen Recording 2026-11-13 20.14.webm 90-180s",
+    "notes": "结果可见，但初始位置无法从压缩视频可靠还原；不构造猜测输入。"
+  },
+  {
+    "id": "screen20-round5",
+    "expected": "unknown",
+    "timestamp": "Screen Recording 2026-11-13 20.14.webm 180-280s",
+    "unsupported_or_custom": ["植物身份不确定", "可能存在附着小鬼"],
+    "notes": "阵容身份不确定，跳过。"
+  },
+  {
+    "id": "screen20-round6",
+    "expected": "unknown",
+    "timestamp": "Screen Recording 2026-11-13 20.14.webm 280-360s",
+    "unsupported_or_custom": ["钉耙/地面特殊物件初态无法可靠复原"],
+    "notes": "保留观察记录，不计入准确率。"
+  }
+]
