@@ -1,0 +1,68 @@
+{
+  "source_videos": [
+    {"path": "/Users/fattiger/Desktop/目标示范1.mov", "duration_s": 202.101667, "fps": 60},
+    {"path": "/Users/fattiger/Downloads/Screen Recording 2026-11-13 20.14.webm", "duration_s": 487.304, "fps": 60},
+    {"path": "/Users/fattiger/Downloads/Screen Recording 2026-11-13 19.07.webm", "duration_s": 627.114, "fps": 59.94},
+    {"path": "/Users/fattiger/Downloads/Screen Recording 2026-11-13 18.57.webm", "duration_s": 334.398, "fps": 120}
+  ],
+  "rounds": [
+    {
+      "video": "目标示范1.mov", "start_s": 0, "end_s": 79,
+      "ui_round": "unknown (old UI)",
+      "plants": ["repeater", "split_pea", "fume_shroom", "squash", "spikeweed", "wallnut"],
+      "zombies": ["buckethead", "digger", "digger"],
+      "row": 3, "overlap_visible": true,
+      "observed_result": "plants",
+      "evidence": "t=5,50,60 show the same six-vs-three lineup; t≈70 has no zombies and surviving plants; t≈80 transitions to the next lineup",
+      "supported_units_only": true
+    },
+    {
+      "video": "Screen Recording 2026-11-13 20.14.webm", "start_s": 0, "end_s": 90,
+      "ui_round": "3/10",
+      "plants_visual": ["spikerock-like blue plant", "puff_shroom-like", "ice_shroom-like blue plant", "aquatic green plant", "yellow shell-like plant", "purple football-like custom object"],
+      "zombies_visual": ["normal zombie", "balloon zombie", "large yellow shell-like object", "zomboni"],
+      "row": 3, "overlap_visible": true,
+      "observed_result": "plants",
+      "confidence": "medium",
+      "evidence": "t=0 lineup; t=70 field is cleared; t=80-90 transitions to current level 4",
+      "unsupported_or_custom": ["purple football-like custom object", "large yellow shell-like object"]
+    },
+    {
+      "video": "Screen Recording 2026-11-13 20.14.webm", "start_s": 90, "end_s": 180,
+      "ui_round": "4/10 (inferred from sequence)",
+      "plants_visual": ["potato_mine", "jalapeno", "ice_shroom", "cattail-like aquatic plant", "magnet_shroom", "snow_pea"],
+      "zombies_visual": ["gargantuar", "buckethead", "imp/attached zombie"],
+      "row": 3, "overlap_visible": true,
+      "observed_result": "plants",
+      "confidence": "medium",
+      "evidence": "t=100-160 lineup; t≈170 gargantuar is near death; t=180 shows plant-win explosion/result transition"
+    },
+    {
+      "video": "Screen Recording 2026-11-13 20.14.webm", "start_s": 180, "end_s": 280,
+      "ui_round": "5/10 (inferred from sequence)",
+      "plants_visual": ["mushroom-like plant", "jalapeno", "peashooter-like", "kernelpult", "puff_shroom"],
+      "zombies_visual": ["gargantuar", "possibly attached imp"],
+      "row": 3, "overlap_visible": true,
+      "observed_result": "zombies (likely)",
+      "confidence": "low",
+      "evidence": "t=190-260 lineup; t≈270-280 gargantuar has crossed to the plant/home side and sequence advances to current level 6",
+      "unsupported_or_custom": ["mushroom-like plant identity uncertain"]
+    },
+    {
+      "video": "Screen Recording 2026-11-13 20.14.webm", "start_s": 280, "end_s": 360,
+      "ui_round": "6/10 (inferred)",
+      "plants_visual": ["snow_pea-like", "spikeweed", "cabbage/kernelpult-like", "starfruit", "lily_pad-like"],
+      "zombies_visual": ["catapult zombie", "conehead zombie", "rake/ground object"],
+      "row": 3, "overlap_visible": true,
+      "observed_result": "unknown",
+      "confidence": "low",
+      "evidence": "t=290-300 start lineup; later frames not fully classified"
+    }
+  ],
+  "comparison_notes": [
+    "The video explicitly allows overlapping zombies; validation must not deduplicate same-row/same-cell units.",
+    "Old UI exposes a lineup before each fight; use that frame as the authoritative initial state, not a later gameplay frame.",
+    "Rows and exact columns cannot be inferred reliably from compressed video for every unit; unknown positions are marked rather than guessed.",
+    "Unsupported/custom objects are listed but should be excluded from automated accuracy scoring."
+  ]
+}

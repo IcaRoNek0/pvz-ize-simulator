@@ -37,6 +37,8 @@ label,.panel-description,.palette-footnote,.run-row p,.status-line{font-size:12p
 @media(max-width:1180px){.board-unit{width:30px;height:30px}}
 @media(max-width:620px){.board-unit{width:30px;height:30px}.ghost-unit{width:54px;height:54px}}
 .cell.cob-anchor{overflow:visible;z-index:3}
+.cell{overflow:visible}
+.cell .board-unit{z-index:2}
 .cell.cob-footprint{background:#c9d7b5;border-style:dashed}
 .cob-board-unit{width:66px;height:48px;border:0;background:transparent;position:relative;z-index:4}
 .cob-board-unit img{object-fit:contain}

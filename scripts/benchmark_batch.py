@@ -6,6 +6,8 @@ Usage: python3 scripts/benchmark_batch.py examples/v2_random.json --runs 100 --w
 from __future__ import annotations
 import argparse, json, time
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from pvz_ize.batch import run_batch, run_batch_parallel
 
 def main():
