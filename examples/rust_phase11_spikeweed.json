@@ -1,0 +1,26 @@
+{
+  "version": 2,
+  "seed": 46,
+  "max_frames": 1500,
+  "brains": [
+    3
+  ],
+  "plants": [
+    {
+      "id": "sp",
+      "type": "spikeweed",
+      "row": 3,
+      "col": 2
+    }
+  ],
+  "zombies": [
+    {
+      "id": "z",
+      "type": "conehead",
+      "row": 3,
+      "x": 100,
+      "speed": 0.001,
+      "helmet_hp": 370
+    }
+  ]
+}

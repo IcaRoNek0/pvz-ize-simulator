@@ -187,6 +187,7 @@ fn plant_default_hp(kind: &str) -> i32 {
     match kind {
         "wallnut" => 4_000,
         "tallnut" => 8_000,
+        "spikerock" => 450,
         _ => 300,
     }
 }
@@ -629,6 +630,10 @@ impl SimpleState {
         let mut cherry_explosions = 0_u64;
         let mut jalapeno_kills = 0_u64;
         let mut jalapeno_explosions = 0_u64;
+        let mut spikeweed_pulses = 0_u64;
+        let mut spikerock_pulses = 0_u64;
+        let mut hazard_kills = 0_u64;
+        let mut hazard_damage = 0_u64;
         for pi in 0..self.plants.len() {
             if self.plants[pi].hp <= 0 || self.plants[pi].kind != "cherry_bomb" {
                 continue;
@@ -714,6 +719,75 @@ impl SimpleState {
                 potato_explosions += 1;
             }
         }
+        // Ground hazards are never bite targets.  They arm when a zombie's
+        // hitbox overlaps the cell, then pulse after the native wind-up:
+        // spikeweed at timer 75 and spikerock at timers 70 and 32.  The
+        // shield is bypassed, while a carried helmet still absorbs damage,
+        // matching Simulator.damage(..., bypass=True).
+        for pi in 0..self.plants.len() {
+            let kind = self.plants[pi].kind.clone();
+            if self.plants[pi].hp <= 0 || !matches!(kind.as_str(), "spikeweed" | "spikerock") {
+                continue;
+            }
+            let px_fp = plant_x_fp(self.plants[pi].col);
+            let row = self.plants[pi].row;
+            let in_range = |z: &Zombie| {
+                z.status == UnitStatus::Active
+                    && z.hp > 0
+                    && !z.hypnotized
+                    && z.row == row
+                    // Normal/screen-door hitbox in this slice is origin
+                    // +[36,78]; use overlap rather than origin-only checks.
+                    && z.x_fp + 36_000 <= px_fp + 50_000
+                    && z.x_fp + 78_000 >= px_fp + 20_000
+            };
+            // `state_timer == 0` is the public ready state.  A positive
+            // timer denotes the private attacking animation; keeping this
+            // implicit avoids widening the stable JSON state schema.
+            if self.plants[pi].state_timer == 0 {
+                if self.zombies.iter().any(in_range) {
+                    self.plants[pi].state_timer = 100;
+                }
+                continue;
+            }
+            if self.plants[pi].state_timer > 0 {
+                self.plants[pi].state_timer -= 1;
+            }
+            let pulse = if kind == "spikeweed" {
+                self.plants[pi].state_timer == 75
+            } else {
+                self.plants[pi].state_timer == 70 || self.plants[pi].state_timer == 32
+            };
+            if pulse {
+                let ids: Vec<usize> = self
+                    .zombies
+                    .iter()
+                    .enumerate()
+                    .filter(|(_, z)| in_range(z))
+                    .map(|(zi, _)| zi)
+                    .collect();
+                for zi in ids {
+                    let z = &mut self.zombies[zi];
+                    hazard_damage += 1;
+                    let mut remaining = 20_i32;
+                    if z.helmet_hp > 0 {
+                        let absorbed = z.helmet_hp.min(remaining);
+                        z.helmet_hp -= absorbed;
+                        remaining -= absorbed;
+                    }
+                    z.hp = (z.hp - remaining).max(0);
+                    if z.hp == 0 {
+                        z.status = UnitStatus::Dead;
+                        hazard_kills += 1;
+                    }
+                }
+                if kind == "spikeweed" {
+                    spikeweed_pulses += 1;
+                } else {
+                    spikerock_pulses += 1;
+                }
+            }
+        }
         // High-health shells use the same bite pipeline; squash is a one-shot
         // close-range attacker in this first special-mechanism slice.
         for pi in 0..self.plants.len() {
@@ -766,7 +840,7 @@ impl SimpleState {
             }
         }
         let mut hits = 0_u64;
-        let mut deaths = squash_hits + potato_kills + cherry_kills + jalapeno_kills;
+        let mut deaths = squash_hits + potato_kills + cherry_kills + jalapeno_kills + hazard_kills;
         let mut chilled = 0_u64;
         for qi in 0..self.projectiles.len() {
             if !self.projectiles[qi].active {
@@ -888,6 +962,7 @@ impl SimpleState {
                     let px_fp = plant_x_fp(p.col);
                     p.hp > 0
                         && p.row == row
+                        && !matches!(p.kind.as_str(), "spikeweed" | "spikerock")
                         && !self
                             .ladders
                             .iter()
@@ -950,6 +1025,9 @@ impl SimpleState {
             ("explosion", potato_explosions),
             ("explosion", cherry_explosions),
             ("explosion", jalapeno_explosions),
+            ("spikeweed_pulse", spikeweed_pulses),
+            ("spikerock_pulse", spikerock_pulses),
+            ("damage", hazard_damage),
             ("chill_applied", chilled),
             ("digger_emerged", digger_emerged),
             ("rake_triggered", rake_hits),

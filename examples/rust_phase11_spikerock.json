@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "seed": 47,
+  "max_frames": 150,
+  "brains": [3],
+  "plants": [
+    {"id": "rock", "type": "spikerock", "row": 3, "col": 2}
+  ],
+  "zombies": [
+    {"id": "door", "type": "screen_door", "row": 3, "x": 100, "speed": 0.001}
+  ]
+}

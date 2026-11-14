@@ -73,3 +73,7 @@ python3 scripts/benchmark_rust_core.py \
 ```
 
 当前报告只证明 winner 与 Python oracle 一致；每次启动 Rust 子进程的切片基准不代表完整 Rust 引擎性能，且可能慢于 Python 进程池。完成单进程批量/Rayon 核心后才能重新评估速度。
+
+### Phase 11：地刺与地刺王
+
+`spikeweed` 与 `spikerock` 已加入 Rust slice：它们不会成为啃食目标，重叠僵尸后进入攻击计时；地刺在 75 tick 脉冲一次，地刺王在 70/32 tick 脉冲两次，伤害绕过铁门盾牌但保留头盔吸收。固定夹具为 `examples/rust_phase11_spikeweed.json` 与 `examples/rust_phase11_spikerock.json`，由 `scripts/compare_phase11_fixtures.py` 写入 `docs/rust_phase11_comparison.latest.json`。当前 gate 比较 winner、reason、frames 与关键终态字段；事件名称仍保留用于后续逐帧校准。

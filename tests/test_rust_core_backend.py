@@ -85,3 +85,15 @@ class RustCoreBridgeTests(unittest.TestCase):
         self.assertEqual(result["zombies"][0]["status"], "dead")
         self.assertEqual(result["zombies"][1]["status"], "active")
 
+    @unittest.skipUnless(rust_core_available(), "native Rust slice is not built")
+    def test_spikeweed_hazard_runs_through_rust(self):
+        result = run_rust_core({
+            "version": 2,
+            "max_frames": 150,
+            "plants": [{"type": "spikerock", "row": 3, "col": 2}],
+            "zombies": [{"type": "normal", "row": 3, "x": 100, "speed": 0.001}],
+            "brains": [3],
+        })
+        self.assertEqual(result["backend"], "rust-core-slice")
+        self.assertEqual(result["events"]["spikerock_pulse"], 3)
+

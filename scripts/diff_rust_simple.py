@@ -19,7 +19,7 @@ def python_reference(data):
         col=int(p.get("col",1)); kind=p.get("type","peashooter")
         if kind == "cob_cannon" and col >= 9:
             raise ValueError("cob_cannon left column must be 1..8")
-        default_hp={"wallnut":4000,"tallnut":8000}.get(kind,300)
+        default_hp={"wallnut":4000,"tallnut":8000,"spikerock":450}.get(kind,300)
         plants.append({"id":p.get("id",f"p{i+1}"),"type":kind,"row":int(p.get("row",3)),"col":col,"footprint":[col,col+1] if kind=="cob_cannon" else [col],"hp":int(p.get("hp",default_hp)),"cooldown":int(p.get("cooldown",0)),"state_timer":int(p.get("state_timer",0)),"layer":p.get("layer","main")})
     zombies=[]
     for i,z in enumerate(data.get("zombies", [])):
@@ -46,11 +46,13 @@ def python_reference(data):
         if not any(z["status"]=="active" and z["hp"]>0 and not z["hypnotized"] for z in zombies): return ("plants","no_on_board_zombies")
     max_frames=int(data.get("max_frames",100000))
     squash_hits=0; potato_kills=0; potato_explosions=0; cherry_kills=0; cherry_explosions=0; jalapeno_kills=0; jalapeno_explosions=0
+    spikeweed_pulses=0; spikerock_pulses=0; hazard_kills=0; hazard_damage=0
     result=terminal()
     while result is None and frame<max_frames:
         frame+=1
         squash_hits=0
         potato_kills=0; potato_explosions=0; cherry_kills=0; cherry_explosions=0; jalapeno_kills=0; jalapeno_explosions=0
+        spikeweed_pulses=0; spikerock_pulses=0; hazard_kills=0; hazard_damage=0
         for p in plants:
             if p["hp"]<=0 or p["type"]!="cherry_bomb": continue
             if p["state_timer"]==0: p["state_timer"]=100
@@ -83,6 +85,36 @@ def python_reference(data):
                     if z["status"]=="active" and z["hp"]>0 and not z["hypnotized"] and z["row"]==p["row"]:
                         z["hp"]=0; z["status"]="dead"; potato_kills+=1
                 p["hp"]=0; potato_explosions+=1
+        # Ground spikes arm on overlap, pulse on their native wind-up timers,
+        # and are never selected as zombie bite targets.  The Python oracle's
+        # bypass damage ignores shields but still consumes helmet armor.
+        for p in plants:
+            if p["hp"]<=0 or p["type"] not in ("spikeweed", "spikerock"): continue
+            px_fp=int(round((40+80*(p["col"]-1))*FP)); row=p["row"]
+            def in_range(z):
+                return (z["status"]=="active" and z["hp"]>0 and not z["hypnotized"]
+                        and z["row"]==row
+                        and z["x_fp"]+36000 <= px_fp+50000
+                        and z["x_fp"]+78000 >= px_fp+20000)
+            if p["state_timer"] == 0:
+                if any(in_range(z) for z in zombies): p["state_timer"] = 100
+                continue
+            p["state_timer"] -= 1
+            pulse = (p["type"] == "spikeweed" and p["state_timer"] == 75) or \
+                    (p["type"] == "spikerock" and p["state_timer"] in (70, 32))
+            if pulse:
+                for z in zombies:
+                    if not in_range(z): continue
+                    hazard_damage += 1
+                    remaining = max(0, 20)
+                    if z["helmet_hp"] > 0:
+                        absorbed = min(z["helmet_hp"], remaining)
+                        z["helmet_hp"] -= absorbed; remaining -= absorbed
+                    z["hp"] = max(0, z["hp"] - remaining)
+                    if z["hp"] == 0:
+                        z["status"] = "dead"; hazard_kills += 1
+                if p["type"] == "spikeweed": spikeweed_pulses += 1
+                else: spikerock_pulses += 1
         for p in plants:
             if p["hp"]<=0 or p["type"]!="squash": continue
             px_fp=int(round((40.0+80.0*(p["col"]-1))*FP))
@@ -142,7 +174,7 @@ def python_reference(data):
                 if target is not None:
                     ladders.append({"row":target["row"],"col":target["col"]}); z["tool"]=False; z["shield_hp"]=0; ev("ladder_placed"); continue
             zx_fp=z["x_fp"]; row=z["row"]
-            target=next((p for p in plants if p["hp"]>0 and p["row"]==row and not any(l["row"]==p["row"] and l["col"]==p["col"] for l in ladders) and zx_fp>=int(round((40+80*(p["col"]-1))*FP)) and zx_fp-int(round((40+80*(p["col"]-1))*FP))<=60000),None)
+            target=next((p for p in plants if p["hp"]>0 and p["type"] not in ("spikeweed", "spikerock") and p["row"]==row and not any(l["row"]==p["row"] and l["col"]==p["col"] for l in ladders) and zx_fp>=int(round((40+80*(p["col"]-1))*FP)) and zx_fp-int(round((40+80*(p["col"]-1))*FP))<=60000),None)
             if target is not None:
                 if z["age"]%4==0: target["hp"]=max(0,target["hp"]-4); ev("plant_bitten")
             else:
@@ -169,10 +201,13 @@ def python_reference(data):
     if potato_explosions: ev("explosion", potato_explosions)
     if cherry_explosions: ev("explosion", cherry_explosions)
     if jalapeno_explosions: ev("explosion", jalapeno_explosions)
+    if spikeweed_pulses: ev("spikeweed_pulse", spikeweed_pulses)
+    if spikerock_pulses: ev("spikerock_pulse", spikerock_pulses)
+    if hazard_damage: ev("damage", hazard_damage)
     if squash_hits:
         ev("squash_impact", squash_hits)
-    if squash_hits or potato_kills or cherry_kills or jalapeno_kills:
-        ev("zombie_died", squash_hits + potato_kills + cherry_kills + jalapeno_kills)
+    if squash_hits or potato_kills or cherry_kills or jalapeno_kills or hazard_kills:
+        ev("zombie_died", squash_hits + potato_kills + cherry_kills + jalapeno_kills + hazard_kills)
     public_zombies=[{k:v for k,v in z.items() if k!="x_fp"} for z in zombies]
     return {"winner":winner,"reason":reason,"frames":frame,"state":{"frame":frame,"mode":mode,"plants":plants,"zombies":public_zombies,"brains":brains,"projectiles":[{k:v for k,v in q.items() if k!="x_fp"} for q in projectiles],"events":events,"rakes":rakes,"ladders":ladders}}
 
