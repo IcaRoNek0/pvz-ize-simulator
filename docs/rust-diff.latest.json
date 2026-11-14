@@ -1,0 +1,241 @@
+{
+  "schema": 1,
+  "rust_binary": "/private/tmp/pvz-ize-simulator.igLHFO/native_sim/target/release/pvz-ize-native-sim",
+  "records": [
+    {
+      "scenario": "examples/plants_win.json",
+      "status": "mismatch",
+      "python": {
+        "winner": "plants",
+        "reason": "no_on_board_zombies",
+        "status": "finished",
+        "frames": 1669,
+        "brains": [
+          {
+            "row": 3,
+            "hp": 70
+          }
+        ],
+        "plants": [
+          {
+            "id": "p1",
+            "type": "peashooter",
+            "row": 3,
+            "col": 1,
+            "hp": 300,
+            "cooldown": 43,
+            "state_timer": 0,
+            "shots": [],
+            "target": null,
+            "state": "ready",
+            "recently_eaten": 0,
+            "layer": "main",
+            "garlic_direction": "random",
+            "animation_phase": null,
+            "animation_rate": null
+          }
+        ],
+        "zombies": [
+          {
+            "id": "z1",
+            "type": "normal",
+            "row": 3,
+            "x": 331.47600000002325,
+            "hp": 0,
+            "helmet_hp": 0,
+            "shield_hp": 0,
+            "speed": 0.143,
+            "age": 1669,
+            "chilled": 0,
+            "headless": true,
+            "eating": false,
+            "status": "dead",
+            "last_damage_age": 1566,
+            "phase": "initial",
+            "phase_timer": 0,
+            "direction": -1,
+            "target_col": null,
+            "target": null,
+            "tool": true,
+            "leader": null,
+            "buttered": 0,
+            "hypnotized": false,
+            "underground": null,
+            "animation_phase": null,
+            "frozen": 0,
+            "velocity_parameter": null,
+            "walk_variant": null,
+            "jack_countdown_frames": null
+          }
+        ],
+        "projectiles": [
+          {
+            "id": "q12",
+            "owner": "p1",
+            "row": 3,
+            "x": 316.45000000000016,
+            "kind": "pea",
+            "direction": 1,
+            "age": 65,
+            "last_torch": -1,
+            "active": true,
+            "y": null,
+            "vx": null,
+            "vy": 0,
+            "z": 0,
+            "vz": 0,
+            "target": null,
+            "motion": "straight"
+          }
+        ],
+        "pending_effects": {
+          "basketballs": [],
+          "garlic": {},
+          "boss": {}
+        },
+        "zombie_special_state": {},
+        "plant_head_state": {},
+        "active_hostile_zombies": 0,
+        "active_friendly_zombies": 0,
+        "ladders": [],
+        "events": {
+          "attack_started": 12,
+          "damage": 11,
+          "finished": 1,
+          "head_lost": 1,
+          "projectile_fired": 12,
+          "projectile_hit": 11,
+          "zombie_died": 1
+        }
+      },
+      "rust": {
+        "winner": "plants",
+        "reason": "no_on_board_zombies",
+        "status": null,
+        "frames": 3847,
+        "brains": null,
+        "plants": null,
+        "zombies": null,
+        "projectiles": null,
+        "pending_effects": null,
+        "zombie_special_state": null,
+        "plant_head_state": null,
+        "active_hostile_zombies": null,
+        "active_friendly_zombies": null,
+        "ladders": null,
+        "events": null
+      }
+    },
+    {
+      "scenario": "examples/zombies_win.json",
+      "status": "mismatch",
+      "python": {
+        "winner": "zombies",
+        "reason": "all_brains_eaten",
+        "status": "finished",
+        "frames": 1620,
+        "brains": [
+          {
+            "row": 3,
+            "hp": 0
+          }
+        ],
+        "plants": [
+          {
+            "id": "p1",
+            "type": "sunflower",
+            "row": 3,
+            "col": 3,
+            "hp": 0,
+            "cooldown": 0,
+            "state_timer": 0,
+            "shots": [],
+            "target": null,
+            "state": "destroyed",
+            "recently_eaten": 50,
+            "layer": "main",
+            "garlic_direction": "random",
+            "animation_phase": null,
+            "animation_rate": null
+          }
+        ],
+        "zombies": [
+          {
+            "id": "z1",
+            "type": "imp",
+            "row": 3,
+            "x": -31.612000000001498,
+            "hp": 70,
+            "helmet_hp": 0,
+            "shield_hp": 0,
+            "speed": 0.423,
+            "age": 1620,
+            "chilled": 0,
+            "headless": false,
+            "eating": true,
+            "status": "active",
+            "last_damage_age": 0,
+            "phase": "initial",
+            "phase_timer": 0,
+            "direction": -1,
+            "target_col": null,
+            "target": null,
+            "tool": true,
+            "leader": null,
+            "buttered": 0,
+            "hypnotized": false,
+            "underground": null,
+            "animation_phase": null,
+            "frozen": 0,
+            "velocity_parameter": null,
+            "walk_variant": null,
+            "jack_countdown_frames": null
+          }
+        ],
+        "projectiles": [],
+        "pending_effects": {
+          "basketballs": [],
+          "garlic": {},
+          "boss": {}
+        },
+        "zombie_special_state": {},
+        "plant_head_state": {},
+        "active_hostile_zombies": 1,
+        "active_friendly_zombies": 0,
+        "ladders": [],
+        "events": {
+          "brain_bitten": 70,
+          "brain_eaten": 1,
+          "eating_started": 2,
+          "finished": 1,
+          "plant_bitten": 75,
+          "plant_died": 1,
+          "walking_started": 1
+        }
+      },
+      "rust": {
+        "winner": "plants",
+        "reason": "no_on_board_zombies",
+        "status": null,
+        "frames": 2728,
+        "brains": null,
+        "plants": null,
+        "zombies": null,
+        "projectiles": null,
+        "pending_effects": null,
+        "zombie_special_state": null,
+        "plant_head_state": null,
+        "active_hostile_zombies": null,
+        "active_friendly_zombies": null,
+        "ladders": null,
+        "events": null
+      }
+    }
+  ],
+  "status": "mismatch",
+  "counts": {
+    "match": 0,
+    "mismatch": 2,
+    "error": 0
+  }
+}
