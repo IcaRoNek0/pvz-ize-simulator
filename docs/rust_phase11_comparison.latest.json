@@ -3,6 +3,7 @@
     {
       "comparison": {
         "frame_match": true,
+        "hazard_projection_match": true,
         "python_exit_ok": true,
         "reason_match": true,
         "rust_exit_ok": true,
@@ -76,6 +77,7 @@
     {
       "comparison": {
         "frame_match": true,
+        "hazard_projection_match": true,
         "python_exit_ok": true,
         "reason_match": true,
         "rust_exit_ok": true,

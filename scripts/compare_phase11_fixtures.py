@@ -41,17 +41,31 @@ def main():
         py, p = run([sys.executable, "-m", "pvz_ize", "run", str(fixture), "--json"])
         rs, r = run([str(RUST), "--slice", "simple"],
                     stdin=fixture.read_text(encoding="utf-8"))
+        py_compact, rust_compact = compact(p), compact(r)
+        def hazard_view(value):
+            if not value:
+                return None
+            events = value.get("events", {})
+            return {
+                "plants": value.get("plants"),
+                "zombies": value.get("zombies"),
+                # Python's public counter reports shared damage but not the
+                # Rust-specific pulse labels; retain pulse labels in the raw
+                # report and compare the shared observable here.
+                "events": {"damage": events.get("damage", 0)},
+            }
         comparison = {
             "python_exit_ok": bool(p) and py.returncode in (0, 2),
             "rust_exit_ok": rs.returncode == 0,
             "winner_match": bool(p and r and p.get("winner") == r.get("winner")),
             "reason_match": bool(p and r and p.get("reason") == r.get("reason")),
             "frame_match": bool(p and r and p.get("frames") == r.get("frames")),
+            "hazard_projection_match": bool(py_compact and rust_compact and hazard_view(py_compact) == hazard_view(rust_compact)),
         }
         rows.append({"fixture": str(fixture),
                      "sha256": hashlib.sha256(fixture.read_bytes()).hexdigest(),
-                     "python": {"exit_status": py.returncode, "compact": compact(p), "stdout": py.stdout, "stderr": py.stderr},
-                     "rust": {"exit_status": rs.returncode, "compact": compact(r), "stdout": rs.stdout, "stderr": rs.stderr},
+                     "python": {"exit_status": py.returncode, "compact": py_compact, "stdout": py.stdout, "stderr": py.stderr},
+                     "rust": {"exit_status": rs.returncode, "compact": rust_compact, "stdout": rs.stdout, "stderr": rs.stderr},
                      "comparison": comparison})
     artifact = {"schema": "pvz-ize/rust-phase11-fixtures/v1", "rust_binary": str(RUST), "fixtures": rows}
     out = ROOT / "docs" / "rust_phase11_comparison.latest.json"

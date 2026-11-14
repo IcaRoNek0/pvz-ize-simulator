@@ -1313,4 +1313,31 @@ mod tests {
         assert_eq!(s.plants[0].hp, 296);
         assert_eq!(s.events.get("plant_bitten"), Some(&1));
     }
+
+    #[test]
+    fn simple_spikeweed_pulses_after_windup_and_is_not_bitten() {
+        let text = r#"{"max_frames":26,"plants":[{"type":"spikeweed","row":3,"col":2}],"zombies":[{"type":"normal","row":3,"x":100,"speed":0.0}],"brains":[3]}"#;
+        let mut s = SimpleState::from(parse_scenario(text).unwrap());
+        for _ in 0..26 {
+            s.step();
+        }
+        assert_eq!(s.plants[0].hp, 300);
+        assert_eq!(s.zombies[0].hp, 250);
+        assert_eq!(s.events.get("spikeweed_pulse"), Some(&1));
+        assert_eq!(s.events.get("plant_bitten"), None);
+    }
+
+    #[test]
+    fn simple_spikerock_pulses_twice_and_bypasses_screen_door() {
+        let text = r#"{"max_frames":70,"plants":[{"type":"spikerock","row":3,"col":2}],"zombies":[{"type":"screen_door","row":3,"x":100,"speed":0.0,"shield_hp":1100}],"brains":[3]}"#;
+        let mut s = SimpleState::from(parse_scenario(text).unwrap());
+        for _ in 0..70 {
+            s.step();
+        }
+        assert_eq!(s.plants[0].hp, 450);
+        assert_eq!(s.zombies[0].hp, 230);
+        assert_eq!(s.zombies[0].shield_hp, 1100);
+        assert_eq!(s.events.get("spikerock_pulse"), Some(&2));
+        assert_eq!(s.events.get("plant_bitten"), None);
+    }
 }
