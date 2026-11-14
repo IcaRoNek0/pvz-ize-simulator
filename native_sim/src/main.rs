@@ -1,5 +1,6 @@
 use pvz_ize_native_sim::{parse_scenario, CoreState};
 use std::io::{self, Read};
+
 fn main() {
     let mut input = String::new();
     if let Err(error) = io::stdin().read_to_string(&mut input) {
@@ -13,9 +14,11 @@ fn main() {
             std::process::exit(2);
         }
     };
-    let state = CoreState::from(scenario);
+    let max_frames = scenario.max_frames;
+    let mode = scenario.mode.clone();
+    let result = CoreState::from(scenario).run_motion(max_frames, &mode);
     println!(
         "{}",
-        serde_json::to_string(&state).expect("serialize state")
+        serde_json::to_string(&result).expect("serialize result")
     );
 }

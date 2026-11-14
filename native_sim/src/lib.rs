@@ -382,6 +382,14 @@ impl From<Scenario> for CoreState {
     }
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct CoreResult {
+    pub winner: Option<String>,
+    pub reason: Option<String>,
+    pub frames: u64,
+    pub state: CoreState,
+}
+
 impl CoreState {
     /// One deterministic movement-only tick.  Combat and special behavior are
     /// intentionally not implemented here yet; this boundary is used by the
@@ -395,12 +403,73 @@ impl CoreState {
             let direction = if z.hypnotized { 1.0 } else { -1.0 };
             z.x += direction * z.speed;
             z.age += 1;
+            // This is the movement-only boundary.  The full Python model uses
+            // type-specific house thresholds and brain-bite combat; those are
+            // deliberately left for the next migration slice.
             if z.x <= -80.0 {
                 z.status = UnitStatus::Exited;
-            }
-            if z.x <= 20.0 && !z.hypnotized {
+            } else if z.x <= 20.0 && !z.hypnotized {
                 z.status = UnitStatus::EnteredHouse;
             }
+        }
+    }
+
+    /// Return the terminal predicate for the currently ported movement slice.
+    /// A hostile zombie is considered on-board only while active and alive;
+    /// hypnotized zombies do not block the plant-side terminal state.
+    pub fn terminal(&self, mode: &str) -> Option<(String, String)> {
+        if self.brains.iter().all(|brain| brain.hp <= 0) {
+            return Some(("zombies".into(), "all_brains_eaten".into()));
+        }
+        let active_hostile = self
+            .zombies
+            .iter()
+            .any(|z| z.status == UnitStatus::Active && z.hp > 0 && !z.hypnotized);
+        if mode == "who_will_win" {
+            let row_three_threat = self.zombies.iter().any(|z| {
+                z.status == UnitStatus::Active
+                    && z.hp > 0
+                    && z.row == 3
+                    && !z.hypnotized
+                    && !z.headless
+            });
+            if !row_three_threat {
+                return Some(("plants".into(), "no_row_3_threats".into()));
+            }
+        } else if !active_hostile {
+            return Some(("plants".into(), "no_on_board_zombies".into()));
+        }
+        None
+    }
+
+    /// Run the currently ported movement-only slice and return a stable JSON
+    /// result.  It is intentionally not wired into the production Python
+    /// backend until differential projections pass for all migrated modules.
+    pub fn run_motion(mut self, max_frames: u64, mode: &str) -> CoreResult {
+        if let Some((winner, reason)) = self.terminal(mode) {
+            return CoreResult {
+                winner: Some(winner),
+                reason: Some(reason),
+                frames: self.frame,
+                state: self,
+            };
+        }
+        while self.frame < max_frames {
+            self.step_motion();
+            if let Some((winner, reason)) = self.terminal(mode) {
+                return CoreResult {
+                    winner: Some(winner),
+                    reason: Some(reason),
+                    frames: self.frame,
+                    state: self,
+                };
+            }
+        }
+        CoreResult {
+            winner: None,
+            reason: Some("max_frames_reached".into()),
+            frames: self.frame,
+            state: self,
         }
     }
 }
@@ -433,5 +502,27 @@ mod tests {
         s.step_motion();
         assert_eq!(s.frame, 1);
         assert!((s.zombies[0].x - 489.857).abs() < 1e-9);
+    }
+    #[test]
+    fn repeated_steps_advance_age_and_terminal_when_empty() {
+        let mut s = CoreState::from(parse_scenario(sample()).unwrap());
+        s.zombies.clear();
+        assert_eq!(
+            s.terminal("ize"),
+            Some(("plants".into(), "no_on_board_zombies".into()))
+        );
+        let result = s.run_motion(3, "ize");
+        assert_eq!(result.frames, 0);
+        assert_eq!(result.winner.as_deref(), Some("plants"));
+    }
+
+    #[test]
+    fn brain_death_has_priority_over_empty_board() {
+        let mut s = CoreState::from(parse_scenario(sample()).unwrap());
+        s.brains[0].hp = 0;
+        assert_eq!(
+            s.terminal("ize"),
+            Some(("zombies".into(), "all_brains_eaten".into()))
+        );
     }
 }
