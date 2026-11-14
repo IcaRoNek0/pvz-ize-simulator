@@ -9,9 +9,9 @@
   {
     "id": "bucket-armor",
     "mechanism": "armor",
-    "profile": "terminal",
+    "profile": "simple",
     "scenario": "rust_migration_armor.json",
-    "expected_status": "mismatch_until_ported"
+    "expected_status": "match"
   },
   {
     "id": "ladder-placement",

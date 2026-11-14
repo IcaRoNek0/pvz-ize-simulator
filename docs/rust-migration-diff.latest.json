@@ -120,112 +120,117 @@
     {
       "id": "bucket-armor",
       "mechanism": "armor",
-      "profile": "terminal",
+      "profile": "simple",
       "scenario": "/private/tmp/pvz-ize-simulator.igLHFO/examples/rust_migration_armor.json",
-      "expected_status": "mismatch_until_ported",
-      "actual_status": "mismatch",
-      "exit_code": 2,
+      "expected_status": "match",
+      "actual_status": "match",
+      "exit_code": 0,
       "comparison": {
         "scenario": "/private/tmp/pvz-ize-simulator.igLHFO/examples/rust_migration_armor.json",
-        "status": "mismatch",
+        "status": "match",
         "python": {
-          "winner": "undecided",
-          "reason": "max_frames_reached",
-          "status": "timeout",
-          "frames": 1200,
-          "brains": [
-            {
-              "row": 3,
-              "hp": 70
+          "winner": "plants",
+          "reason": "no_on_board_zombies",
+          "frames": 911,
+          "state": {
+            "frame": 911,
+            "plants": [
+              {
+                "id": "p1",
+                "type": "repeater",
+                "row": 3,
+                "col": 1,
+                "hp": 300,
+                "cooldown": 140,
+                "state_timer": 0,
+                "layer": "main"
+              }
+            ],
+            "zombies": [
+              {
+                "id": "z1",
+                "type": "buckethead",
+                "row": 3,
+                "col": 5,
+                "x": 199.87,
+                "hp": 0,
+                "helmet_hp": 0,
+                "shield_hp": 0,
+                "speed": 0.143,
+                "age": 910,
+                "chilled": 0,
+                "headless": false,
+                "hypnotized": false,
+                "tool": true,
+                "underground": null,
+                "status": "dead"
+              }
+            ],
+            "brains": [
+              {
+                "row": 3,
+                "hp": 70
+              }
+            ],
+            "projectiles": [],
+            "events": {
+              "projectile_fired": 14,
+              "projectile_hit": 14,
+              "zombie_died": 1
             }
-          ],
-          "plants": [
-            {
-              "id": "p1",
-              "type": "repeater",
-              "row": 3,
-              "col": 1,
-              "hp": 300,
-              "cooldown": 42,
-              "state_timer": 0,
-              "shots": [],
-              "target": null,
-              "state": "ready",
-              "recently_eaten": 0,
-              "layer": "main",
-              "garlic_direction": "random",
-              "animation_phase": null,
-              "animation_rate": null
-            }
-          ],
-          "zombies": [
-            {
-              "id": "z1",
-              "type": "buckethead",
-              "row": 3,
-              "x": 158.40000000001388,
-              "hp": 270,
-              "helmet_hp": 780,
-              "shield_hp": 0,
-              "speed": 0.143,
-              "age": 1200,
-              "chilled": 0,
-              "headless": false,
-              "eating": false,
-              "status": "active",
-              "last_damage_age": 1171,
-              "phase": "initial",
-              "phase_timer": 0,
-              "direction": -1,
-              "target_col": null,
-              "target": null,
-              "tool": true,
-              "leader": null,
-              "buttered": 0,
-              "hypnotized": false,
-              "underground": null,
-              "animation_phase": null,
-              "frozen": 0,
-              "velocity_parameter": null,
-              "walk_variant": null,
-              "jack_countdown_frames": null
-            }
-          ],
-          "projectiles": [],
-          "pending_effects": {
-            "basketballs": [],
-            "garlic": {},
-            "boss": {}
-          },
-          "zombie_special_state": {},
-          "plant_head_state": {},
-          "active_hostile_zombies": 1,
-          "active_friendly_zombies": 0,
-          "ladders": [],
-          "events": {
-            "attack_started": 16,
-            "damage": 16,
-            "finished": 1,
-            "projectile_fired": 16,
-            "projectile_hit": 16
           }
         },
         "rust": {
-          "winner": null,
-          "reason": "max_frames_reached",
-          "status": null,
-          "frames": 1200,
-          "brains": null,
-          "plants": null,
-          "zombies": null,
-          "projectiles": null,
-          "pending_effects": null,
-          "zombie_special_state": null,
-          "plant_head_state": null,
-          "active_hostile_zombies": null,
-          "active_friendly_zombies": null,
-          "ladders": null,
-          "events": null
+          "winner": "plants",
+          "reason": "no_on_board_zombies",
+          "frames": 911,
+          "state": {
+            "frame": 911,
+            "plants": [
+              {
+                "id": "p1",
+                "type": "repeater",
+                "row": 3,
+                "col": 1,
+                "hp": 300,
+                "cooldown": 140,
+                "state_timer": 0,
+                "layer": "main"
+              }
+            ],
+            "zombies": [
+              {
+                "id": "z1",
+                "type": "buckethead",
+                "row": 3,
+                "col": 5,
+                "x": 199.87,
+                "hp": 0,
+                "helmet_hp": 0,
+                "shield_hp": 0,
+                "speed": 0.143,
+                "age": 910,
+                "chilled": 0,
+                "headless": false,
+                "hypnotized": false,
+                "tool": true,
+                "underground": null,
+                "status": "dead"
+              }
+            ],
+            "brains": [
+              {
+                "row": 3,
+                "hp": 70
+              }
+            ],
+            "projectiles": [],
+            "events": {
+              "projectile_fired": 14,
+              "projectile_hit": 14,
+              "zombie_died": 1
+            }
+          }
         }
       }
     },
@@ -485,8 +490,8 @@
     }
   ],
   "counts": {
-    "match": 1,
-    "mismatch": 3,
+    "match": 2,
+    "mismatch": 2,
     "error": 0
   },
   "notes": [
