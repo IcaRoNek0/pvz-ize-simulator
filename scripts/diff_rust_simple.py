@@ -21,10 +21,14 @@ def python_reference(data):
     for i,z in enumerate(data.get("zombies", [])):
         kind=z.get("type","normal"); col=z.get("col")
         x=float(z["x"]) if "x" in z else 10.0+80.0*(int(col)-1)
-        zombies.append({"id":z.get("id",f"z{i+1}"),"type":kind,"row":int(z.get("row",3)),"col":int(round((x-10.0)/80.0))+1,"x":x,"x_fp":int(round(x*FP)),"hp":int(z.get("hp",270)),"helmet_hp":int(z.get("helmet_hp",0)),"shield_hp":int(z.get("shield_hp",0)),"speed":float(z.get("speed",0.143)),"age":int(z.get("age",0)),"chilled":int(z.get("chilled",0)),"headless":bool(z.get("headless",False)),"hypnotized":bool(z.get("hypnotized",False)),"tool":bool(z.get("tool",True)),"underground":z.get("underground") if isinstance(z.get("underground"),bool) else None,"status":"active"})
+        default_hp = 500 if kind == "ladder" else 270
+        default_helmet = 100 if kind == "digger" else 0
+        default_shield = 500 if kind == "ladder" else 0
+        zombies.append({"id":z.get("id",f"z{i+1}"),"type":kind,"row":int(z.get("row",3)),"col":int(round((x-10.0)/80.0))+1,"x":x,"x_fp":int(round(x*FP)),"hp":int(z.get("hp",default_hp)),"helmet_hp":int(z.get("helmet_hp",default_helmet)),"shield_hp":int(z.get("shield_hp",default_shield)),"speed":float(z.get("speed",0.143)),"age":int(z.get("age",0)),"chilled":int(z.get("chilled",0)),"headless":bool(z.get("headless",False)),"hypnotized":bool(z.get("hypnotized",False)),"tool":bool(z.get("tool",True)),"underground":z.get("underground") if isinstance(z.get("underground"),bool) else None,"status":"active"})
     brains=[]
     for b in data.get("brains",[3]): brains.append({"row":int(b if isinstance(b,int) else b["row"]),"hp":70 if isinstance(b,int) else int(b.get("hp",70))})
     rakes=[{"row":int(r["row"]),"col":int(r["col"])} for r in data.get("rakes",[])]
+    ladders=[{"row":int(l["row"]),"col":int(l["col"])} for l in data.get("ladders",[])]
     projectiles=[]; events={}; frame=0
     def ev(name,n=1): events[name]=events.get(name,0)+n
     def terminal():
@@ -78,8 +82,14 @@ def python_reference(data):
             if z.get("underground") is True:
                 if z["age"]>=2: z["underground"]=False; ev("digger_emerged")
                 continue
+            if z["type"]=="ladder" and z["tool"] and z["shield_hp"]==0:
+                z["tool"]=False
+            if z["type"]=="ladder" and z["tool"] and z["shield_hp"]>0:
+                target=next((p for p in plants if p["hp"]>0 and p["type"] in ("wallnut","tallnut") and p["row"]==z["row"] and int(round((40+80*(p["col"]-1))*FP))-60000<=z["x_fp"]<=int(round((40+80*(p["col"]-1))*FP))+70000 and not any(l["row"]==p["row"] and l["col"]==p["col"] for l in ladders)),None)
+                if target is not None:
+                    ladders.append({"row":target["row"],"col":target["col"]}); z["tool"]=False; z["shield_hp"]=0; ev("ladder_placed"); continue
             zx_fp=z["x_fp"]; row=z["row"]
-            target=next((p for p in plants if p["hp"]>0 and p["row"]==row and zx_fp>=int(round((40+80*(p["col"]-1))*FP)) and zx_fp-int(round((40+80*(p["col"]-1))*FP))<=60000),None)
+            target=next((p for p in plants if p["hp"]>0 and p["row"]==row and not any(l["row"]==p["row"] and l["col"]==p["col"] for l in ladders) and zx_fp>=int(round((40+80*(p["col"]-1))*FP)) and zx_fp-int(round((40+80*(p["col"]-1))*FP))<=60000),None)
             if target is not None:
                 if z["age"]%4==0: target["hp"]=max(0,target["hp"]-4); ev("plant_bitten")
             else:
@@ -107,7 +117,7 @@ def python_reference(data):
         ev("squash_impact", squash_hits)
         ev("zombie_died", squash_hits)
     public_zombies=[{k:v for k,v in z.items() if k!="x_fp"} for z in zombies]
-    return {"winner":winner,"reason":reason,"frames":frame,"state":{"frame":frame,"plants":plants,"zombies":public_zombies,"brains":brains,"projectiles":[{k:v for k,v in q.items() if k!="x_fp"} for q in projectiles],"events":events,"rakes":rakes}}
+    return {"winner":winner,"reason":reason,"frames":frame,"state":{"frame":frame,"plants":plants,"zombies":public_zombies,"brains":brains,"projectiles":[{k:v for k,v in q.items() if k!="x_fp"} for q in projectiles],"events":events,"rakes":rakes,"ladders":ladders}}
 
 def main():
     ap=argparse.ArgumentParser(); ap.add_argument("scenarios",nargs="+",type=Path); ap.add_argument("--rust-binary",type=Path,default=ROOT/"native_sim/target/release/pvz-ize-native-sim"); args=ap.parse_args()

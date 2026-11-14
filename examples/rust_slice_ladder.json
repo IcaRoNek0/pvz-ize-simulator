@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "max_frames": 1,
+  "brains": [3],
+  "plants": [
+    {"type": "wallnut", "row": 3, "col": 1}
+  ],
+  "zombies": [
+    {"type": "ladder", "row": 3, "x": 90}
+  ]
+}

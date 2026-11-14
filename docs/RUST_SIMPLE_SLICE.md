@@ -11,7 +11,8 @@ python3 scripts/diff_rust_simple.py \
   examples/rust_slice_empty.json examples/rust_slice_nuts.json \
   examples/rust_slice_squash.json examples/rust_slice_ice.json \
   examples/rust_slice_repeater.json examples/rust_slice_digger.json \
-  examples/rust_slice_armor_helmet.json examples/rust_slice_armor_shield.json
+  examples/rust_slice_armor_helmet.json examples/rust_slice_armor_shield.json \
+  examples/rust_slice_ladder.json
 ```
 
 当前十份均应输出 `status: "match"` 并以退出码 0 结束：
@@ -26,6 +27,7 @@ python3 scripts/diff_rust_simple.py \
 - `rust_slice_digger.json`：矿工地下两帧后出土。
 - `rust_slice_armor_helmet.json`：普通豌豆先扣除铁桶僵尸的帽子耐久，再扣本体。
 - `rust_slice_armor_shield.json`：普通豌豆先扣除铁门僵尸的盾牌耐久，再扣本体。
+- `rust_slice_ladder.json`：带梯僵尸在坚果前放置梯子。
 
 护甲顺序与 Python `Simulator.damage` 一致：普通投射物先消耗
 `shield_hp`，剩余伤害再消耗 `helmet_hp`，最后作用于 `hp`；每层耐久降到零时

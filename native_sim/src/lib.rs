@@ -188,6 +188,27 @@ fn plant_default_hp(kind: &str) -> i32 {
     }
 }
 
+fn zombie_default_hp(kind: &str) -> i32 {
+    match kind {
+        "ladder" => 500,
+        _ => 270,
+    }
+}
+
+fn zombie_default_helmet(kind: &str) -> i32 {
+    match kind {
+        "digger" => 100,
+        _ => 0,
+    }
+}
+
+fn zombie_default_shield(kind: &str) -> i32 {
+    match kind {
+        "ladder" => 500,
+        _ => 0,
+    }
+}
+
 fn spawn_offset(kind: &str) -> f64 {
     match kind {
         "bungee" => 0.0,
@@ -294,6 +315,9 @@ pub fn parse_scenario(input: &str) -> Result<Scenario, InputError> {
             let c = ((x - 40.0 - offset) / 80.0).round().clamp(0.0, 8.0) as u8 + 1;
             (x, c)
         };
+        let default_hp = zombie_default_hp(&kind);
+        let default_helmet = zombie_default_helmet(&kind);
+        let default_shield = zombie_default_shield(&kind);
         zombies.push(Zombie {
             id,
             kind,
@@ -302,9 +326,9 @@ pub fn parse_scenario(input: &str) -> Result<Scenario, InputError> {
             x,
             x_fp: (x * 1000.0).round() as i64,
             speed_fp: (f64_field(z.get("speed"), 0.143, "zombie.speed")? * 1000.0).round() as i64,
-            hp: i64_field(z.get("hp"), 270, "zombie.hp")? as i32,
-            helmet_hp: i64_field(z.get("helmet_hp"), 0, "zombie.helmet_hp")? as i32,
-            shield_hp: i64_field(z.get("shield_hp"), 0, "zombie.shield_hp")? as i32,
+            hp: i64_field(z.get("hp"), i64::from(default_hp), "zombie.hp")? as i32,
+            helmet_hp: i64_field(z.get("helmet_hp"), i64::from(default_helmet), "zombie.helmet_hp")? as i32,
+            shield_hp: i64_field(z.get("shield_hp"), i64::from(default_shield), "zombie.shield_hp")? as i32,
             speed: f64_field(z.get("speed"), 0.143, "zombie.speed")?,
             age: u64_field(z.get("age"), 0, "zombie.age")?,
             chilled: u64_field(z.get("chilled"), 0, "zombie.chilled")? as u32,
@@ -512,6 +536,7 @@ pub struct SimpleState {
     pub projectiles: Vec<SimpleProjectile>,
     pub events: std::collections::BTreeMap<String, u64>,
     pub rakes: Vec<GridObject>,
+    pub ladders: Vec<GridObject>,
 }
 
 impl From<Scenario> for SimpleState {
@@ -524,6 +549,7 @@ impl From<Scenario> for SimpleState {
             projectiles: Vec::new(),
             events: std::collections::BTreeMap::new(),
             rakes: s.rakes,
+            ladders: s.ladders,
         }
     }
 }
@@ -668,6 +694,7 @@ impl SimpleState {
         let mut bites = 0_u64;
         let mut brain_eaten = 0_u64;
         let mut digger_emerged = 0_u64;
+        let mut ladder_placed = 0_u64;
         for zi in 0..self.zombies.len() {
             if self.zombies[zi].status != UnitStatus::Active
                 || self.zombies[zi].hp <= 0
@@ -685,6 +712,27 @@ impl SimpleState {
                     digger_emerged += 1;
                 }
                 continue;
+            }
+            if self.zombies[zi].kind == "ladder"
+                && self.zombies[zi].tool
+                && self.zombies[zi].shield_hp > 0
+            {
+                let zx_fp = self.zombies[zi].x_fp;
+                let row = self.zombies[zi].row;
+                if let Some((_, plant)) = self.plants.iter().enumerate().find(|(_, p)| {
+                    p.hp > 0
+                        && matches!(p.kind.as_str(), "wallnut" | "tallnut")
+                        && p.row == row
+                        && zx_fp >= plant_x_fp(p.col) - 60_000
+                        && zx_fp <= plant_x_fp(p.col) + 70_000
+                        && !self.ladders.iter().any(|l| l.row == p.row && l.col == p.col)
+                }) {
+                    self.ladders.push(GridObject { row: plant.row, col: plant.col });
+                    self.zombies[zi].tool = false;
+                    self.zombies[zi].shield_hp = 0;
+                    ladder_placed += 1;
+                    continue;
+                }
             }
             let zx_fp = self.zombies[zi].x_fp;
             let row = self.zombies[zi].row;
@@ -752,6 +800,7 @@ impl SimpleState {
             ("digger_emerged", digger_emerged),
             ("rake_triggered", rake_hits),
             ("zombie_died", rake_hits),
+            ("ladder_placed", ladder_placed),
         ] {
             if count > 0 {
                 *self.events.entry(name.into()).or_default() += count;
@@ -932,6 +981,16 @@ mod tests {
         assert!(s.rakes.is_empty());
         assert_eq!(s.zombies[0].status, UnitStatus::Dead);
         assert_eq!(s.events.get("rake_triggered"), Some(&1));
+    }
+
+    #[test]
+    fn simple_ladder_zombie_places_ladder_on_nut() {
+        let text = r#"{"max_frames":1,"plants":[{"type":"wallnut","row":3,"col":1}],"zombies":[{"type":"ladder","row":3,"x":90}],"brains":[3]}"#;
+        let mut s = SimpleState::from(parse_scenario(text).unwrap());
+        s.step();
+        assert_eq!(s.ladders, vec![GridObject { row: 3, col: 1 }]);
+        assert!(!s.zombies[0].tool);
+        assert_eq!(s.events.get("ladder_placed"), Some(&1));
     }
 
     #[test]
