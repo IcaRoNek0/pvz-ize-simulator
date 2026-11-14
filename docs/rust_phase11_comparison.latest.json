@@ -51,7 +51,7 @@
             {
               "hp": 300,
               "id": "sp",
-              "state": null,
+              "state": "attacking",
               "state_timer": 15,
               "type": "spikeweed"
             }
@@ -125,7 +125,7 @@
             {
               "hp": 450,
               "id": "rock",
-              "state": null,
+              "state": "attacking",
               "state_timer": 52,
               "type": "spikerock"
             }
@@ -143,9 +143,9 @@
         },
         "exit_status": 0,
         "stderr": "",
-        "stdout": "{\"winner\":\"undecided\",\"reason\":\"max_frames_reached\",\"frames\":150,\"state\":{\"frame\":150,\"mode\":\"ize\",\"plants\":[{\"id\":\"rock\",\"type\":\"spikerock\",\"row\":3,\"col\":2,\"footprint\":[2],\"hp\":450,\"cooldown\":0,\"state_timer\":52,\"layer\":\"main\"}],\"zombies\":[{\"id\":\"door\",\"type\":\"screen_door\",\"row\":3,\"col\":2,\"x\":99.85,\"hp\":210,\"helmet_hp\":0,\"shield_hp\":0,\"speed\":0.001,\"age\":150,\"chilled\":0,\"headless\":false,\"hypnotized\":false,\"tool\":true,\"underground\":null,\"status\":\"active\"}],\"brains\":[{\"row\":3,\"hp\":70}],\"projectiles\":[],\"events\":{\"damage\":3,\"spikerock_pulse\":3},\"rakes\":[],\"ladders\":[]}}\n"
+        "stdout": "{\"winner\":\"undecided\",\"reason\":\"max_frames_reached\",\"frames\":150,\"state\":{\"frame\":150,\"mode\":\"ize\",\"plants\":[{\"id\":\"rock\",\"type\":\"spikerock\",\"row\":3,\"col\":2,\"footprint\":[2],\"hp\":450,\"cooldown\":0,\"state_timer\":52,\"layer\":\"main\"}],\"zombies\":[{\"id\":\"door\",\"type\":\"screen_door\",\"row\":3,\"col\":2,\"x\":99.85,\"hp\":210,\"helmet_hp\":0,\"shield_hp\":1100,\"speed\":0.001,\"age\":150,\"chilled\":0,\"headless\":false,\"hypnotized\":false,\"tool\":true,\"underground\":null,\"status\":\"active\"}],\"brains\":[{\"row\":3,\"hp\":70}],\"projectiles\":[],\"events\":{\"damage\":3,\"spikerock_pulse\":3},\"rakes\":[],\"ladders\":[]}}\n"
       },
-      "sha256": "0016137b04ac2f7b52d7b1348e4197383e9ca1c900b99df8ca67738bb0a54d8e"
+      "sha256": "d64e6a3d94e4360a9c52ad13a07303e122b7099d2df3fc08a1ca7d379edbcb1c"
     }
   ],
   "rust_binary": "/private/tmp/pvz-ize-simulator.igLHFO/native_sim/target/release/pvz-ize-native-sim",

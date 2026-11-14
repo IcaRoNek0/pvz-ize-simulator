@@ -7,6 +7,6 @@
     {"id": "rock", "type": "spikerock", "row": 3, "col": 2}
   ],
   "zombies": [
-    {"id": "door", "type": "screen_door", "row": 3, "x": 100, "speed": 0.001}
+    {"id": "door", "type": "screen_door", "row": 3, "x": 100, "speed": 0.001, "shield_hp": 1100}
   ]
 }

@@ -19,15 +19,20 @@ def run(cmd, *, stdin=None):
 def compact(value):
     if not value: return None
     out = {k: value[k] for k in ("winner", "reason", "frames") if k in value}
+    def plants(items):
+        return [{k: (p.get(k) if k != "state" else
+                     p.get("state", "attacking" if p.get("state_timer", 0) else "ready"))
+                 for k in ("id", "type", "hp", "state", "state_timer")}
+                for p in items]
     if "state" in value:
         state = value["state"]
         out["events"] = state.get("events", {})
         out["zombies"] = [{k: z.get(k) for k in ("id", "status", "hp", "helmet_hp")} for z in state.get("zombies", [])]
-        out["plants"] = [{k: p.get(k) for k in ("id", "type", "hp", "state", "state_timer")} for p in state.get("plants", [])]
+        out["plants"] = plants(state.get("plants", []))
     else:
         out["events"] = value.get("events", {})
         out["zombies"] = [{k: z.get(k) for k in ("id", "status", "hp", "helmet_hp")} for z in value.get("zombies", [])]
-        out["plants"] = [{k: p.get(k) for k in ("id", "type", "hp", "state", "state_timer")} for p in value.get("plants", [])]
+        out["plants"] = plants(value.get("plants", []))
     return out
 
 def main():
