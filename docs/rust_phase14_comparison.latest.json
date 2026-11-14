@@ -1,0 +1,215 @@
+{
+  "fixtures": [
+    {
+      "fixture": "/private/tmp/pvz-ize-simulator.igLHFO/examples/rust_phase14_newspaper_defaults.json",
+      "python": {
+        "frames": 1,
+        "reason": "max_frames_reached",
+        "state": {
+          "brains": [
+            {
+              "hp": 70,
+              "row": 3
+            }
+          ],
+          "events": {},
+          "frame": 1,
+          "ladders": [],
+          "mode": "ize",
+          "plants": [],
+          "projectiles": [],
+          "rakes": [],
+          "zombies": [
+            {
+              "age": 1,
+              "chilled": 0,
+              "col": 7,
+              "headless": false,
+              "helmet_hp": 0,
+              "hp": 270,
+              "hypnotized": false,
+              "id": "paper",
+              "row": 3,
+              "shield_hp": 150,
+              "speed": 0.09,
+              "status": "active",
+              "tool": true,
+              "type": "newspaper",
+              "underground": null,
+              "x": 499.91
+            }
+          ]
+        },
+        "winner": "undecided"
+      },
+      "rust": {
+        "frames": 1,
+        "reason": "max_frames_reached",
+        "state": {
+          "brains": [
+            {
+              "hp": 70,
+              "row": 3
+            }
+          ],
+          "events": {},
+          "frame": 1,
+          "ladders": [],
+          "mode": "ize",
+          "plants": [],
+          "projectiles": [],
+          "rakes": [],
+          "zombies": [
+            {
+              "age": 1,
+              "chilled": 0,
+              "col": 7,
+              "headless": false,
+              "helmet_hp": 0,
+              "hp": 270,
+              "hypnotized": false,
+              "id": "paper",
+              "row": 3,
+              "shield_hp": 150,
+              "speed": 0.09,
+              "status": "active",
+              "tool": true,
+              "type": "newspaper",
+              "underground": null,
+              "x": 499.91
+            }
+          ]
+        },
+        "winner": "undecided"
+      },
+      "rust_exit_status": 0,
+      "sha256": "7adb4caf2b8ca53860b6883b370d4354e3058d6a5dac881242e81615ebb69b33",
+      "status": "match",
+      "stderr": ""
+    },
+    {
+      "fixture": "/private/tmp/pvz-ize-simulator.igLHFO/examples/rust_phase14_newspaper_armor_order.json",
+      "python": {
+        "frames": 1,
+        "reason": "max_frames_reached",
+        "state": {
+          "brains": [
+            {
+              "hp": 70,
+              "row": 3
+            }
+          ],
+          "events": {
+            "projectile_fired": 1,
+            "projectile_hit": 1
+          },
+          "frame": 1,
+          "ladders": [],
+          "mode": "ize",
+          "plants": [
+            {
+              "col": 1,
+              "cooldown": 150,
+              "footprint": [
+                1
+              ],
+              "hp": 300,
+              "id": "pea",
+              "layer": "main",
+              "row": 3,
+              "state_timer": 0,
+              "type": "peashooter"
+            }
+          ],
+          "projectiles": [],
+          "rakes": [],
+          "zombies": [
+            {
+              "age": 1,
+              "chilled": 0,
+              "col": 2,
+              "headless": false,
+              "helmet_hp": 0,
+              "hp": 270,
+              "hypnotized": false,
+              "id": "paper",
+              "row": 3,
+              "shield_hp": 130,
+              "speed": 0.09,
+              "status": "active",
+              "tool": true,
+              "type": "newspaper",
+              "underground": null,
+              "x": 90.0
+            }
+          ]
+        },
+        "winner": "undecided"
+      },
+      "rust": {
+        "frames": 1,
+        "reason": "max_frames_reached",
+        "state": {
+          "brains": [
+            {
+              "hp": 70,
+              "row": 3
+            }
+          ],
+          "events": {
+            "projectile_fired": 1,
+            "projectile_hit": 1
+          },
+          "frame": 1,
+          "ladders": [],
+          "mode": "ize",
+          "plants": [
+            {
+              "col": 1,
+              "cooldown": 150,
+              "footprint": [
+                1
+              ],
+              "hp": 300,
+              "id": "pea",
+              "layer": "main",
+              "row": 3,
+              "state_timer": 0,
+              "type": "peashooter"
+            }
+          ],
+          "projectiles": [],
+          "rakes": [],
+          "zombies": [
+            {
+              "age": 1,
+              "chilled": 0,
+              "col": 2,
+              "headless": false,
+              "helmet_hp": 0,
+              "hp": 270,
+              "hypnotized": false,
+              "id": "paper",
+              "row": 3,
+              "shield_hp": 130,
+              "speed": 0.09,
+              "status": "active",
+              "tool": true,
+              "type": "newspaper",
+              "underground": null,
+              "x": 90.0
+            }
+          ]
+        },
+        "winner": "undecided"
+      },
+      "rust_exit_status": 0,
+      "sha256": "8ce55abf31445c419a5e6245d1d9cd8173e858d7b86a4c947ebc69af620d950f",
+      "status": "match",
+      "stderr": ""
+    }
+  ],
+  "rust_binary": "/private/tmp/pvz-ize-simulator.igLHFO/native_sim/target/release/pvz-ize-native-sim",
+  "schema": "pvz-ize/rust-phase14-newspaper/v1",
+  "status": "match"
+}

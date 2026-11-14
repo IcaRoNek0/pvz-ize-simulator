@@ -213,6 +213,7 @@ fn zombie_default_shield(kind: &str) -> i32 {
     match kind {
         "screen_door" => 1100,
         "ladder" => 500,
+        "newspaper" => 150,
         _ => 0,
     }
 }
@@ -220,6 +221,7 @@ fn zombie_default_shield(kind: &str) -> i32 {
 fn zombie_default_speed(kind: &str) -> f64 {
     match kind {
         "football" => 0.32,
+        "newspaper" => 0.09,
         _ => 0.143,
     }
 }
@@ -1297,6 +1299,14 @@ mod tests {
         // The football zombie is already in bite range of the shooter cell,
         // so the movement phase holds it in place after the direct hit.
         assert!((s.zombies[0].x - 90.0).abs() < 1e-9);
+    }
+
+    #[test]
+    fn simple_newspaper_defaults_use_catalog_shield_and_speed() {
+        let text = r#"{"max_frames":1,"plants":[],"zombies":[{"type":"newspaper","row":3,"x":500}],"brains":[3]}"#;
+        let s = SimpleState::from(parse_scenario(text).unwrap());
+        assert_eq!(s.zombies[0].shield_hp, 150);
+        assert!((s.zombies[0].speed - 0.09).abs() < f64::EPSILON);
     }
 
     #[test]

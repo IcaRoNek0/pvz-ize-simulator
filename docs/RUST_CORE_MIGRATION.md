@@ -105,3 +105,13 @@ football charge animation or special movement state is claimed. Run
 `python3 scripts/compare_phase13_fixtures.py` to regenerate
 `docs/rust_phase13_comparison.latest.json`; unsupported scenarios retain the
 Python fallback.
+
+### Phase 14：报纸僵尸基础默认值
+
+Rust simple slice now accepts `newspaper` with catalog defaults: body HP 270,
+shield HP 150, and speed 0.09 px/tick. The guarded scope covers ordinary
+projectile shield damage only; the reading/maddening/rage animation state
+machine remains in Python. Fixtures `examples/rust_phase14_newspaper_defaults.json`
+and `examples/rust_phase14_newspaper_armor_order.json` are checked by
+`scripts/compare_phase14_fixtures.py` and recorded in
+`docs/rust_phase14_comparison.latest.json`.

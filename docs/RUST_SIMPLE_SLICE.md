@@ -67,6 +67,11 @@ python3 scripts/compare_phase13_fixtures.py
 The report is written to `docs/rust_phase13_comparison.latest.json`, and
 scenarios outside the support gate continue to use the Python fallback.
 
+Phase 14 adds the newspaper zombie's catalog defaults (270 body HP, 150 shield
+HP, 0.09 px/tick). The reading/rage animation state machine remains Python;
+run `python3 scripts/compare_phase14_fixtures.py` for the guarded defaults and
+shield-order fixtures.
+
 Phase 11 固定夹具可单独运行 Python/Rust 对照（Rust 从 stdin 读取场景）：
 
 ```sh

@@ -22,6 +22,9 @@ class RustCoreBridgeTests(unittest.TestCase):
             "plants": [], "zombies": [{"type": "football", "row": 3, "x": 90}],
         }))
         self.assertTrue(supports_scenario({
+            "plants": [], "zombies": [{"type": "newspaper", "row": 3, "x": 90}],
+        }))
+        self.assertTrue(supports_scenario({
             "plants": [{"type": "wallnut", "row": 3, "col": 1}],
             "zombies": [{"type": "ladder", "row": 3, "x": 90}],
             "rakes": [{"row": 3, "col": 8}],

@@ -27,8 +27,8 @@ def python_reference(data):
         x=float(z["x"]) if "x" in z else 10.0+80.0*(int(col)-1)
         default_hp = 500 if kind == "ladder" else 270
         default_helmet = {"digger": 100, "conehead": 370, "buckethead": 1100, "football": 1400}.get(kind, 0)
-        default_shield = {"ladder": 500, "screen_door": 1100}.get(kind, 0)
-        default_speed = 0.32 if kind == "football" else 0.143
+        default_shield = {"ladder": 500, "screen_door": 1100, "newspaper": 150}.get(kind, 0)
+        default_speed = {"football": 0.32, "newspaper": 0.09}.get(kind, 0.143)
         zombies.append({"id":z.get("id",f"z{i+1}"),"type":kind,"row":int(z.get("row",3)),"col":int(round((x-10.0)/80.0))+1,"x":x,"x_fp":int(round(x*FP)),"hp":int(z.get("hp",default_hp)),"helmet_hp":int(z.get("helmet_hp",default_helmet)),"shield_hp":int(z.get("shield_hp",default_shield)),"speed":float(z.get("speed",default_speed)),"age":int(z.get("age",0)),"chilled":int(z.get("chilled",0)),"headless":bool(z.get("headless",False)),"hypnotized":bool(z.get("hypnotized",False)),"tool":bool(z.get("tool",True)),"underground":z.get("underground") if isinstance(z.get("underground"),bool) else None,"status":"active"})
     brains=[]
     for b in data.get("brains",[3]): brains.append({"row":int(b if isinstance(b,int) else b["row"]),"hp":70 if isinstance(b,int) else int(b.get("hp",70))})
