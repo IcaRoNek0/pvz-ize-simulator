@@ -113,6 +113,23 @@ python3 -m pvz_ize run --help
 
 ## 验证和保留产物
 
+### 参考视频准确率复现
+
+视频对照只读取每局开始前的阵容；同格僵尸按列表中的独立实体保留，不做去重；记录含
+`unsupported_or_custom` 或 `expected: "unknown"` 的轮次会跳过，不进入准确率分母。仓库内的
+`examples/video_round_5.json` 与 `examples/video_round_7.json` 是可复现的两份输入，当前报告
+明确保留 `run/5` 的已知偏差，不把它伪装成通过：
+
+```sh
+python3 scripts/audit_recorded_rounds.py \
+  outputs/video-observations.example.json \
+  --out outputs/video_accuracy.json
+```
+
+脚本输出 `match`、`mismatch`、`skipped` 三类计数，并记录初始僵尸数量及
+`same_cell_zombies` 证据；需要绝对路径时加 `--absolute-paths`。视频原始文件不随仓库分发；抽帧和人工观察记录见
+`docs/video_accuracy_report.md` 与 `outputs/video_accuracy.json`。
+
 ```sh
 python3 -m unittest discover -v
 python3 scripts/run_examples.py

@@ -1,4 +1,4 @@
 [
-  {"id":"run7-reference","scenario":"run/7.json","expected":"zombies","timestamp":"reference video: round 7", "notes":"Two miners are squash-killed; buckethead reaches the house."},
-  {"id":"run5-reference","scenario":"run/5.json","expected":"zombies","timestamp":"reference video: round 5", "notes":"Reference observation says the later zombie reaches the house; compare mine trigger separation."}
+  {"id":"run7-reference","scenario":"../examples/video_round_7.json","expected":"zombies","timestamp":"reference video: round 7", "notes":"Two miners are squash-killed; buckethead reaches the house."},
+  {"id":"run5-reference","scenario":"../examples/video_round_5.json","expected":"zombies","timestamp":"reference video: round 5", "notes":"Reference observation says the later zombie reaches the house; compare mine trigger separation."}
 ]

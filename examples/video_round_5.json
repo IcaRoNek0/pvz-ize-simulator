@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "seed": 2026,
+  "runs": 10,
+  "brains": [3],
+  "plants": [
+    {"type": "puff_shroom", "row": 3, "col": 1},
+    {"type": "spikeweed", "row": 3, "col": 2},
+    {"type": "potato_mine", "row": 3, "col": 3},
+    {"type": "wallnut", "row": 3, "col": 4},
+    {"type": "repeater", "row": 3, "col": 5}
+  ],
+  "zombies": [
+    {"type": "conehead", "row": 3, "col": 6},
+    {"type": "pole_vaulting", "row": 3, "col": 8}
+  ]
+}
