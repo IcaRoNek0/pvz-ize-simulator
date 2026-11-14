@@ -38,7 +38,12 @@ function renderBoard(){const board=$("board");board.replaceChildren();for(let ro
  const anchor=cobAt(row,col), covered=cobCovers(row,col);
  if(anchor)b.classList.add("cob-anchor");
  if(covered)b.classList.add("cob-footprint");
- for(const group of ["plants","zombies"]){let units=scene[group].filter(u=>inCell(u,group,row,col));if(covered&&col!==anchor?.col)units=[];for(const u of units){const chip=document.createElement("span");chip.className=`board-unit ${group==="zombies"?"zombie-unit":""} ${u.type==="cob_cannon"?"cob-board-unit":""}`;const icon=document.createElement("img");icon.src=assetFor(u.type,group);icon.alt=title(u.type);icon.onerror=()=>{icon.src=assetFor(group==="zombies"?"normal":"peashooter",group);};chip.append(icon);chip.title=title(u.type)+(u.x!==undefined?` X=${u.x}`:"");b.append(chip);}}
+ for(const group of ["plants","zombies"]){let units=scene[group].filter(u=>inCell(u,group,row,col));
+  // A cob's model footprint is two cells, but its sprite must only be drawn
+  // once at the anchor.  Keep other occupants (notably zombies) visible in
+  // the covered cell so overlapping formations remain inspectable.
+  if(covered&&!anchor)units=units.filter(u=>u.type!=="cob_cannon");
+  for(const u of units){const chip=document.createElement("span");chip.className=`board-unit ${group==="zombies"?"zombie-unit":""} ${u.type==="cob_cannon"?"cob-board-unit":""}`;const icon=document.createElement("img");icon.src=assetFor(u.type,group);icon.alt=title(u.type);icon.onerror=()=>{icon.src=assetFor(group==="zombies"?"normal":"peashooter",group);};chip.append(icon);chip.title=title(u.type)+(u.x!==undefined?` X=${u.x}`:"");b.append(chip);}}
  if(anchor){const note=document.createElement("span");note.className="cob-footprint-label";note.textContent="占2格";b.append(note);} 
  if(covered&&!anchor){const note=document.createElement("span");note.className="cob-footprint-label";note.textContent="玉米加农炮";b.append(note);}
  const rake=(scene.rakes||[]).some(r=>r.row===row&&r.col===col);const ladder=(scene.ladders||[]).some(r=>r.row===row&&r.col===col);if(rake||ladder){const marker=document.createElement("img");marker.className="board-unit special-marker";marker.src=assetFor(rake?"rake":"ladder","special");marker.alt=rake?"钉耙":"梯子";b.append(marker);} if(scene.brains.some(br=>(typeof br==="number"?br:br.row)===row)&&col===1)b.classList.add("brain-lane");board.append(b);
@@ -54,6 +59,7 @@ function clickCell(row,col){
    render(); return;
   }
   if(side==="plants"&&brush==="cob_cannon"&&col>=9){status("玉米加农炮占用当前格及右侧一格，请从第1—8列放置。",true);render();return;}
+  if(side==="plants"&&brush==="cob_cannon"&&(cobAt(row,col)||cobCovers(row,col)||cobAt(row,col+1)||cobCovers(row,col+1))){status("该玉米加农炮的两格占用范围与已有玉米炮重叠。",true);render();return;}
   if(side==="plants"&&cobCovers(row,col)&&brush!=="cob_cannon"){status("该格是玉米加农炮占用的第二格。",true);render();return;}
   const unit={type:brush,row,col};
   if(side==="plants"){
