@@ -1,0 +1,633 @@
+{
+  "schema": 1,
+  "description": "Complete character preview sprites; source is Plants vs. Zombies Wiki.",
+  "assets": {
+    "backup_dancer": {
+      "file": "backup_dancer.png",
+      "bytes": 19566,
+      "sha256": "2eeb1f088e2bc4fadc573fafb5f94a83ca94b5ae2692423afe6dbc22b0dc6e40",
+      "dimensions": [
+        164,
+        164
+      ],
+      "source_file": "Backup_Dancer.png"
+    },
+    "balloon": {
+      "file": "balloon.png",
+      "bytes": 16447,
+      "sha256": "daf376709b77a479c0e9458e6cc82ab8bbf9f297e4d27339a4836fb201d5bc40",
+      "dimensions": [
+        143,
+        143
+      ],
+      "source_file": "Balloon_Zombie1.png"
+    },
+    "blover": {
+      "file": "blover.png",
+      "bytes": 6966,
+      "sha256": "1d8550353b31a932ae8c6363fc2818b6ec2ddf5a7c3aa069192880aef69cd2a6",
+      "dimensions": [
+        160,
+        160
+      ],
+      "source_file": "Blover.png"
+    },
+    "buckethead": {
+      "file": "buckethead.png",
+      "bytes": 15501,
+      "sha256": "498091909604be6e9d9e7f590644d06b6e46a25dfe03b002f7fdc16b7b68e94f",
+      "dimensions": [
+        150,
+        150
+      ],
+      "source_file": "Buckethead_Zombie.png"
+    },
+    "bungee": {
+      "file": "bungee.png",
+      "bytes": 19171,
+      "sha256": "3e9e82db9dec5b825653f07e711591244e9c049b4a2432587f6720c43e1c48ac",
+      "dimensions": [
+        184,
+        184
+      ],
+      "source_file": "Bungee_Zombie.png"
+    },
+    "cabbage_pult": {
+      "file": "cabbage_pult.png",
+      "bytes": 15217,
+      "sha256": "7ce98fade486f6cb10879c67ad8a6458756bae274ef5d31b4c561e2fda338976",
+      "dimensions": [
+        96,
+        96
+      ],
+      "source_file": "Cabbage-pult.png"
+    },
+    "cactus": {
+      "file": "cactus.png",
+      "bytes": 15886,
+      "sha256": "256fe82caf83c9db0c1fae0e3de8a7dd939949eeb58dc5a9fed3881caedf6867",
+      "dimensions": [
+        96,
+        96
+      ],
+      "source_file": "Cactus.png"
+    },
+    "catapult": {
+      "file": "catapult.png",
+      "bytes": 43538,
+      "sha256": "f805f94bd353541cf05a017095f52df59d37825597e8b382adb79fa83b99fdb4",
+      "dimensions": [
+        197,
+        197
+      ],
+      "source_file": "Catapult_Zombie1.png"
+    },
+    "cattail": {
+      "file": "cattail.png",
+      "bytes": 17842,
+      "sha256": "dda4b4fbc3c2423cb98b84f7a98d857c56bbb9e8d5807c70b25314b06421defd",
+      "dimensions": [
+        96,
+        96
+      ],
+      "source_file": "Cattail.png"
+    },
+    "cherry_bomb": {
+      "file": "cherry_bomb.png",
+      "bytes": 13974,
+      "sha256": "11a30d3664682108c29b1615799955ad8ca5db1e5f65a6737e72eee038f8c6c4",
+      "dimensions": [
+        96,
+        96
+      ],
+      "source_file": "Cherry_Bomb.png"
+    },
+    "chomper": {
+      "file": "chomper.png",
+      "bytes": 19116,
+      "sha256": "b80433bb4878eba9e518e570641f72533dcd56bc16cb4658c20a9023432fc024",
+      "dimensions": [
+        96,
+        96
+      ],
+      "source_file": "Chomper.png"
+    },
+    "cob_cannon": {
+      "file": "cob_cannon.png",
+      "bytes": 41643,
+      "sha256": "3b17c92061d19f7dce04b81cfe98b4e4698f563ef62691f8a524ee287bc9a2da",
+      "dimensions": [
+        183,
+        132
+      ],
+      "source_file": "Cob_Cannon.png"
+    },
+    "conehead": {
+      "file": "conehead.png",
+      "bytes": 15314,
+      "sha256": "d5bc0bb4c03f418f58bac8a79540dea970c34d2e44953be2f7d596301f4eda7b",
+      "dimensions": [
+        158,
+        158
+      ],
+      "source_file": "Conehead_Zombie1.png"
+    },
+    "dancing": {
+      "file": "dancing.png",
+      "bytes": 17015,
+      "sha256": "aafe3642d744386974e264501027c47e5711449cdd813d05c7586722fdd3ea70",
+      "dimensions": [
+        160,
+        160
+      ],
+      "source_file": "Dancing_Zombie1.png"
+    },
+    "digger": {
+      "file": "digger.png",
+      "bytes": 21439,
+      "sha256": "2cdef53e99f81f7d4986b501749b4d42caa9a004b8701879590a8e2ae719c423",
+      "dimensions": [
+        147,
+        147
+      ],
+      "source_file": "Digger_Zombie1.png"
+    },
+    "doom_shroom": {
+      "file": "doom_shroom.png",
+      "bytes": 15005,
+      "sha256": "d84d0c32c6b31fd0f1edd223120b4bc32af4a76d45043a169d68b0aa27d54c17",
+      "dimensions": [
+        210,
+        197
+      ],
+      "source_file": "Doom-shroom.png"
+    },
+    "flag": {
+      "file": "flag.png",
+      "bytes": 14557,
+      "sha256": "c0459d85597602a76be839a2df84ca73d77e632e4a59327961db73f1a36a58a4",
+      "dimensions": [
+        136,
+        136
+      ],
+      "source_file": "Flag_Zombie.png"
+    },
+    "flower_pot": {
+      "file": "flower_pot.png",
+      "bytes": 14012,
+      "sha256": "a776b25f69f2162061eb9de6e779908de6e6a8099a1bc23b9177596016a550e4",
+      "dimensions": [
+        96,
+        96
+      ],
+      "source_file": "Flower_Pot1.png"
+    },
+    "football": {
+      "file": "football.png",
+      "bytes": 24492,
+      "sha256": "75801b236e29f4ca95d38a6cad0e0ad249b92a372fdfc2449f972b83e4f5220e",
+      "dimensions": [
+        154,
+        154
+      ],
+      "source_file": "Football_Zombie1.png"
+    },
+    "fume_shroom": {
+      "file": "fume_shroom.png",
+      "bytes": 13877,
+      "sha256": "287e4d2ed00b9a510503aaf7ea2e8d3a1e47cee4e0850c8be084cd79e0462edd",
+      "dimensions": [
+        96,
+        96
+      ],
+      "source_file": "Fume-shroom.png"
+    },
+    "gargantuar": {
+      "file": "gargantuar.png",
+      "bytes": 50213,
+      "sha256": "5bb83bc75d4d5023303195372e7104b46578d373b2faa131937e56f11a92f307",
+      "dimensions": [
+        200,
+        200
+      ],
+      "source_file": "Gargantuar.png"
+    },
+    "garlic": {
+      "file": "garlic.png",
+      "bytes": 13429,
+      "sha256": "8f0d110f043403ffec1f87a437aecb9fcfd0b13acf8eb9401bfcc038813678dc",
+      "dimensions": [
+        96,
+        96
+      ],
+      "source_file": "Garlic.png"
+    },
+    "gatling_pea": {
+      "file": "gatling_pea.png",
+      "bytes": 15903,
+      "sha256": "1421ecde9e1d6818868401771c1e29a9ef22f67e75ac0ef8122fd879b12f3162",
+      "dimensions": [
+        96,
+        96
+      ],
+      "source_file": "Gatling_Pea.png"
+    },
+    "gloom_shroom": {
+      "file": "gloom_shroom.png",
+      "bytes": 15728,
+      "sha256": "d12e69cc4f69ae09ddd490be5a00bb72231679739815cd8283642dceb4b02d47",
+      "dimensions": [
+        96,
+        96
+      ],
+      "source_file": "Gloom-shroom1.png"
+    },
+    "hypno_shroom": {
+      "file": "hypno_shroom.png",
+      "bytes": 7931,
+      "sha256": "45a699efbde0cd4c070077ef0e20024a60a86f691cdc749a7abe79f8495cd713",
+      "dimensions": [
+        160,
+        160
+      ],
+      "source_file": "Hypno-shroom.png"
+    },
+    "ice_shroom": {
+      "file": "ice_shroom.png",
+      "bytes": 15280,
+      "sha256": "f1bbd26b209104790e5bce01c88c266fb1d9750012f8457a39a536a84206bbc4",
+      "dimensions": [
+        96,
+        96
+      ],
+      "source_file": "Ice-shroom1.png"
+    },
+    "imp": {
+      "file": "imp.png",
+      "bytes": 7844,
+      "sha256": "a8c5b53efb763bf716f000def493f22fd2cfb8dc7e65763d98a06ffa2f20039c",
+      "dimensions": [
+        102,
+        102
+      ],
+      "source_file": "Imp.png"
+    },
+    "jack_in_the_box": {
+      "file": "jack_in_the_box.png",
+      "bytes": 21915,
+      "sha256": "6459679413b3c3756dabc0551c4406ed1fc03760a1e9299e1b75f6917f0860e1",
+      "dimensions": [
+        96,
+        96
+      ],
+      "source_file": "Jack-in-the-Box_Zombie1.png"
+    },
+    "jalapeno": {
+      "file": "jalapeno.png",
+      "bytes": 13022,
+      "sha256": "70626fc7e721a6d67425862ef06613ce0aa5d1ecdc04979cf5511e9d6d40664d",
+      "dimensions": [
+        96,
+        96
+      ],
+      "source_file": "Jalapeno.png"
+    },
+    "kernelpult": {
+      "file": "kernelpult.png",
+      "bytes": 15295,
+      "sha256": "2b7a9644d22591caca3652184ee09a82626ff34e2e3a3a0901dc72b95cacd006",
+      "dimensions": [
+        96,
+        96
+      ],
+      "source_file": "Kernel-pult.png"
+    },
+    "ladder": {
+      "file": "ladder.png",
+      "bytes": 22660,
+      "sha256": "e363e089e0b3e2c21d04ed18b98f2c85d01bde038a95f026f7d010d57ab2b09f",
+      "dimensions": [
+        140,
+        140
+      ],
+      "source_file": "Ladder_Zombie1.png"
+    },
+    "ladder_object": {
+      "file": "ladder_object.png",
+      "bytes": 8207,
+      "sha256": "349de391af1d5f483d5e7b1c4252e372512194ec2c2f75b87e0f97e53c0c51fe",
+      "dimensions": [
+        77,
+        121
+      ]
+    },
+    "lily_pad": {
+      "file": "lily_pad.png",
+      "bytes": 13839,
+      "sha256": "64e9263cebc80fea300a8a08aead4595d39d57a102d0a0dd75af75f0484dac12",
+      "dimensions": [
+        96,
+        96
+      ],
+      "source_file": "Lily_Pad1.png"
+    },
+    "magnet_shroom": {
+      "file": "magnet_shroom.png",
+      "bytes": 11267,
+      "sha256": "19c8ae2a4b4a07ea635b0abaa8226069733c9d507e1ff7b50d3be462dc679747",
+      "dimensions": [
+        96,
+        96
+      ],
+      "source_file": "Magnet-shroom1.png"
+    },
+    "melon_pult": {
+      "file": "melon_pult.png",
+      "bytes": 15772,
+      "sha256": "ba8d744ec793dbc20cb5b3bf642bf707aa596d2f4150bf991f8aa4e2a3f846d7",
+      "dimensions": [
+        96,
+        96
+      ],
+      "source_file": "Melon-pult.png"
+    },
+    "newspaper": {
+      "file": "newspaper.png",
+      "bytes": 19721,
+      "sha256": "687c1fc81d05fe26d5b424b0379f01ba5d69f5d520fd2c0678a8407930e1f44e",
+      "dimensions": [
+        137,
+        137
+      ],
+      "source_file": "Newspaper_Zombie.png"
+    },
+    "normal": {
+      "file": "normal.png",
+      "bytes": 13598,
+      "sha256": "2e3092058d2eb5ffd3cfda599a98352af6572f82b840d51df3ef3d33e673982c",
+      "dimensions": [
+        136,
+        136
+      ],
+      "source_file": "Normal_Zombie.png"
+    },
+    "peashooter": {
+      "file": "peashooter.png",
+      "bytes": 13267,
+      "sha256": "5ca813deb5ab2b6a5285ad1828eaa2152bb0118960f6432c2df62f5e26fcd55b",
+      "dimensions": [
+        96,
+        96
+      ],
+      "source_file": "Peashooter.png"
+    },
+    "pogo": {
+      "file": "pogo.png",
+      "bytes": 20372,
+      "sha256": "23cabd2d96df343aad1427657243b2ba2ddabc8d6d0fc90a29acae284c84ed55",
+      "dimensions": [
+        96,
+        96
+      ],
+      "source_file": "Pogo_Zombie1.png"
+    },
+    "pole_vaulting": {
+      "file": "pole_vaulting.png",
+      "bytes": 18697,
+      "sha256": "cedcb684d354713e2e3483bbd251e71ae6165912c6b6c3087e105a0e7ae97062",
+      "dimensions": [
+        206,
+        206
+      ],
+      "source_file": "Pole_Vaulting_Zombie1.png"
+    },
+    "potato_mine": {
+      "file": "potato_mine.png",
+      "bytes": 12583,
+      "sha256": "f157bca5840e3eb47623593ce7cdc4ac8fdd642c50f3afc65b25665b95aad14b",
+      "dimensions": [
+        96,
+        96
+      ],
+      "source_file": "Potato_Mine.png"
+    },
+    "puff_shroom": {
+      "file": "puff_shroom.png",
+      "bytes": 7735,
+      "sha256": "6bae207c3e39442256e5e6751aaf591536285de345c53f99c07a061b345fff76",
+      "dimensions": [
+        96,
+        96
+      ],
+      "source_file": "Puff-shroom.png"
+    },
+    "pumpkin": {
+      "file": "pumpkin.png",
+      "bytes": 12809,
+      "sha256": "4232bbb17db4c7ca51880168754419474c989d144f2f1bb1e82b484bd386f072",
+      "dimensions": [
+        160,
+        160
+      ],
+      "source_file": "Pumpkin.png"
+    },
+    "rake": {
+      "file": "rake.png",
+      "bytes": 2917,
+      "sha256": "555bd759e7e549609e3458f8692f6f0c1e03c170c6f428f388909b102f78f3a0",
+      "dimensions": [
+        60,
+        61
+      ]
+    },
+    "red_eye_gargantuar": {
+      "file": "red_eye_gargantuar.png",
+      "bytes": 50213,
+      "sha256": "5bb83bc75d4d5023303195372e7104b46578d373b2faa131937e56f11a92f307",
+      "dimensions": [
+        200,
+        200
+      ]
+    },
+    "repeater": {
+      "file": "repeater.png",
+      "bytes": 13742,
+      "sha256": "b5b0da65cfd9f6e1d041ccd080e7e67269de942aae869d089fbba81f0e827206",
+      "dimensions": [
+        96,
+        96
+      ],
+      "source_file": "Repeater.png"
+    },
+    "scaredy_shroom": {
+      "file": "scaredy_shroom.png",
+      "bytes": 10483,
+      "sha256": "16223f40ef8edea7053557b1df0d2bc9bc163d4352a65ce3d4316aa0fcaf7979",
+      "dimensions": [
+        96,
+        96
+      ],
+      "source_file": "Scaredy-shroom.png"
+    },
+    "screen_door": {
+      "file": "screen_door.png",
+      "bytes": 22519,
+      "sha256": "35e66f6d9ed5d60bc85fe2acc9263609e8e3be616f4c3968c3da5b44a45d23cc",
+      "dimensions": [
+        140,
+        140
+      ],
+      "source_file": "Screen_Door_Zombie.png"
+    },
+    "snow_pea": {
+      "file": "snow_pea.png",
+      "bytes": 13883,
+      "sha256": "f9a962d8fc1e155fbc3772d3365e259d866f7e2e86ed3a84747d5e8303627743",
+      "dimensions": [
+        96,
+        96
+      ],
+      "source_file": "Snow_Pea1.png"
+    },
+    "spikerock": {
+      "file": "spikerock.png",
+      "bytes": 12824,
+      "sha256": "254712fcd38683a6346eb04c80f371af34804d195da955978ebd896d87a82d9e",
+      "dimensions": [
+        96,
+        96
+      ],
+      "source_file": "Spikerock.png"
+    },
+    "spikeweed": {
+      "file": "spikeweed.png",
+      "bytes": 11708,
+      "sha256": "44308ffca698b6995947048d36f146deb22221592d15a5236b811359397de08e",
+      "dimensions": [
+        96,
+        96
+      ],
+      "source_file": "Spikeweed.png"
+    },
+    "split_pea": {
+      "file": "split_pea.png",
+      "bytes": 14835,
+      "sha256": "f2da038703d065f8033238b53c6a709e178000511ada4d66012d98f1e9bea754",
+      "dimensions": [
+        96,
+        96
+      ],
+      "source_file": "Split_Pea.png"
+    },
+    "squash": {
+      "file": "squash.png",
+      "bytes": 15957,
+      "sha256": "d3c579b556f5b2649d73f519f3d3d39081cd6ddb0d5dc2efcaca16cd0dde484f",
+      "dimensions": [
+        96,
+        96
+      ],
+      "source_file": "Squash1.png"
+    },
+    "starfruit": {
+      "file": "starfruit.png",
+      "bytes": 12738,
+      "sha256": "1cd752f901fa93ba6879708c5d8ff85494e20cfc32af7856dc98836393e1fbf2",
+      "dimensions": [
+        96,
+        96
+      ],
+      "source_file": "Starfruit.png"
+    },
+    "sunflower": {
+      "file": "sunflower.png",
+      "bytes": 9211,
+      "sha256": "968f93521e9848ab0ba09fc3c49a0fbbe06de70a46cb1ac9ba428e2bb1d10d6b",
+      "dimensions": [
+        160,
+        160
+      ],
+      "source_file": "Sunflower.png"
+    },
+    "tallnut": {
+      "file": "tallnut.png",
+      "bytes": 18281,
+      "sha256": "c04fe2f385ab5d6484542bb0331c8a1d7547a41d32bd52304dcd5d940be2a9af",
+      "dimensions": [
+        96,
+        96
+      ],
+      "source_file": "Tall-nut.png"
+    },
+    "threepeater": {
+      "file": "threepeater.png",
+      "bytes": 15312,
+      "sha256": "e52e0f94c9d76213aa4bfa8f840470cf214a18e78a2d19bc4e7e1d53875e625f",
+      "dimensions": [
+        96,
+        96
+      ],
+      "source_file": "Threepeater.png"
+    },
+    "torchwood": {
+      "file": "torchwood.png",
+      "bytes": 14750,
+      "sha256": "77deaebfeb7d75fa25d3c2e06933dd225d0cd555391cc2c7b4e3fbefc4955515",
+      "dimensions": [
+        96,
+        96
+      ],
+      "source_file": "Torchwood.png"
+    },
+    "umbrella_leaf": {
+      "file": "umbrella_leaf.png",
+      "bytes": 14486,
+      "sha256": "b30740be3967a306ea9b1ecc6496caa9bf92deb7ac0e1b834e18a9d0418c884c",
+      "dimensions": [
+        96,
+        96
+      ],
+      "source_file": "Umbrella_Leaf.png"
+    },
+    "wallnut": {
+      "file": "wallnut.png",
+      "bytes": 2590,
+      "sha256": "4840f085d04094d4e8a6fcebeed1aefeb959fd90b4bcff29b9425b83ca3ae256",
+      "dimensions": [
+        160,
+        160
+      ],
+      "source_file": "Wall-nut1.png"
+    },
+    "winter_melon": {
+      "file": "winter_melon.png",
+      "bytes": 16869,
+      "sha256": "aad0cdba15ebbe17f54e35da511ca140b8acc21736f8ddb2f6889726648a8124",
+      "dimensions": [
+        96,
+        96
+      ],
+      "source_file": "Winter_Melon.png"
+    },
+    "yeti": {
+      "file": "yeti.png",
+      "bytes": 25735,
+      "sha256": "c2519e604a1d833069f17df677b31f3e9f0023c85d15d1b4baa3ee9553873ce9",
+      "dimensions": [
+        160,
+        160
+      ],
+      "source_file": "Yeti1.png"
+    },
+    "zamboni": {
+      "file": "zamboni.png",
+      "bytes": 40747,
+      "sha256": "c2a9873ba5165a4f4a27e39c0253587447c2b94653bd4aef242c2cf10b7c2e61",
+      "dimensions": [
+        189,
+        189
+      ],
+      "source_file": "Zomboni.png"
+    }
+  }
+}

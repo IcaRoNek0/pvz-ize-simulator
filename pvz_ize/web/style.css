@@ -22,3 +22,22 @@ label,.panel-description,.palette-footnote,.run-row p,.status-line{font-size:12p
 @media(max-width:620px){.palette-panel .unit-palette{display:grid;grid-template-columns:repeat(3,minmax(76px,1fr));overflow:auto}.board-inspector{display:flex;flex-direction:column}.board-panel,.inspector-panel{width:100%}}
 .board-unit img{width:100%;height:100%;object-fit:contain;border-radius:50%}.ghost-unit{position:absolute;width:48px;height:48px;object-fit:contain;opacity:.42;filter:saturate(.65);pointer-events:none;z-index:5}.special-unit .unit-icon{background:#eadfc2;color:#785e2d}.special-unit{border-color:#b49b5e}
 .board-unit img{width:100%;height:100%;object-fit:contain;border-radius:50%}.ghost-unit{position:absolute;width:48px;height:48px;object-fit:contain;opacity:.42;filter:saturate(.65);pointer-events:none;z-index:5}.special-unit .unit-icon{background:#eadfc2;color:#785e2d}.special-unit{border-color:#b49b5e}
+/* Keep complete character sprites visible instead of circular face-only avatars. */
+.unit-icon{border-radius:8px;background:#e4ecd5;overflow:hidden}
+.unit-icon img{border-radius:5px;object-fit:contain;background:transparent}
+.zombie-unit .unit-icon{background:#f1ddd2}
+.board-unit{border-radius:5px;overflow:hidden}
+.board-unit img{border-radius:3px;object-fit:contain}
+/* Board sprites are deliberately larger than palette thumbnails so a placed
+   unit can be recognized at a glance.  The smaller breakpoint values keep
+   four stacked units within a cell on narrow windows. */
+.board-unit{width:34px;height:34px;font-size:13px}
+.board-unit img{width:100%;height:100%}
+.ghost-unit{width:60px;height:60px}
+@media(max-width:1180px){.board-unit{width:30px;height:30px}}
+@media(max-width:620px){.board-unit{width:30px;height:30px}.ghost-unit{width:54px;height:54px}}
+.cell.cob-anchor{overflow:visible;z-index:3}
+.cell.cob-footprint{background:#c9d7b5;border-style:dashed}
+.cob-board-unit{width:66px;height:48px;border:0;background:transparent;position:relative;z-index:4}
+.cob-board-unit img{object-fit:contain}
+.cob-footprint-label{position:absolute;bottom:2px;left:3px;right:3px;text-align:center;font-size:8px;color:#53684a;z-index:5;pointer-events:none}

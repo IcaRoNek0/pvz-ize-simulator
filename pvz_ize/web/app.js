@@ -19,7 +19,13 @@ async function api(path,body){const response=await fetch(path,{method:body?"POST
 function remember(){history.push(clone(scene));if(history.length>80)history.shift();future=[];}
 function nextId(){const used=new Set([...scene.plants,...scene.zombies].map(u=>u.id));let id;do{id=`ui_${++serial}`;}while(used.has(id));return id;}
 function column(unit,group){if(unit.col!==undefined)return unit.col;const offset=catalog[group][unit.type].spawn_offset||0;return (unit.x-40-offset)/80+1;}
-function inCell(unit,group,row,col){return unit.row===row && Math.max(1,Math.min(9,Math.round(column(unit,group))))===col;}
+function inCell(unit,group,row,col){
+ if(unit.row!==row)return false;
+ const left=Math.max(1,Math.min(9,Math.round(column(unit,group))));
+ return left===col || (group==="plants"&&unit.type==="cob_cannon"&&left+1===col);
+}
+function cobAt(row,col){return scene.plants.find(p=>p.type==="cob_cannon"&&p.row===row&&p.col===col);}
+function cobCovers(row,col){return scene.plants.some(p=>p.type==="cob_cannon"&&p.row===row&&p.col+1===col);}
 function unitsHere(){const result=[];for(const group of ["plants","zombies"])scene[group].forEach((u,i)=>{if(inCell(u,group,...cell))result.push({group,index:i,unit:u});});return result;}
 function selectedUnit(){return selected && scene[selected.group]?.[selected.index];}
 function button(text,fn,className=""){const b=document.createElement("button");b.type="button";b.textContent=text;b.className=className;b.addEventListener("click",fn);return b;}
@@ -29,7 +35,12 @@ function renderPalette(){const filter=$("unit-search").value.trim().toLowerCase(
 }
 function renderBoard(){const board=$("board");board.replaceChildren();for(let row=1;row<=5;row++){const rowLabel=document.createElement("span");rowLabel.className="row-label";rowLabel.textContent=row;board.append(rowLabel);for(let col=1;col<=9;col++){
  const b=button("",()=>clickCell(row,col),`cell ${row===3?"main-row":""} ${cell[0]===row&&cell[1]===col?"selected":""}`);b.setAttribute("aria-label",`第${row}行第${col}列`);b.addEventListener("mouseenter",()=>{if(tool!=="place"||side==="special")return;const ghost=document.createElement("img");ghost.className="ghost-unit";ghost.src=assetFor(brush,side);ghost.alt="预览";ghost.onerror=()=>ghost.remove();b.append(ghost);});b.addEventListener("mouseleave",()=>b.querySelectorAll(".ghost-unit").forEach(n=>n.remove()));b.addEventListener("contextmenu",event=>{event.preventDefault();cell=[row,col];const first=unitsHere()[0];if(first){selected={group:first.group,index:first.index};tool="inspect";render();status(`已选中${title(first.unit.type)}，可编辑属性。`);}});
- for(const group of ["plants","zombies"]){const units=scene[group].filter(u=>inCell(u,group,row,col));for(const u of units.slice(0,4)){const chip=document.createElement("span");chip.className=`board-unit ${group==="zombies"?"zombie-unit":""}`;const icon=document.createElement("img");icon.src=assetFor(u.type,group);icon.alt=title(u.type);icon.onerror=()=>{icon.src=assetFor(group==="zombies"?"normal":"peashooter",group);};chip.append(icon);chip.title=title(u.type)+(u.x!==undefined?` X=${u.x}`:"");b.append(chip);}if(units.length>4){const more=document.createElement("small");more.textContent=`+${units.length-4}`;b.append(more);}}
+ const anchor=cobAt(row,col), covered=cobCovers(row,col);
+ if(anchor)b.classList.add("cob-anchor");
+ if(covered)b.classList.add("cob-footprint");
+ for(const group of ["plants","zombies"]){let units=scene[group].filter(u=>inCell(u,group,row,col));if(covered&&col!==anchor?.col)units=[];for(const u of units.slice(0,4)){const chip=document.createElement("span");chip.className=`board-unit ${group==="zombies"?"zombie-unit":""} ${u.type==="cob_cannon"?"cob-board-unit":""}`;const icon=document.createElement("img");icon.src=assetFor(u.type,group);icon.alt=title(u.type);icon.onerror=()=>{icon.src=assetFor(group==="zombies"?"normal":"peashooter",group);};chip.append(icon);chip.title=title(u.type)+(u.x!==undefined?` X=${u.x}`:"");b.append(chip);}if(units.length>4){const more=document.createElement("small");more.textContent=`+${units.length-4}`;b.append(more);}}
+ if(anchor){const note=document.createElement("span");note.className="cob-footprint-label";note.textContent="占2格";b.append(note);} 
+ if(covered&&!anchor){const note=document.createElement("span");note.className="cob-footprint-label";note.textContent="玉米加农炮";b.append(note);}
  const rake=(scene.rakes||[]).some(r=>r.row===row&&r.col===col);const ladder=(scene.ladders||[]).some(r=>r.row===row&&r.col===col);if(rake||ladder){const marker=document.createElement("img");marker.className="board-unit special-marker";marker.src=assetFor(rake?"rake":"ladder","special");marker.alt=rake?"钉耙":"梯子";b.append(marker);} if(scene.brains.some(br=>(typeof br==="number"?br:br.row)===row)&&col===1)b.classList.add("brain-lane");board.append(b);
  }}
  $("placement-hint").textContent=tool==="place"?`正在放置：${title(brush)} · 点击棋盘落子` : "查看模式 · 点击格子编辑已有单位";
@@ -42,6 +53,8 @@ function clickCell(row,col){
    if(!list.some(item=>item.row===row&&item.col===col)){list.push({row,col});status(`已放置${brush==="rake"?"钉耙":"场上梯子"}。`);}else{status("该格已有特殊物件。");}
    render(); return;
   }
+  if(side==="plants"&&brush==="cob_cannon"&&col>=9){status("玉米加农炮占用当前格及右侧一格，请从第1—8列放置。",true);render();return;}
+  if(side==="plants"&&cobCovers(row,col)&&brush!=="cob_cannon"){status("该格是玉米加农炮占用的第二格。",true);render();return;}
   const unit={type:brush,row,col};
   if(side==="plants"){
    unit.layer=brush==="pumpkin"?"shell":["lily_pad","flower_pot"].includes(brush)?"base":"main";
