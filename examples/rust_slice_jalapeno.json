@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "seed": 15,
+  "max_frames": 1,
+  "brains": [3],
+  "plants": [
+    {"id": "pepper", "type": "jalapeno", "row": 3, "col": 2, "state_timer": 1}
+  ],
+  "ladders": [{"row": 3, "col": 4}, {"row": 2, "col": 4}],
+  "zombies": [
+    {"id": "same-row", "type": "normal", "row": 3, "x": 300, "hp": 270},
+    {"id": "other-row", "type": "normal", "row": 2, "x": 300, "hp": 270}
+  ]
+}

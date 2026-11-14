@@ -341,8 +341,16 @@ pub fn parse_scenario(input: &str) -> Result<Scenario, InputError> {
             x_fp: (x * 1000.0).round() as i64,
             speed_fp: (f64_field(z.get("speed"), 0.143, "zombie.speed")? * 1000.0).round() as i64,
             hp: i64_field(z.get("hp"), i64::from(default_hp), "zombie.hp")? as i32,
-            helmet_hp: i64_field(z.get("helmet_hp"), i64::from(default_helmet), "zombie.helmet_hp")? as i32,
-            shield_hp: i64_field(z.get("shield_hp"), i64::from(default_shield), "zombie.shield_hp")? as i32,
+            helmet_hp: i64_field(
+                z.get("helmet_hp"),
+                i64::from(default_helmet),
+                "zombie.helmet_hp",
+            )? as i32,
+            shield_hp: i64_field(
+                z.get("shield_hp"),
+                i64::from(default_shield),
+                "zombie.shield_hp",
+            )? as i32,
             speed: f64_field(z.get("speed"), 0.143, "zombie.speed")?,
             age: u64_field(z.get("age"), 0, "zombie.age")?,
             chilled: u64_field(z.get("chilled"), 0, "zombie.chilled")? as u32,
@@ -619,6 +627,8 @@ impl SimpleState {
         let mut potato_explosions = 0_u64;
         let mut cherry_kills = 0_u64;
         let mut cherry_explosions = 0_u64;
+        let mut jalapeno_kills = 0_u64;
+        let mut jalapeno_explosions = 0_u64;
         for pi in 0..self.plants.len() {
             if self.plants[pi].hp <= 0 || self.plants[pi].kind != "cherry_bomb" {
                 continue;
@@ -644,6 +654,32 @@ impl SimpleState {
                 }
                 self.plants[pi].hp = 0;
                 cherry_explosions += 1;
+            }
+        }
+        // Jalapeno arms for 100 frames, then burns every hostile zombie and
+        // removes persistent ladders on its row.  It is intentionally a
+        // simple instant row effect; ice-ball/boss interactions remain in
+        // the Python oracle.
+        for pi in 0..self.plants.len() {
+            if self.plants[pi].hp <= 0 || self.plants[pi].kind != "jalapeno" {
+                continue;
+            }
+            if self.plants[pi].state_timer == 0 {
+                self.plants[pi].state_timer = 100;
+            }
+            self.plants[pi].state_timer -= 1;
+            if self.plants[pi].state_timer == 0 {
+                let row = self.plants[pi].row;
+                for z in &mut self.zombies {
+                    if z.status == UnitStatus::Active && z.hp > 0 && !z.hypnotized && z.row == row {
+                        z.hp = 0;
+                        z.status = UnitStatus::Dead;
+                        jalapeno_kills += 1;
+                    }
+                }
+                self.ladders.retain(|ladder| ladder.row != row);
+                self.plants[pi].hp = 0;
+                jalapeno_explosions += 1;
             }
         }
         // Potato mine arms on contact and destroys itself.  Once triggered,
@@ -730,7 +766,7 @@ impl SimpleState {
             }
         }
         let mut hits = 0_u64;
-        let mut deaths = squash_hits + potato_kills + cherry_kills;
+        let mut deaths = squash_hits + potato_kills + cherry_kills + jalapeno_kills;
         let mut chilled = 0_u64;
         for qi in 0..self.projectiles.len() {
             if !self.projectiles[qi].active {
@@ -788,9 +824,7 @@ impl SimpleState {
         let mut digger_emerged = 0_u64;
         let mut ladder_placed = 0_u64;
         for zi in 0..self.zombies.len() {
-            if self.zombies[zi].status != UnitStatus::Active
-                || self.zombies[zi].hp <= 0
-            {
+            if self.zombies[zi].status != UnitStatus::Active || self.zombies[zi].hp <= 0 {
                 continue;
             }
             self.zombies[zi].age += 1;
@@ -829,9 +863,15 @@ impl SimpleState {
                         && p.row == row
                         && zx_fp >= plant_x_fp(p.col) - 60_000
                         && zx_fp <= plant_x_fp(p.col) + 70_000
-                        && !self.ladders.iter().any(|l| l.row == p.row && l.col == p.col)
+                        && !self
+                            .ladders
+                            .iter()
+                            .any(|l| l.row == p.row && l.col == p.col)
                 }) {
-                    self.ladders.push(GridObject { row: plant.row, col: plant.col });
+                    self.ladders.push(GridObject {
+                        row: plant.row,
+                        col: plant.col,
+                    });
                     self.zombies[zi].tool = false;
                     self.zombies[zi].shield_hp = 0;
                     ladder_placed += 1;
@@ -848,7 +888,10 @@ impl SimpleState {
                     let px_fp = plant_x_fp(p.col);
                     p.hp > 0
                         && p.row == row
-                        && !self.ladders.iter().any(|l| l.row == p.row && l.col == p.col)
+                        && !self
+                            .ladders
+                            .iter()
+                            .any(|l| l.row == p.row && l.col == p.col)
                         && zx_fp >= px_fp
                         && zx_fp - px_fp <= 60_000
                 })
@@ -906,6 +949,7 @@ impl SimpleState {
             ("squash_impact", squash_hits),
             ("explosion", potato_explosions),
             ("explosion", cherry_explosions),
+            ("explosion", jalapeno_explosions),
             ("chill_applied", chilled),
             ("digger_emerged", digger_emerged),
             ("rake_triggered", rake_hits),
@@ -971,14 +1015,16 @@ mod tests {
 
     #[test]
     fn preserves_cob_cannon_two_cell_footprint() {
-        let text = r#"{"plants":[{"type":"cob_cannon","row":3,"col":8}],"zombies":[],"brains":[3]}"#;
+        let text =
+            r#"{"plants":[{"type":"cob_cannon","row":3,"col":8}],"zombies":[],"brains":[3]}"#;
         let s = parse_scenario(text).unwrap();
         assert_eq!(s.plants[0].footprint, vec![8, 9]);
     }
 
     #[test]
     fn rejects_cob_cannon_in_last_column() {
-        let text = r#"{"plants":[{"type":"cob_cannon","row":3,"col":9}],"zombies":[],"brains":[3]}"#;
+        let text =
+            r#"{"plants":[{"type":"cob_cannon","row":3,"col":9}],"zombies":[],"brains":[3]}"#;
         let error = parse_scenario(text).unwrap_err().to_string();
         assert!(error.contains("cob_cannon occupies columns col and col+1"));
     }
@@ -1097,7 +1143,14 @@ mod tests {
         let text = r#"{"plants":[{"type":"peashooter","row":3,"col":1}],"zombies":[{"type":"buckethead","row":3,"x":90,"hp":270,"helmet_hp":10}],"brains":[3]}"#;
         let mut s = SimpleState::from(parse_scenario(text).unwrap());
         s.step();
-        assert_eq!((s.zombies[0].helmet_hp, s.zombies[0].shield_hp, s.zombies[0].hp), (0, 0, 260));
+        assert_eq!(
+            (
+                s.zombies[0].helmet_hp,
+                s.zombies[0].shield_hp,
+                s.zombies[0].hp
+            ),
+            (0, 0, 260)
+        );
         assert_eq!(s.events.get("armor_lost"), Some(&1));
     }
 
@@ -1106,7 +1159,14 @@ mod tests {
         let text = r#"{"plants":[{"type":"peashooter","row":3,"col":1}],"zombies":[{"type":"screen_door","row":3,"x":90,"hp":270,"shield_hp":10}],"brains":[3]}"#;
         let mut s = SimpleState::from(parse_scenario(text).unwrap());
         s.step();
-        assert_eq!((s.zombies[0].helmet_hp, s.zombies[0].shield_hp, s.zombies[0].hp), (0, 0, 260));
+        assert_eq!(
+            (
+                s.zombies[0].helmet_hp,
+                s.zombies[0].shield_hp,
+                s.zombies[0].hp
+            ),
+            (0, 0, 260)
+        );
         assert_eq!(s.events.get("armor_lost"), Some(&1));
     }
 

@@ -68,3 +68,20 @@ class RustCoreBridgeTests(unittest.TestCase):
         self.assertEqual(result["events"]["explosion"], 1)
         self.assertEqual(result["zombies"][0]["status"], "dead")
 
+    @unittest.skipUnless(rust_core_available(), "native Rust slice is not built")
+    def test_jalapeno_row_blast_runs_through_rust(self):
+        result = run_rust_core({
+            "version": 2,
+            "max_frames": 100,
+            "plants": [{"type": "jalapeno", "row": 3, "col": 2}],
+            "zombies": [
+                {"type": "normal", "row": 3, "x": 300},
+                {"type": "normal", "row": 2, "x": 300},
+            ],
+            "brains": [3],
+        })
+        self.assertEqual(result["backend"], "rust-core-slice")
+        self.assertEqual(result["events"]["explosion"], 1)
+        self.assertEqual(result["zombies"][0]["status"], "dead")
+        self.assertEqual(result["zombies"][1]["status"], "active")
+

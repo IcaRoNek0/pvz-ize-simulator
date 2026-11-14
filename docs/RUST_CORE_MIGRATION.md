@@ -49,7 +49,19 @@ python3 scripts/benchmark_rust_slice.py \
 
 ## 可选 Rust 后端
 
-`pvz-ize run/predict --backend rust-core` 仅调度已通过差分门的切片单位（包括钉耙、梯子、土豆雷和延迟樱桃炸弹）；不满足支持门（例如玉米炮弹、未迁移僵尸，或省略射击植物的初始 `cooldown`）时使用 Python `Simulator`，不会套用错误规则。默认后端仍是 Python。
+`pvz-ize run/predict --backend rust-core` 仅调度已通过差分门的切片单位（包括钉耙、梯子、土豆雷、延迟樱桃炸弹和同排火爆辣椒）；不满足支持门（例如玉米炮弹、未迁移僵尸，或省略射击植物的初始 `cooldown`）时使用 Python `Simulator`，不会套用错误规则。默认后端仍是 Python。
+
+### Phase 9：延迟爆炸与同排灼烧
+
+- `cherry_bomb`：激活延迟 100 tick，在自身及相邻行的 115px 范围内造成 1800 点伤害。
+- `jalapeno`：激活延迟 100 tick，消灭同排敌方僵尸并清除该行梯子。
+- 樱桃炸弹固定夹具：`examples/rust_phase9_cherry_bomb.json`，比较脚本：
+  `scripts/compare_phase9_fixtures.py`，报告：
+  `docs/rust_phase9_comparison.latest.json`。
+- 火爆辣椒基础夹具：`examples/rust_slice_jalapeno.json`，使用
+  `scripts/diff_rust_simple.py` 做完整终态差分。
+
+这些夹具要求 Python/Rust 的 winner、reason、frames 和可比较的终态投影一致；尚未迁移的动画随机性、玉米加农炮弹道、礼盒和僵王继续走 Python fallback。
 
 可重复运行 guarded backend 基准：
 

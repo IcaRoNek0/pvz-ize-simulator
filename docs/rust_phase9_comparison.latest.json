@@ -1,0 +1,41 @@
+{
+  "comparison": {
+    "frame_match": true,
+    "python_exit_ok": true,
+    "reason_match": true,
+    "rust_exit_ok": true,
+    "winner_match": true
+  },
+  "fixture": "/private/tmp/pvz-ize-simulator.igLHFO/examples/rust_phase9_cherry_bomb.json",
+  "python": {
+    "compact": {
+      "events": {
+        "damage": 2,
+        "eating_started": 1,
+        "explosion": 1,
+        "finished": 1,
+        "plant_died": 1,
+        "zombie_died": 2
+      },
+      "frames": 100,
+      "reason": "no_on_board_zombies",
+      "status": "finished",
+      "winner": "plants"
+    },
+    "exit_status": 0,
+    "stderr": "",
+    "stdout": "{\n  \"model\": \"izc-predict-v5.6\",\n  \"approximate\": true,\n  \"warnings\": [\n    \"Approximate offline model; not frame-equivalent to PvZ 1.0.0.1051.\",\n    \"Animation-driven movement, attack geometry and special timings are simplified; the seed reproduces this model only, not the original game RNG.\",\n    \"IZC 0.7.1 mode rules are statically checked; no live-game differential accuracy is claimed.\"\n  ],\n  \"seed\": 43,\n  \"movement_mode\": \"mean\",\n  \"mode\": \"ize\",\n  \"time_limit_frames\": null,\n  \"timeout_winner\": \"undecided\",\n  \"winner\": \"plants\",\n  \"reason\": \"no_on_board_zombies\",\n  \"status\": \"finished\",\n  \"frames\": 100,\n  \"seconds\": 1.0,\n  \"brains\": [\n    {\n      \"row\": 3,\n      \"hp\": 70\n    }\n  ],\n  \"plants\": [\n    {\n      \"id\": \"cherry\",\n      \"type\": \"cherry_bomb\",\n      \"row\": 3,\n      \"col\": 2,\n      \"hp\": 0,\n      \"cooldown\": 0,\n      \"state_timer\": 0,\n      \"shots\": [],\n      \"target\": null,\n      \"state\": \"destroyed\",\n      \"recently_eaten\": 0,\n      \"layer\": \"main\",\n      \"garlic_direction\": \"random\",\n      \"animation_phase\": null,\n      \"animation_rate\": null\n    }\n  ],\n  \"zombies\": [\n    {\n      \"id\": \"same\",\n      \"type\": \"normal\",\n      \"row\": 3,\n      \"x\": 119.428,\n      \"hp\": 0,\n      \"helmet_hp\": 0,\n      \"shield_hp\": 0,\n      \"speed\": 0.143,\n      \"age\": 99,\n      \"chilled\": 0,\n      \"headless\": false,\n      \"eating\": false,\n      \"status\": \"dead\",\n      \"last_damage_age\": 124,\n      \"phase\": \"initial\",\n      \"phase_timer\": 0,\n      \"direction\": -1,\n      \"target_col\": null,\n      \"target\": null,\n      \"tool\": true,\n      \"leader\": null,\n      \"buttered\": 0,\n      \"hypnotized\": false,\n      \"underground\": null,\n      \"animation_phase\": null,\n      \"frozen\": 0,\n      \"velocity_parameter\": null,\n      \"walk_variant\": null,\n      \"jack_countdown_frames\": null\n    },\n    {\n      \"id\": \"adjacent\",\n      \"type\": \"normal\",\n      \"row\": 2,\n      \"x\": 105.84299999999993,\n      \"hp\": 0,\n      \"helmet_hp\": 0,\n      \"shield_hp\": 0,\n      \"speed\": 0.143,\n      \"age\": 99,\n      \"chilled\": 0,\n      \"headless\": false,\n      \"eating\": false,\n      \"status\": \"dead\",\n      \"last_damage_age\": 124,\n      \"phase\": \"initial\",\n      \"phase_timer\": 0,\n      \"direction\": -1,\n      \"target_col\": null,\n      \"target\": null,\n      \"tool\": true,\n      \"leader\": null,\n      \"buttered\": 0,\n      \"hypnotized\": false,\n      \"underground\": null,\n      \"animation_phase\": null,\n      \"frozen\": 0,\n      \"velocity_parameter\": null,\n      \"walk_variant\": null,\n      \"jack_countdown_frames\": null\n    }\n  ],\n  \"projectiles\": [],\n  \"pending_effects\": {\n    \"basketballs\": [],\n    \"garlic\": {},\n    \"boss\": {}\n  },\n  \"zombie_special_state\": {},\n  \"plant_head_state\": {},\n  \"active_hostile_zombies\": 0,\n  \"active_friendly_zombies\": 0,\n  \"ladders\": [],\n  \"events\": {\n    \"damage\": 2,\n    \"eating_started\": 1,\n    \"explosion\": 1,\n    \"finished\": 1,\n    \"plant_died\": 1,\n    \"zombie_died\": 2\n  }\n}\n"
+  },
+  "rust": {
+    "compact": {
+      "frames": 100,
+      "reason": "no_on_board_zombies",
+      "winner": "plants"
+    },
+    "exit_status": 0,
+    "stderr": "",
+    "stdout": "{\"winner\":\"plants\",\"reason\":\"no_on_board_zombies\",\"frames\":100,\"state\":{\"frame\":100,\"mode\":\"ize\",\"plants\":[{\"id\":\"cherry\",\"type\":\"cherry_bomb\",\"row\":3,\"col\":2,\"footprint\":[2],\"hp\":0,\"cooldown\":0,\"state_timer\":0,\"layer\":\"main\"}],\"zombies\":[{\"id\":\"same\",\"type\":\"normal\",\"row\":3,\"col\":2,\"x\":120.0,\"hp\":0,\"helmet_hp\":0,\"shield_hp\":0,\"speed\":0.143,\"age\":99,\"chilled\":0,\"headless\":false,\"hypnotized\":false,\"tool\":true,\"underground\":null,\"status\":\"dead\"},{\"id\":\"adjacent\",\"type\":\"normal\",\"row\":2,\"col\":2,\"x\":105.843,\"hp\":0,\"helmet_hp\":0,\"shield_hp\":0,\"speed\":0.143,\"age\":99,\"chilled\":0,\"headless\":false,\"hypnotized\":false,\"tool\":true,\"underground\":null,\"status\":\"dead\"}],\"brains\":[{\"row\":3,\"hp\":70}],\"projectiles\":[],\"events\":{\"explosion\":1,\"plant_bitten\":24,\"zombie_died\":2},\"rakes\":[],\"ladders\":[]}}\n"
+  },
+  "schema": "pvz-ize/rust-phase9-fixtures/v1",
+  "sha256": "166932c6b72c912dc17765375801f2f29e3f99cf32aaddcfabf03aff92de3ff8"
+}
