@@ -1,0 +1,8 @@
+{
+  "version": 2,
+  "seed": 42,
+  "max_frames": 10,
+  "brains": [3],
+  "plants": [],
+  "zombies": []
+}

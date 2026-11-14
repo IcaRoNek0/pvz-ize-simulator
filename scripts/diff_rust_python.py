@@ -49,6 +49,33 @@ def projection(result: dict[str, Any]) -> dict[str, Any]:
     return {key: result.get(key) for key in keys}
 
 
+def _core_unit(unit: dict[str, Any], zombie: bool = False) -> dict[str, Any]:
+    """Normalize the subset exposed by the migrating Rust state core."""
+    keys = (("id", "type", "row", "col", "hp", "cooldown", "state_timer", "layer")
+            if not zombie else
+            ("id", "type", "row", "x", "hp", "helmet_hp", "shield_hp", "speed",
+             "age", "chilled", "headless", "hypnotized", "tool", "underground", "status"))
+    value = {key: unit.get(key) for key in keys}
+    if zombie and isinstance(value.get("x"), (int, float)):
+        value["x"] = round(value["x"], 3)
+    return value
+
+
+def core_projection(result: dict[str, Any]) -> dict[str, Any]:
+    """Compare the currently ported state boundary, not unported effects."""
+    state = result.get("state", result)
+    return {
+        "winner": result.get("winner"),
+        "reason": result.get("reason"),
+        "frames": result.get("frames", state.get("frame")),
+        "state": {
+            "plants": [_core_unit(p) for p in state.get("plants", [])],
+            "zombies": [_core_unit(z, zombie=True) for z in state.get("zombies", [])],
+            "brains": state.get("brains", []),
+        },
+    }
+
+
 def rust_result(binary: Path, data: dict[str, Any], timeout: float) -> dict[str, Any]:
     completed = subprocess.run(
         [str(binary)], input=json.dumps(data, ensure_ascii=False, allow_nan=False),
@@ -80,6 +107,8 @@ def main(argv: list[str] | None = None) -> int:
         help="Rust Simulator executable (or PVZ_IZE_RUST_SIM)",
     )
     parser.add_argument("--timeout", type=float, default=30.0)
+    parser.add_argument("--profile", choices=("terminal", "core"), default="terminal",
+                        help="terminal 比较完整终态；core 比较当前 Rust 状态边界")
     parser.add_argument("--out", type=Path, help="write the comparison report as JSON")
     args = parser.parse_args(argv)
     binary = args.rust_binary if args.rust_binary.is_absolute() else ROOT / args.rust_binary
@@ -101,7 +130,8 @@ def main(argv: list[str] | None = None) -> int:
                 raise ValueError("scenario must be a JSON object")
             py = python_result(data)
             rust = rust_result(binary, {**data, "runs": 1}, args.timeout)
-            py_projection, rust_projection = projection(py), projection(rust)
+            project = core_projection if args.profile == "core" else projection
+            py_projection, rust_projection = project(py), project(rust)
             record.update(
                 status="match" if py_projection == rust_projection else "mismatch",
                 python=py_projection, rust=rust_projection,

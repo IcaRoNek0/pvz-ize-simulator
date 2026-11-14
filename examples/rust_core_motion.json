@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "seed": 42,
+  "max_frames": 1,
+  "brains": [3],
+  "plants": [],
+  "zombies": [
+    {"type": "normal", "row": 3, "col": 7}
+  ]
+}
