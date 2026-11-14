@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "description": "Complete PvZ1 character preview sprites. Wiki *1 files are original PvZ1 thumbnails; selected sprites are transparently composed from original PvZ1 reanimation layers.",
+  "description": "Complete PvZ1 character preview sprites. Transparent composites are rendered from original PvZ1 reanimation layers; other entries use full-body PvZ1 Wiki thumbnails.",
   "assets": {
     "backup_dancer": {
       "file": "backup_dancer.png",
@@ -630,11 +630,43 @@
       "source_file": "Zomboni.png"
     }
   },
-  "generated_assets": [
-    "normal",
+  "transparent_composites": [
+    "peashooter",
+    "snow_pea",
+    "threepeater",
+    "split_pea",
+    "puff_shroom",
+    "fume_shroom",
+    "scaredy_shroom",
+    "starfruit",
     "sunflower",
     "wallnut",
+    "tallnut",
+    "umbrella_leaf",
+    "torchwood",
+    "potato_mine",
+    "magnet_shroom",
+    "chomper",
+    "squash",
+    "cactus",
+    "cattail",
+    "gatling_pea",
+    "cabbage_pult",
+    "melon_pult",
+    "winter_melon",
+    "gloom_shroom",
+    "garlic",
+    "pumpkin",
+    "lily_pad",
+    "spikerock",
+    "cherry_bomb",
+    "jalapeno",
+    "doom_shroom",
+    "ice_shroom",
+    "blover",
+    "hypno_shroom",
     "cob_cannon",
+    "normal",
     "yeti"
   ]
 }
