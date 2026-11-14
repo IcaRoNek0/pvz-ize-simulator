@@ -111,6 +111,17 @@ python3 -m pvz_ize run --help
 
 `--dump-initial` 保存实际采样后的、可再次输入的初态，同版本可重放相同结果与轨迹；**最终结果不是可恢复的存档**。输出路径不得与输入或其他产物相同（含软/硬链接）；显式指定已存在的其他输出文件会被覆盖。
 
+## Rust Simulator 迁移（进行中）
+
+`native_sim/` 正在逐步迁移 `Simulator` 核心。当前已完成输入/状态边界、普通移动/终结条件，以及一个不接入默认后端的普通豌豆射手—普通僵尸垂直切片。运行该切片的固定 Python/Rust 差分门：
+
+```sh
+cargo build --release --manifest-path native_sim/Cargo.toml
+python3 scripts/diff_rust_simple.py examples/rust_slice_pea.json
+```
+
+完整战斗规则仍以 Python `Simulator` 为 oracle；Rust 尚未替代默认后端。迁移路线和完整差分门见 `docs/RUST_CORE_MIGRATION.md`、`docs/RUST_DIFF.md` 与 `docs/RUST_SIMPLE_SLICE.md`。
+
 ## 验证和保留产物
 
 ### 参考视频准确率复现
