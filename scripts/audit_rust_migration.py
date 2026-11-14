@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """Run explicit Rust migration fixtures and preserve real mismatches.
 
-The fixture manifest marks migrated projectile, armor and rake slices as an
-already-migrated ``simple`` contract. Ladder still uses the full terminal
-projection and is expected to report a mismatch until its Rust handler is
-ported. A mismatch is evidence, not a failure hidden by a compatibility
-fallback; the report records both outputs and the expected migration status.
+The fixture manifest marks migrated projectile, armor, rake and ladder slices
+as an already-migrated ``simple`` contract. A mismatch is evidence, not a
+failure hidden by a compatibility fallback; the report records both outputs
+and the expected migration status.
 """
 from __future__ import annotations
 

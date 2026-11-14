@@ -16,9 +16,9 @@
   {
     "id": "ladder-placement",
     "mechanism": "ladder",
-    "profile": "terminal",
+    "profile": "simple",
     "scenario": "rust_migration_ladder.json",
-    "expected_status": "mismatch_until_ported"
+    "expected_status": "match"
   },
   {
     "id": "rake-trigger",

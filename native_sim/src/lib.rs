@@ -742,7 +742,11 @@ impl SimpleState {
                 .enumerate()
                 .find(|(_, p)| {
                     let px_fp = plant_x_fp(p.col);
-                    p.hp > 0 && p.row == row && zx_fp >= px_fp && zx_fp - px_fp <= 60_000
+                    p.hp > 0
+                        && p.row == row
+                        && !self.ladders.iter().any(|l| l.row == p.row && l.col == p.col)
+                        && zx_fp >= px_fp
+                        && zx_fp - px_fp <= 60_000
                 })
                 .map(|(i, _)| i);
             if let Some(pi) = target {
