@@ -1,0 +1,13 @@
+{
+  "scenario": "examples/v2_random.json",
+  "runs": 100,
+  "workers": 4,
+  "rustc": "rustc 1.100.0 (0ef1bc386 2026-11-09)",
+  "cargo": "cargo 1.100.0 (3acc79c0c 2026-11-05)",
+  "results": [
+    {"backend": "python-processpool", "seconds": 0.8689412499952596, "runs_per_second": 115.08257894368064},
+    {"backend": "rust-coordinator-python-workers", "seconds": 0.9608612500014715, "runs_per_second": 104.07329882420262}
+  ],
+  "outcomes_equal": true,
+  "note": "Rust coordinator is opt-in and is not faster than Python ProcessPool in this benchmark; Python remains the default."
+}

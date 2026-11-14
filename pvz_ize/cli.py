@@ -11,6 +11,7 @@ from .catalog import MODEL, PLANTS, PLANT_ALIASES, WARNINGS, ZOMBIES, ZOMBIE_ALI
 from .engine import Simulator
 from .model import ScenarioError, parse_scenario
 from .batch import run_batch, run_batch_parallel
+from .native_batch import run_batch_rust
 
 
 class Parser(argparse.ArgumentParser):
@@ -31,6 +32,7 @@ def parser():
     run.add_argument("--max-frames", type=int)
     run.add_argument("--runs", type=int, help="独立模拟次数；覆盖 JSON runs（默认 1）")
     run.add_argument("--workers", type=int, help="批量模拟进程数；>1 启用并行加速（默认串行）")
+    run.add_argument("--backend", choices=("python", "rust"), default="python", help="批量后端；rust 需先构建 native_batch")
     run.add_argument("--json", action="store_true", help="标准输出为完整 JSON")
     run.add_argument("--output", type=Path, help="另存完整 JSON 结果")
     run.add_argument("--trace", type=Path, help="逐事件 NDJSON 日志（非逐帧快照）")
@@ -46,6 +48,7 @@ def parser():
     for option in ("--seed", "--max-frames", "--runs"):
         predict.add_argument(option, type=int)
     predict.add_argument("--workers", type=int, help="批量模拟进程数；>1 启用并行加速（默认串行）")
+    predict.add_argument("--backend", choices=("python", "rust"), default="python", help="批量后端；rust 需先构建 native_batch")
     predict.add_argument("--json", action="store_true")
     for option in ("--output", "--trace", "--dump-initial"):
         predict.add_argument(option, type=Path)
@@ -191,7 +194,9 @@ def main(argv=None):
                 manifest = [] if args.dump_initial else None
                 # Streaming traces/replay manifests require deterministic
                 # parent-process ordering, so retain the serial path there.
-                if args.workers and args.workers > 1 and not args.trace and not args.dump_initial:
+                if args.backend == "rust" and args.workers and args.workers > 1 and not args.trace and not args.dump_initial:
+                    result = run_batch_rust(data, workers=args.workers)
+                elif args.workers and args.workers > 1 and not args.trace and not args.dump_initial:
                     result = run_batch_parallel(data, workers=args.workers)
                 else:
                     result = run_batch(data, event_sink=sink,

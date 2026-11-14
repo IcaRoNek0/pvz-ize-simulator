@@ -1,0 +1,9 @@
+[package]
+name = "pvz-ize-native-batch"
+version = "0.1.0"
+edition = "2021"
+description = "Rust process-pool coordinator for the pvz-ize simulator"
+license = "MIT"
+
+[dependencies]
+serde_json = "1.0"
