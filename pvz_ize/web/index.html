@@ -17,7 +17,7 @@
           <div class="side-tabs" role="group" aria-label="单位阵营"><button type="button" id="plants-tab" class="active" aria-pressed="true">植物</button><button type="button" id="zombies-tab" aria-pressed="false">僵尸</button><button type="button" id="special-tab" aria-pressed="false">特殊物件</button></div>
           <label class="search-field"><span class="sr-only">搜索单位名称或英文名</span><span aria-hidden="true">⌕</span><input id="unit-search" type="search" placeholder="搜索单位名称…" autocomplete="off"></label>
           <div id="unit-palette" class="unit-palette" aria-label="可放置单位"></div>
-          <div class="palette-tools"><button type="button" id="quick-rake" class="secondary-button">＋ 放置钉耙</button><button type="button" id="add-ladder" class="secondary-button" hidden>＋ 放置梯子</button></div><p class="palette-footnote">选中单位后点击棋盘放置。<br>同格可容纳多个僵尸与不同植物层。</p>
+          <div class="palette-tools"><button type="button" id="quick-rake" class="secondary-button">＋ 放置钉耙</button><button type="button" id="add-ladder" class="secondary-button" hidden>＋ 放置梯子</button></div>
         </aside>
 
         <div class="board-inspector">
@@ -32,7 +32,7 @@
             <label>帧数上限<input id="frames-input" type="number" min="1" max="10000000" step="1" value="100000"></label>
             <label>模拟轮数<input id="runs-input" type="number" min="1" max="100000" step="1" value="1"></label>
           </div>
-          <details class="advanced-settings"><summary>场景进阶设置 <span>脑子 / 步行 / 叠放 / 钉耙</span></summary><div class="advanced-body"><label>步行模型<select id="movement-input"><option value="animation">动画步行</option><option value="mean">均速步行</option></select></label><label>磁铁距离<select id="magnet-input"><option value="horizontal">横向距离</option><option value="source">原版距离权重</option></select></label><label class="check-label"><input id="stacking-input" type="checkbox">允许同层植物叠放</label><fieldset class="brain-settings"><legend>脑子所在行与血量</legend><div id="brain-controls"></div></fieldset><fieldset class="brain-settings rake-settings"><legend>钉耙（一次性，默认第 3 行第 8 列）</legend><div id="rake-controls"></div><button type="button" id="add-rake" class="secondary-button">＋ 添加钉耙</button></fieldset></div></details>
+          <details class="advanced-settings"><summary>场景进阶设置 <span>脑子 / 步行 / 叠放 / 钉耙</span></summary><div class="advanced-body"><label>步行模型<select id="movement-input"><option value="animation">动画步行</option><option value="mean">均速步行</option></select></label><label>磁铁距离<select id="magnet-input"><option value="horizontal">横向距离</option><option value="source">原版距离权重</option></select></label><label class="check-label"><input id="stacking-input" type="checkbox" checked>允许同层植物叠放</label><fieldset class="brain-settings"><legend>脑子所在行与血量</legend><div id="brain-controls"></div></fieldset><fieldset class="brain-settings rake-settings"><legend>钉耙（一次性，默认第 3 行第 8 列）</legend><div id="rake-controls"></div><button type="button" id="add-rake" class="secondary-button">＋ 添加钉耙</button></fieldset></div></details>
           <div class="run-row"><p><span class="small-caps">NOTE</span> 帧数是计算预算，不是游戏限时。<br>预算耗尽仍存活的对局将标记为「未决」。</p><button type="button" id="simulate-button" class="primary-button">开始推演 <span aria-hidden="true">↗</span></button></div>
         </section>
 

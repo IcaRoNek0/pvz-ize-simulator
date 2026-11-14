@@ -10,7 +10,7 @@ const optionNames={main:"主植物",shell:"外壳",base:"底座",random:"随机"
 // spec fields, while unknown/new fields are inferred and rendered below.
 const fieldLabels = {type:"单位类型",period:"攻击周期（帧）",windup:"出手前摇（帧）",reach:"攻击距离",helmet:"默认头盔血量",shield:"默认盾牌血量",metal:"金属单位",spawn_offset:"出生偏移",hit_offset:"命中偏移",hit_width:"命中宽度",can_lose_head:"可掉头"};
 let catalog, side="plants", brush="repeater", tool="place", cell=[3,1], selected=null;
-let scene={version:2,seed:2026,max_frames:100000,runs:1,mode:"who_will_win",movement_mode:"animation",brains:[{row:3,hp:70}],rakes:[],ladders:[],plants:[],zombies:[]};
+let scene={version:2,seed:2026,max_frames:100000,runs:1,mode:"who_will_win",movement_mode:"animation",brains:[{row:3,hp:70}],allow_stacking:true,rakes:[],ladders:[],plants:[],zombies:[]};
 let history=[],future=[],serial=0,busy=false;
 const clone = value => JSON.parse(JSON.stringify(value));
 const title = type => names[type] || type;
@@ -25,7 +25,7 @@ function selectedUnit(){return selected && scene[selected.group]?.[selected.inde
 function button(text,fn,className=""){const b=document.createElement("button");b.type="button";b.textContent=text;b.className=className;b.addEventListener("click",fn);return b;}
 function assetFor(type,group){return `/assets/${group==="special"&&type==="ladder"?"ladder_object":type}.png`;}
 function renderPalette(){const filter=$("unit-search").value.trim().toLowerCase();const root=$("unit-palette");root.replaceChildren();const source=side==="special"?{rake:{hp:1800,period:0},ladder:{hp:0,period:0}}:catalog[side];const types=Object.keys(source).filter(t=>(title(t)+t).toLowerCase().includes(filter));$("roster-count").textContent=`${types.length} 种`;
- for(const type of types){const b=button("",()=>{if(side==="special"&&(type==="rake"||type==="ladder")){(type==="rake"?$("add-rake"):$("add-ladder")).click();return;}brush=type;tool="place";render();},`unit-card ${side==="zombies"?"zombie-unit":side==="special"?"special-unit":""} ${brush===type?"active":""}`);const mark=document.createElement("span");mark.className="unit-icon";const img=document.createElement("img");img.src=assetFor(type,side);img.alt="";img.onerror=()=>{img.src=assetFor(side==="zombies"?"normal":side==="special"?"rake":"peashooter",side);};mark.append(img);const text=document.createElement("span");text.className="unit-name";text.textContent=title(type);const small=document.createElement("small");small.textContent=type;const spec=source[type]||{};const stats=[];if(spec.hp!==undefined)stats.push(`HP ${spec.hp}`);if(spec.period)stats.push(`冷却 ${spec.period}`);if(spec.speed)stats.push(`速度 ${spec.speed}`);if(stats.length){const meta=document.createElement("small");meta.className="unit-stats";meta.textContent=stats.join(" · ");text.append(meta);}text.append(small);b.append(mark,text);b.title=stats.join(" · ");b.setAttribute("aria-label",`选择${title(type)}`);b.setAttribute("aria-pressed",String(brush===type));root.append(b);}
+ for(const type of types){const b=button("",()=>{if(side==="special"){brush=type;tool="place";render();return;}brush=type;tool="place";render();},`unit-card ${side==="zombies"?"zombie-unit":side==="special"?"special-unit":""} ${brush===type?"active":""}`);const mark=document.createElement("span");mark.className="unit-icon";const img=document.createElement("img");img.src=assetFor(type,side);img.alt="";img.onerror=()=>{img.src=assetFor(side==="zombies"?"normal":side==="special"?"rake":"peashooter",side);};mark.append(img);const text=document.createElement("span");text.className="unit-name";text.textContent=title(type);const small=document.createElement("small");small.textContent=type;const spec=source[type]||{};const stats=[];if(spec.hp!==undefined)stats.push(`HP ${spec.hp}`);if(spec.period)stats.push(`冷却 ${spec.period}`);if(spec.speed)stats.push(`速度 ${spec.speed}`);if(stats.length){const meta=document.createElement("small");meta.className="unit-stats";meta.textContent=stats.join(" · ");text.append(meta);}text.append(small);b.append(mark,text);b.title=stats.join(" · ");b.setAttribute("aria-label",`选择${title(type)}`);b.setAttribute("aria-pressed",String(brush===type));root.append(b);}
 }
 function renderBoard(){const board=$("board");board.replaceChildren();for(let row=1;row<=5;row++){const rowLabel=document.createElement("span");rowLabel.className="row-label";rowLabel.textContent=row;board.append(rowLabel);for(let col=1;col<=9;col++){
  const b=button("",()=>clickCell(row,col),`cell ${row===3?"main-row":""} ${cell[0]===row&&cell[1]===col?"selected":""}`);b.setAttribute("aria-label",`第${row}行第${col}列`);b.addEventListener("mouseenter",()=>{if(tool!=="place"||side==="special")return;const ghost=document.createElement("img");ghost.className="ghost-unit";ghost.src=assetFor(brush,side);ghost.alt="预览";ghost.onerror=()=>ghost.remove();b.append(ghost);});b.addEventListener("mouseleave",()=>b.querySelectorAll(".ghost-unit").forEach(n=>n.remove()));b.addEventListener("contextmenu",event=>{event.preventDefault();cell=[row,col];const first=unitsHere()[0];if(first){selected={group:first.group,index:first.index};tool="inspect";render();status(`已选中${title(first.unit.type)}，可编辑属性。`);}});
@@ -34,10 +34,23 @@ function renderBoard(){const board=$("board");board.replaceChildren();for(let ro
  }}
  $("placement-hint").textContent=tool==="place"?`正在放置：${title(brush)} · 点击棋盘落子` : "查看模式 · 点击格子编辑已有单位";
 }
-function clickCell(row,col){cell=[row,col];selected=null;if(tool==="place"){
- const unit={type:brush,row,col};if(side==="plants"){unit.layer=brush==="pumpkin"?"shell":["lily_pad","flower_pot"].includes(brush)?"base":"main";if(!scene.allow_stacking&&scene.plants.some(p=>p.row===row&&p.col===col&&(p.layer||"main")===unit.layer)){tool="inspect";status("该植物层已有单位，已切换查看模式；如需同层叠放，请开启进阶选项。");render();return;}}
- remember();unit.id=nextId();scene[side].push(unit);selected={group:side,index:scene[side].length-1};status(`已放置${title(brush)}。`);
- }else{const first=unitsHere()[0];if(first)selected={group:first.group,index:first.index};}render();}
+function clickCell(row,col){
+ cell=[row,col];selected=null;
+ if(tool==="place"){
+  if(side==="special"){
+   remember(); const list=brush==="rake"?(scene.rakes||(scene.rakes=[])):(scene.ladders||(scene.ladders=[]));
+   if(!list.some(item=>item.row===row&&item.col===col)){list.push({row,col});status(`已放置${brush==="rake"?"钉耙":"场上梯子"}。`);}else{status("该格已有特殊物件。");}
+   render(); return;
+  }
+  const unit={type:brush,row,col};
+  if(side==="plants"){
+   unit.layer=brush==="pumpkin"?"shell":["lily_pad","flower_pot"].includes(brush)?"base":"main";
+   if(!scene.allow_stacking&&scene.plants.some(p=>p.row===row&&p.col===col&&(p.layer||"main")===unit.layer)){tool="inspect";status("该植物层已有单位；请开启同层叠放。");render();return;}
+  }
+  remember();unit.id=nextId();scene[side].push(unit);selected={group:side,index:scene[side].length-1};status(`已放置${title(brush)}。`);
+ }else{const first=unitsHere()[0];if(first)selected={group:first.group,index:first.index};}
+ render();
+}
 function defaultValue(group,type,name,u){
  const spec=catalog[group]?.[type]||{};
  if(u[name]!==undefined)return u[name];
