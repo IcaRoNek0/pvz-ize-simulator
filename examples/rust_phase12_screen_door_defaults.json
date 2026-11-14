@@ -2,7 +2,24 @@
   "version": 2,
   "seed": 1203,
   "max_frames": 1,
-  "brains": [3],
-  "plants": [{"id": "pea", "type": "peashooter", "row": 3, "col": 1}],
-  "zombies": [{"id": "screen", "type": "screen_door", "row": 3, "x": 90}]
+  "brains": [
+    3
+  ],
+  "plants": [
+    {
+      "id": "pea",
+      "type": "peashooter",
+      "row": 3,
+      "col": 1,
+      "cooldown": 0
+    }
+  ],
+  "zombies": [
+    {
+      "id": "screen",
+      "type": "screen_door",
+      "row": 3,
+      "x": 90
+    }
+  ]
 }
