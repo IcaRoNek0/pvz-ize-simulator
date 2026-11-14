@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "seed": 13,
+  "max_frames": 0,
+  "brains": [3],
+  "plants": [
+    {"id": "cob", "type": "cob_cannon", "row": 3, "col": 2, "cooldown": 500}
+  ],
+  "zombies": []
+}

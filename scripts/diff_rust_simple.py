@@ -16,7 +16,11 @@ FP = 1000
 def python_reference(data):
     plants=[]
     for i,p in enumerate(data.get("plants", [])):
-        col=int(p.get("col",1)); kind=p.get("type","peashooter"); default_hp={"wallnut":4000,"tallnut":8000}.get(kind,300); plants.append({"id":p.get("id",f"p{i+1}"),"type":kind,"row":int(p.get("row",3)),"col":col,"hp":int(p.get("hp",default_hp)),"cooldown":int(p.get("cooldown",0)),"state_timer":int(p.get("state_timer",0)),"layer":p.get("layer","main")})
+        col=int(p.get("col",1)); kind=p.get("type","peashooter")
+        if kind == "cob_cannon" and col >= 9:
+            raise ValueError("cob_cannon left column must be 1..8")
+        default_hp={"wallnut":4000,"tallnut":8000}.get(kind,300)
+        plants.append({"id":p.get("id",f"p{i+1}"),"type":kind,"row":int(p.get("row",3)),"col":col,"footprint":[col,col+1] if kind=="cob_cannon" else [col],"hp":int(p.get("hp",default_hp)),"cooldown":int(p.get("cooldown",0)),"state_timer":int(p.get("state_timer",0)),"layer":p.get("layer","main")})
     zombies=[]
     for i,z in enumerate(data.get("zombies", [])):
         kind=z.get("type","normal"); col=z.get("col")

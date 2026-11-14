@@ -16,6 +16,9 @@ pub struct Plant {
     pub kind: String,
     pub row: u8,
     pub col: u8,
+    /// Occupied board columns.  Most plants occupy one cell; cob cannon
+    /// preserves the two-cell footprint [col, col + 1].
+    pub footprint: Vec<u8>,
     pub hp: i32,
     pub cooldown: u32,
     #[serde(default)]
@@ -272,12 +275,23 @@ pub fn parse_scenario(input: &str) -> Result<Scenario, InputError> {
         let r = row(p.get("row"), &format!("plants[{i}].row"))?;
         let c = col(p.get("col"), &format!("plants[{i}].col"))?;
         let kind = string_field(p.get("type"), "peashooter", "plant.type")?;
+        let footprint = if kind == "cob_cannon" {
+            if c >= 9 {
+                return Err(InputError::Invalid(format!(
+                    "plants[{i}].col: cob_cannon occupies columns col and col+1; left column must be 1..8"
+                )));
+            }
+            vec![c, c + 1]
+        } else {
+            vec![c]
+        };
         let default_hp = plant_default_hp(&kind);
         plants.push(Plant {
             id,
             kind,
             row: r,
             col: c,
+            footprint,
             hp: i64_field(p.get("hp"), i64::from(default_hp), "plant.hp")? as i32,
             cooldown: u64_field(p.get("cooldown"), 0, "plant.cooldown")? as u32,
             state_timer: u64_field(p.get("state_timer"), 0, "plant.state_timer")? as u32,
@@ -888,6 +902,20 @@ mod tests {
     fn rejects_both_coordinates() {
         let bad = r#"{"zombies":[{"type":"normal","row":3,"col":7,"x":490}]}"#;
         assert!(parse_scenario(bad).is_err());
+    }
+
+    #[test]
+    fn preserves_cob_cannon_two_cell_footprint() {
+        let text = r#"{"plants":[{"type":"cob_cannon","row":3,"col":8}],"zombies":[],"brains":[3]}"#;
+        let s = parse_scenario(text).unwrap();
+        assert_eq!(s.plants[0].footprint, vec![8, 9]);
+    }
+
+    #[test]
+    fn rejects_cob_cannon_in_last_column() {
+        let text = r#"{"plants":[{"type":"cob_cannon","row":3,"col":9}],"zombies":[],"brains":[3]}"#;
+        let error = parse_scenario(text).unwrap_err().to_string();
+        assert!(error.contains("cob_cannon occupies columns col and col+1"));
     }
     #[test]
     fn movement_boundary_is_deterministic() {
