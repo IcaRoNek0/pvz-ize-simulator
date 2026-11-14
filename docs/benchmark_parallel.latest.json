@@ -1,0 +1,70 @@
+{
+  "benchmark": [
+    {
+      "mode": "serial",
+      "seconds": 2.7924067080020905,
+      "runs": 100,
+      "runs_per_second": 35.811402298037,
+      "outcomes": {
+        "plants": {
+          "count": 76,
+          "probability": 0.76,
+          "wilson_95": [
+            0.6676766365018553,
+            0.8330867444305122
+          ]
+        },
+        "zombies": {
+          "count": 24,
+          "probability": 0.24,
+          "wilson_95": [
+            0.16691325556948772,
+            0.33232336349814473
+          ]
+        },
+        "undecided": {
+          "count": 0,
+          "probability": 0.0,
+          "wilson_95": [
+            3.469446951953614e-18,
+            0.03699349820698568
+          ]
+        }
+      },
+      "parallel_workers": 1
+    },
+    {
+      "mode": "parallel",
+      "seconds": 0.8487556670006597,
+      "runs": 100,
+      "runs_per_second": 117.81953733915071,
+      "outcomes": {
+        "plants": {
+          "count": 76,
+          "probability": 0.76,
+          "wilson_95": [
+            0.6676766365018553,
+            0.8330867444305122
+          ]
+        },
+        "zombies": {
+          "count": 24,
+          "probability": 0.24,
+          "wilson_95": [
+            0.16691325556948772,
+            0.33232336349814473
+          ]
+        },
+        "undecided": {
+          "count": 0,
+          "probability": 0.0,
+          "wilson_95": [
+            3.469446951953614e-18,
+            0.03699349820698568
+          ]
+        }
+      },
+      "parallel_workers": 4
+    }
+  ]
+}
