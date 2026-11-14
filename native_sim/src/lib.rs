@@ -781,6 +781,8 @@ impl SimpleState {
         let mut spikerock_pulses = 0_u64;
         let mut hazard_kills = 0_u64;
         let mut hazard_damage = 0_u64;
+        let mut fume_pulses = 0_u64;
+        let mut fume_damage = 0_u64;
         for pi in 0..self.plants.len() {
             if self.plants[pi].hp <= 0 || self.plants[pi].kind != "cherry_bomb" {
                 continue;
@@ -941,6 +943,56 @@ impl SimpleState {
                     }
                 }
             }
+        }
+        // Fume-shroom is a deterministic same-row cone in this slice.  Its
+        // `both` damage consumes shield and applies the full 20 damage to the
+        // body path (with helmet absorption), matching the Python oracle;
+        // animation-driven wind-up remains represented by explicit cooldown.
+        for pi in 0..self.plants.len() {
+            if self.plants[pi].hp <= 0 || self.plants[pi].kind != "fume_shroom" {
+                continue;
+            }
+            if self.plants[pi].cooldown > 0 {
+                self.plants[pi].cooldown -= 1;
+            }
+            if self.plants[pi].cooldown != 0 {
+                continue;
+            }
+            let px_fp = plant_x_fp(self.plants[pi].col);
+            let row = self.plants[pi].row;
+            for z in &mut self.zombies {
+                if z.status != UnitStatus::Active
+                    || z.hp <= 0
+                    || z.hypnotized
+                    || z.row != row
+                    || !(z.x_fp + 36_000 < px_fp + 400_000 && z.x_fp + 78_000 > px_fp + 60_000)
+                {
+                    continue;
+                }
+                let mut remaining = 20_i32;
+                if z.shield_hp > 0 {
+                    let absorbed = z.shield_hp.min(remaining);
+                    z.shield_hp -= absorbed;
+                    if z.shield_hp == 0 {
+                        *self.events.entry("armor_lost".into()).or_default() += 1;
+                    }
+                }
+                if z.helmet_hp > 0 {
+                    let absorbed = z.helmet_hp.min(remaining);
+                    z.helmet_hp -= absorbed;
+                    remaining -= absorbed;
+                    if z.helmet_hp == 0 {
+                        *self.events.entry("armor_lost".into()).or_default() += 1;
+                    }
+                }
+                z.hp = (z.hp - remaining).max(0);
+                fume_damage += 1;
+                if z.hp == 0 {
+                    z.status = UnitStatus::Dead;
+                }
+            }
+            self.plants[pi].cooldown = 150;
+            fume_pulses += 1;
         }
         // High-health shells use the same bite pipeline; squash is a one-shot
         // close-range attacker in this first special-mechanism slice.
@@ -1194,6 +1246,8 @@ impl SimpleState {
             ("spikeweed_pulse", spikeweed_pulses),
             ("spikerock_pulse", spikerock_pulses),
             ("damage", hazard_damage),
+            ("fume", fume_pulses),
+            ("damage", fume_damage),
             ("chill_applied", chilled),
             ("digger_emerged", digger_emerged),
             ("rake_triggered", rake_hits),
@@ -1404,6 +1458,20 @@ mod tests {
             s.zombies.iter().map(|z| z.hp).collect::<Vec<_>>(),
             vec![250, 250, 250]
         );
+    }
+
+    #[test]
+    fn simple_fume_pulse_hits_same_row_and_bypasses_shield_bodywise() {
+        let text = r#"{"max_frames":1,"plants":[{"type":"fume_shroom","row":3,"col":1,"cooldown":0}],"zombies":[{"type":"screen_door","row":3,"x":200},{"type":"normal","row":3,"x":300},{"type":"normal","row":3,"x":404},{"type":"normal","row":2,"x":200}],"brains":[3]}"#;
+        let mut s = SimpleState::from(parse_scenario(text).unwrap());
+        s.step();
+        assert_eq!(s.events.get("fume"), Some(&1));
+        assert_eq!(s.events.get("damage"), Some(&2));
+        assert_eq!(s.zombies[0].shield_hp, 1080);
+        assert_eq!(s.zombies[0].hp, 250);
+        assert_eq!(s.zombies[1].hp, 250);
+        assert_eq!(s.zombies[2].hp, 270);
+        assert_eq!(s.zombies[3].hp, 270);
     }
 
     #[test]

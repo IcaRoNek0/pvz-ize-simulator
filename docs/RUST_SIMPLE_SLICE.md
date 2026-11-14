@@ -112,6 +112,14 @@ run `python3 scripts/compare_phase14_fixtures.py` for the guarded defaults,
 shield-order, and one-tick shield-break audit fixtures. A broken shield does
 not claim the Python model's later `newspaper_maddening`/rage speed transition.
 
+Phase 23 adds a deterministic fume-shroom same-row pulse. It uses the existing
+hitbox overlap and armor pipeline, applying 20 body damage while also reducing
+shield armor; strict range and adjacent-row exclusion are covered by
+`examples/rust_phase23_fume_shroom.json`. Run
+`python3 scripts/compare_phase23_fixtures.py` to write
+`docs/rust_phase23_comparison.latest.json`. Animation-driven wind-up remains
+guarded by an explicit cooldown and unsupported scenarios use Python fallback.
+
 Phase 21 adds deterministic `threepeater` fan-out using the existing straight
 projectile model and a zamboni catalog-only walk (HP 1350, speed 0.25). One pea
 is emitted on each valid adjacent row (2–4); ice trails, crushing, and other

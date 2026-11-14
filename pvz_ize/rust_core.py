@@ -18,7 +18,7 @@ from typing import Any
 
 from .batch import run_seed, wilson_interval
 
-SUPPORTED_PLANTS = {"peashooter", "repeater", "snow_pea", "threepeater", "wallnut", "tallnut", "squash", "potato_mine", "cherry_bomb", "jalapeno", "spikeweed", "spikerock", "cob_cannon"}
+SUPPORTED_PLANTS = {"peashooter", "repeater", "snow_pea", "threepeater", "fume_shroom", "wallnut", "tallnut", "squash", "potato_mine", "cherry_bomb", "jalapeno", "spikeweed", "spikerock", "cob_cannon"}
 SUPPORTED_ZOMBIES = {
     "normal", "digger", "ladder", "conehead", "buckethead", "screen_door", "football", "newspaper", "imp", "pole_vaulting", "flag", "zamboni",
 }
@@ -96,7 +96,7 @@ def supports_scenario(data: dict[str, Any]) -> bool:
     # slice has no equivalent random wind-up, so only explicitly seeded
     # shooter cooldowns may cross the backend boundary.
     for item in plants:
-        if item.get("type") in {"peashooter", "repeater", "snow_pea", "threepeater"} and "cooldown" not in item:
+        if item.get("type") in {"peashooter", "repeater", "snow_pea", "threepeater", "fume_shroom"} and "cooldown" not in item:
             return False
     return True
 

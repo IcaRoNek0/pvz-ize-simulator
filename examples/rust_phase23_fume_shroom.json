@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "seed": 2201,
+  "max_frames": 1,
+  "brains": [3],
+  "plants": [
+    {"id": "fume", "type": "fume_shroom", "row": 3, "col": 1, "cooldown": 0}
+  ],
+  "zombies": [
+    {"id": "screen", "type": "screen_door", "row": 3, "x": 200},
+    {"id": "near", "type": "normal", "row": 3, "x": 300},
+    {"id": "edge", "type": "normal", "row": 3, "x": 404},
+    {"id": "other_row", "type": "normal", "row": 2, "x": 200}
+  ]
+}

@@ -182,3 +182,13 @@ The Rust simple slice accepts `flag` with catalog walk speed 0.22 px/tick and re
 ### Phase 22：钉耙与梯子僵尸对象交互
 
 The Rust slice has guarded differentials for a pre-placed rake consuming the first overlapping hostile zombie and a ladder zombie placing its ladder on a wallnut. `examples/rust_migration_rake.json` and `examples/rust_migration_ladder.json` are checked by `scripts/compare_phase22_fixtures.py` and recorded in `docs/rust_phase22_comparison.latest.json`. Pre-placed ladder objects and ladder traversal animation remain Python fallback.
+
+### Phase 23：大喷菇同排范围脉冲
+
+The Rust simple slice covers fume-shroom's deterministic same-row pulse:
+strict hitbox overlap in the 60–400 px cone applies 20 body damage while also
+consuming shield armor. The fixture `examples/rust_phase23_fume_shroom.json`
+checks shield/body ordering, strict range, and row exclusion. Run
+`python3 scripts/compare_phase23_fixtures.py` to regenerate
+`docs/rust_phase23_comparison.latest.json`; animation wind-up and unsupported
+scenarios remain on the Python fallback.

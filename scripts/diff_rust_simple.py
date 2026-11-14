@@ -131,6 +131,33 @@ def python_reference(data):
                 if z["status"]=="active" and z["hp"]>0 and not z["hypnotized"] and z["row"]==p["row"] and z["x_fp"]>=px_fp and z["x_fp"]-px_fp<=120000:
                     z["hp"]=0; z["status"]="dead"; p["hp"]=0; squash_hits+=1; break
         for p in plants:
+            if p["hp"] > 0 and p["type"] == "fume_shroom":
+                if p["cooldown"] > 0:
+                    p["cooldown"] -= 1
+                if p["cooldown"] == 0:
+                    px_fp = int(round((40.0 + 80.0 * (p["col"] - 1)) * FP))
+                    hits = 0
+                    for z in zombies:
+                        if not (z["status"] == "active" and z["hp"] > 0 and not z["hypnotized"]
+                                and z["row"] == p["row"]
+                                and z["x_fp"] + 36000 < px_fp + 400000
+                                and z["x_fp"] + 78000 > px_fp + 60000):
+                            continue
+                        remaining = 20
+                        if z["shield_hp"] > 0:
+                            absorbed = min(z["shield_hp"], remaining)
+                            z["shield_hp"] -= absorbed
+                            if z["shield_hp"] == 0: ev("armor_lost")
+                        if z["helmet_hp"] > 0:
+                            absorbed = min(z["helmet_hp"], remaining)
+                            z["helmet_hp"] -= absorbed; remaining -= absorbed
+                            if z["helmet_hp"] == 0: ev("armor_lost")
+                        z["hp"] = max(0, z["hp"] - remaining)
+                        if z["hp"] == 0: z["status"] = "dead"
+                        hits += 1; ev("damage")
+                    p["cooldown"] = 150
+                    ev("fume")
+                continue
             if p["hp"] > 0 and p["type"] == "cob_cannon":
                 if p["cooldown"] > 0:
                     p["cooldown"] -= 1

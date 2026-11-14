@@ -194,6 +194,31 @@ class RustCoreBridgeTests(unittest.TestCase):
         self.assertEqual(result["plants"][0]["cooldown"], 499)
         self.assertEqual(result["projectiles"], [])
 
+    def test_fume_support_gate_requires_explicit_cooldown(self):
+        self.assertTrue(supports_scenario({
+            "max_frames": 1,
+            "plants": [{"type": "fume_shroom", "row": 3, "col": 1, "cooldown": 0}],
+            "zombies": [{"type": "normal", "row": 3, "x": 200}],
+        }))
+        self.assertFalse(supports_scenario({
+            "max_frames": 1,
+            "plants": [{"type": "fume_shroom", "row": 3, "col": 1}],
+            "zombies": [{"type": "normal", "row": 3, "x": 200}],
+        }))
+
+    @unittest.skipUnless(rust_core_available(), "native Rust slice is not built")
+    def test_fume_pulse_runs_through_rust(self):
+        result = run_rust_core({
+            "version": 2,
+            "max_frames": 1,
+            "plants": [{"type": "fume_shroom", "row": 3, "col": 1, "cooldown": 0}],
+            "zombies": [{"type": "normal", "row": 3, "x": 200}],
+            "brains": [3],
+        })
+        self.assertEqual(result["backend"], "rust-core-slice")
+        self.assertEqual(result["events"]["fume"], 1)
+        self.assertEqual(result["zombies"][0]["hp"], 250)
+
     @unittest.skipUnless(rust_core_available(), "native Rust slice is not built")
     def test_batch_bridge_uses_stable_native_rows(self):
         from pvz_ize.rust_core import run_batch_rust_core
