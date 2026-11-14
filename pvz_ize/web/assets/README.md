@@ -1,13 +1,12 @@
 # PvZ1 sprite assets
 
 每个 GUI 单位现在使用一张完整角色图，不再把 reanimation 的脸、帽子或
-单独身体部件当作图标。植物与僵尸的 `*1.png` 缩略图来自
-[Plants vs. Zombies Wiki](https://plantsvszombies.wiki.gg/)，对应原版
-Plants vs. Zombies（PvZ1）素材；下载和映射可由
-`scripts/fetch_sprite_assets.py` 重复执行。`normal.png`、`wallnut.png`、
-`sunflower.png`、`cob_cannon.png`、`yeti.png` 使用本地 PvZ1
-reanimation 定义合成（`scripts/compose_reanim_assets.py`）；因此没有引入
-PvZ2 的角色图。`rake.png`、`ladder_object.png` 是模拟器的场景道具图。
+单独身体部件当作图标。能从本地 reanimation 正确合成的单位使用透明的
+PvZ1 图层合成图；其余单位使用 [Plants vs. Zombies Wiki](https://plantsvszombies.wiki.gg/)
+的完整 `*1.png` 缩略图。两者都对应原版 Plants vs. Zombies（PvZ1），下载
+映射可由 `scripts/fetch_sprite_assets.py` 重复执行，合成可由
+`scripts/compose_reanim_assets.py` 重复执行；因此没有引入 PvZ2 的角色图。
+`rake.png`、`ladder_object.png` 是模拟器的场景道具图。
 
 僵尸图标由 `scripts/generate_sprite_assets.py` 的同一 PvZ1 reanimation
 导出流程生成（源数据为 FregD156/PvZ_Assets 的原版 reanim 图层）；普通、
