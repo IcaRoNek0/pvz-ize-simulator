@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "max_frames": 4,
+  "runs": 1,
+  "brains": [{"row": 3, "hp": 1}],
+  "plants": [
+    {"type": "peashooter", "row": 3, "col": 1, "hp": 300, "cooldown": 150}
+  ],
+  "zombies": [
+    {"type": "normal", "row": 3, "x": 90, "age": 3, "hp": 270},
+    {"type": "normal", "row": 3, "x": 20.143, "hp": 270}
+  ]
+}

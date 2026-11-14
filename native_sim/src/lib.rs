@@ -44,6 +44,11 @@ pub struct Zombie {
     /// normalized state always stores both the public column and pixel x.
     pub col: u8,
     pub x: f64,
+    /// Internal fixed-point position/speed (1/1000 px). Omitted at the JSON boundary.
+    #[serde(skip)]
+    pub x_fp: i64,
+    #[serde(skip)]
+    pub speed_fp: i64,
     pub hp: i32,
     #[serde(default)]
     pub helmet_hp: i32,
@@ -285,6 +290,8 @@ pub fn parse_scenario(input: &str) -> Result<Scenario, InputError> {
             row: r,
             col: c,
             x,
+            x_fp: (x * 1000.0).round() as i64,
+            speed_fp: (f64_field(z.get("speed"), 0.143, "zombie.speed")? * 1000.0).round() as i64,
             hp: i64_field(z.get("hp"), 270, "zombie.hp")? as i32,
             helmet_hp: i64_field(z.get("helmet_hp"), 0, "zombie.helmet_hp")? as i32,
             shield_hp: i64_field(z.get("shield_hp"), 0, "zombie.shield_hp")? as i32,
@@ -400,8 +407,9 @@ impl CoreState {
             if z.status != UnitStatus::Active {
                 continue;
             }
-            let direction = if z.hypnotized { 1.0 } else { -1.0 };
-            z.x += direction * z.speed;
+            let direction: i64 = if z.hypnotized { 1 } else { -1 };
+            z.x_fp += direction * z.speed_fp;
+            z.x = z.x_fp as f64 / 1000.0;
             z.age += 1;
             // This is the movement-only boundary.  The full Python model uses
             // type-specific house thresholds and brain-bite combat; those are
@@ -478,6 +486,8 @@ impl CoreState {
 pub struct SimpleProjectile {
     pub row: u8,
     pub x: f64,
+    #[serde(skip)]
+    pub x_fp: i64,
     pub damage: i32,
     pub active: bool,
 }
@@ -513,6 +523,10 @@ pub struct SimpleResult {
     pub state: SimpleState,
 }
 
+fn plant_x_fp(col: u8) -> i64 {
+    40_000 + 80_000 * i64::from(col.saturating_sub(1))
+}
+
 impl SimpleState {
     fn terminal(&self) -> Option<(String, String)> {
         if self.brains.iter().all(|b| b.hp <= 0) {
@@ -543,6 +557,7 @@ impl SimpleState {
                 self.projectiles.push(SimpleProjectile {
                     row: p.row,
                     x: p.x() + 50.0,
+                    x_fp: plant_x_fp(p.col) + 50_000,
                     damage: 20,
                     active: true,
                 });
@@ -552,7 +567,8 @@ impl SimpleState {
         }
         for q in &mut self.projectiles {
             if q.active {
-                q.x += 8.0;
+                q.x_fp += 8_000;
+                q.x = q.x_fp as f64 / 1000.0;
             }
         }
         let mut hits = 0_u64;
@@ -561,16 +577,16 @@ impl SimpleState {
             if !self.projectiles[qi].active {
                 continue;
             }
-            let (row, x, damage) = (
+            let (row, x_fp, damage) = (
                 self.projectiles[qi].row,
-                self.projectiles[qi].x,
+                self.projectiles[qi].x_fp,
                 self.projectiles[qi].damage,
             );
             if let Some(z) = self.zombies.iter_mut().find(|z| {
                 z.status == UnitStatus::Active
                     && z.hp > 0
                     && z.row == row
-                    && (z.x - x).abs() <= 25.0
+                    && (z.x_fp - x_fp).abs() <= 25_000
             }) {
                 z.hp = (z.hp - damage).max(0);
                 self.projectiles[qi].active = false;
@@ -592,13 +608,16 @@ impl SimpleState {
                 continue;
             }
             self.zombies[zi].age += 1;
-            let zx = self.zombies[zi].x;
+            let zx_fp = self.zombies[zi].x_fp;
             let row = self.zombies[zi].row;
             let target = self
                 .plants
                 .iter()
                 .enumerate()
-                .find(|(_, p)| p.hp > 0 && p.row == row && zx >= p.x() && zx - p.x() <= 60.0)
+                .find(|(_, p)| {
+                    let px_fp = plant_x_fp(p.col);
+                    p.hp > 0 && p.row == row && zx_fp >= px_fp && zx_fp - px_fp <= 60_000
+                })
                 .map(|(i, _)| i);
             if let Some(pi) = target {
                 if self.zombies[zi].age % 4 == 0 {
@@ -606,8 +625,9 @@ impl SimpleState {
                     bites += 1;
                 }
             } else {
-                self.zombies[zi].x -= self.zombies[zi].speed;
-                if self.zombies[zi].x <= 20.0 {
+                self.zombies[zi].x_fp -= self.zombies[zi].speed_fp;
+                self.zombies[zi].x = self.zombies[zi].x_fp as f64 / 1000.0;
+                if self.zombies[zi].x_fp <= 20_000 {
                     self.zombies[zi].status = UnitStatus::EnteredHouse;
                     if let Some(brain) = self.brains.iter_mut().find(|b| b.row == row && b.hp > 0) {
                         brain.hp = 0;
@@ -716,6 +736,17 @@ mod tests {
         assert_eq!(s.events.get("projectile_fired"), Some(&1));
         assert_eq!(s.zombies[0].hp, 250);
         assert_eq!(s.events.get("projectile_hit"), Some(&1));
+    }
+
+    #[test]
+    fn simple_fixed_point_motion_does_not_accumulate_float_drift() {
+        let text = r#"{"plants":[],"zombies":[{"type":"normal","row":3,"x":100.0,"speed":0.143}],"brains":[3]}"#;
+        let mut s = SimpleState::from(parse_scenario(text).unwrap());
+        for _ in 0..7 {
+            s.step();
+        }
+        assert_eq!(s.zombies[0].x_fp, 98_999);
+        assert!((s.zombies[0].x - 98.999).abs() < 1e-9);
     }
 
     #[test]

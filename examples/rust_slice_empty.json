@@ -1,0 +1,8 @@
+{
+  "version": 2,
+  "max_frames": 10,
+  "runs": 1,
+  "brains": [3],
+  "plants": [],
+  "zombies": [{"type": "normal", "row": 3, "col": 2, "hp": 0}]
+}

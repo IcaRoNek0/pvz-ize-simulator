@@ -1,28 +1,79 @@
 #!/usr/bin/env python3
 """Differential check for the first Rust vertical slice.
 
-This is intentionally separate from the full Simulator diff: the slice has a
-small fixed contract (peashooter, ordinary zombie, one tick) while the full
-Rust migration is still in progress.
+The reference here is deliberately the small fixed-tick contract, not the full
+Python Simulator: peashooter, ordinary zombie, straight projectile, bite and
+brain terminal.  The full engine remains the fidelity oracle until each module
+is ported.
 """
 from __future__ import annotations
 import argparse, json, subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+FP = 1000
 
 def python_reference(data):
-    plant = {"id":"p1","type":"peashooter","row":3,"col":1,"hp":300,"cooldown":150,"state_timer":0,"layer":"main"}
-    zombie = {"id":"z1","type":"normal","row":3,"col":2,"x":90.0,"hp":250,"helmet_hp":0,"shield_hp":0,"speed":0.143,"age":1,"chilled":0,"headless":False,"hypnotized":False,"tool":True,"underground":None,"status":"active"}
-    return {"winner":"undecided","reason":"max_frames_reached","frames":1,"state":{"frame":1,"plants":[plant],"zombies":[zombie],"brains":[{"row":3,"hp":70}],"projectiles":[],"events":{"projectile_fired":1,"projectile_hit":1}}}
+    plants=[]
+    for i,p in enumerate(data.get("plants", [])):
+        col=int(p.get("col",1)); plants.append({"id":p.get("id",f"p{i+1}"),"type":p.get("type","peashooter"),"row":int(p.get("row",3)),"col":col,"hp":int(p.get("hp",300)),"cooldown":int(p.get("cooldown",0)),"state_timer":int(p.get("state_timer",0)),"layer":p.get("layer","main")})
+    zombies=[]
+    for i,z in enumerate(data.get("zombies", [])):
+        kind=z.get("type","normal"); col=z.get("col")
+        x=float(z["x"]) if "x" in z else 10.0+80.0*(int(col)-1)
+        zombies.append({"id":z.get("id",f"z{i+1}"),"type":kind,"row":int(z.get("row",3)),"col":int(round((x-10.0)/80.0))+1,"x":x,"x_fp":int(round(x*FP)),"hp":int(z.get("hp",270)),"helmet_hp":int(z.get("helmet_hp",0)),"shield_hp":int(z.get("shield_hp",0)),"speed":float(z.get("speed",0.143)),"age":int(z.get("age",0)),"chilled":int(z.get("chilled",0)),"headless":bool(z.get("headless",False)),"hypnotized":bool(z.get("hypnotized",False)),"tool":bool(z.get("tool",True)),"underground":z.get("underground") if isinstance(z.get("underground"),bool) else None,"status":"active"})
+    brains=[]
+    for b in data.get("brains",[3]): brains.append({"row":int(b if isinstance(b,int) else b["row"]),"hp":70 if isinstance(b,int) else int(b.get("hp",70))})
+    projectiles=[]; events={}; frame=0
+    def ev(name,n=1): events[name]=events.get(name,0)+n
+    def terminal():
+        if all(b["hp"]<=0 for b in brains): return ("zombies","all_brains_eaten")
+        if not any(z["status"]=="active" and z["hp"]>0 and not z["hypnotized"] for z in zombies): return ("plants","no_on_board_zombies")
+    max_frames=int(data.get("max_frames",100000))
+    result=terminal()
+    while result is None and frame<max_frames:
+        frame+=1
+        for p in plants:
+            if p["hp"]<=0 or p["type"]!="peashooter": continue
+            if p["cooldown"]>0: p["cooldown"]-=1
+            if p["cooldown"]==0:
+                px=40.0+80.0*(p["col"]-1); projectiles.append({"row":p["row"],"x_fp":int(round((px+50)*FP)),"x":px+50,"damage":20,"active":True}); p["cooldown"]=150; ev("projectile_fired")
+        for q in projectiles:
+            if q["active"]: q["x_fp"]+=8000; q["x"]=q["x_fp"]/FP
+        for q in projectiles:
+            if not q["active"]: continue
+            for z in zombies:
+                if z["status"]=="active" and z["hp"]>0 and z["row"]==q["row"] and abs(z["x_fp"]-q["x_fp"])<=25000:
+                    z["hp"]=max(0,z["hp"]-q["damage"]); q["active"]=False; ev("projectile_hit")
+                    if z["hp"]==0: z["status"]="dead"; ev("zombie_died")
+                    break
+        projectiles=[q for q in projectiles if q["active"] and q["x_fp"]<900000]
+        for z in zombies:
+            if z["status"]!="active" or z["hp"]<=0 or z["hypnotized"]: continue
+            z["age"]+=1; zx_fp=z["x_fp"]; row=z["row"]
+            target=next((p for p in plants if p["hp"]>0 and p["row"]==row and zx_fp>=int(round((40+80*(p["col"]-1))*FP)) and zx_fp-int(round((40+80*(p["col"]-1))*FP))<=60000),None)
+            if target is not None:
+                if z["age"]%4==0: target["hp"]=max(0,target["hp"]-4); ev("plant_bitten")
+            else:
+                z["x_fp"]-=int(round(z["speed"]*FP)); z["x"]=z["x_fp"]/FP
+                if z["x_fp"]<=20000:
+                    z["status"]="entered_house"
+                    brain=next((b for b in brains if b["row"]==row and b["hp"]>0),None)
+                    if brain is not None: brain["hp"]=0; ev("brain_eaten")
+        result=terminal()
+    if result is None: winner,reason="undecided","max_frames_reached"
+    else: winner,reason=result
+    public_zombies=[{k:v for k,v in z.items() if k!="x_fp"} for z in zombies]
+    return {"winner":winner,"reason":reason,"frames":frame,"state":{"frame":frame,"plants":plants,"zombies":public_zombies,"brains":brains,"projectiles":[{k:v for k,v in q.items() if k!="x_fp"} for q in projectiles],"events":events}}
 
 def main():
-    ap=argparse.ArgumentParser(); ap.add_argument("scenario",type=Path); ap.add_argument("--rust-binary",type=Path,default=ROOT/"native_sim/target/release/pvz-ize-native-sim"); args=ap.parse_args()
-    data=json.loads(args.scenario.read_text()); expected=python_reference(data)
-    p=subprocess.run([str(args.rust_binary),"--slice","simple"],input=json.dumps(data),text=True,capture_output=True,check=False,cwd=ROOT)
-    if p.returncode: raise SystemExit(f"Rust exited {p.returncode}: {p.stderr}")
-    actual=json.loads(p.stdout)
-    ok=actual==expected
-    print(json.dumps({"status":"match" if ok else "mismatch","python":expected,"rust":actual},ensure_ascii=False,indent=2))
-    return 0 if ok else 2
+    ap=argparse.ArgumentParser(); ap.add_argument("scenarios",nargs="+",type=Path); ap.add_argument("--rust-binary",type=Path,default=ROOT/"native_sim/target/release/pvz-ize-native-sim"); args=ap.parse_args()
+    failed=False
+    for path in args.scenarios:
+        data=json.loads(path.read_text()); expected=python_reference(data)
+        p=subprocess.run([str(args.rust_binary),"--slice","simple"],input=json.dumps(data),text=True,capture_output=True,check=False,cwd=ROOT)
+        if p.returncode: raise SystemExit(f"Rust exited {p.returncode}: {p.stderr}")
+        actual=json.loads(p.stdout); ok=actual==expected; failed|=not ok
+        print(json.dumps({"scenario":str(path),"status":"match" if ok else "mismatch","python":expected,"rust":actual},ensure_ascii=False,indent=2))
+    return 2 if failed else 0
 if __name__=="__main__": raise SystemExit(main())
