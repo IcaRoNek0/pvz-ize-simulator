@@ -117,7 +117,7 @@
         "winner": "undecided"
       },
       "rust_exit_status": 0,
-      "sha256": "273ba7feb266e7527c6f49a91df42b1b619e6e56e23037e1b3613d39957e7e43",
+      "sha256": "e620aff7300a288410c7713ba18175b85f25efb17df6bf1db0baab0d98145097",
       "status": "match",
       "stderr": ""
     },
@@ -238,7 +238,7 @@
         "winner": "undecided"
       },
       "rust_exit_status": 0,
-      "sha256": "4a6b0db37796e8c24837c5321e91942d48f52f8f81292230fcb371c220eec743",
+      "sha256": "ae2030c597c1b24762405022785202188e6e33b97eff3f8d1e13fa0ba25a60f9",
       "status": "match",
       "stderr": ""
     },
@@ -359,7 +359,7 @@
         "winner": "undecided"
       },
       "rust_exit_status": 0,
-      "sha256": "ac37e111521abf59faef0d7f3635fd3ed602083174f4be7592aff06fd10316fe",
+      "sha256": "29bc4f04ad9cc5fb0fc0e04ce202bdd54514336990f208ac14e65937e97f755f",
       "status": "match",
       "stderr": ""
     },
@@ -482,7 +482,7 @@
         "winner": "undecided"
       },
       "rust_exit_status": 0,
-      "sha256": "3c6e626b8b31d781be04fa8084f6f70656471ef6d3cf83e89fc60cd80a2bcc06",
+      "sha256": "f6930da75da5ce3be1237d549fea57eb62d96766c25c4296c2d849b0dad83e20",
       "status": "match",
       "stderr": ""
     }

@@ -53,6 +53,20 @@ python3 scripts/compare_phase12_fixtures.py
 The Rust backend support gate now admits these three zombie types.  No
 animation or movement mechanism is changed by this phase.
 
+Phase 13 adds the football zombie's observable catalog defaults to the simple
+slice: 270 body HP, 1400 helmet HP, and 0.32 px/tick speed. The straight pea
+projectile path uses the existing `shield_hp -> helmet_hp -> hp` order; the
+football fixture records a direct hit that reduces its helmet to 1380 while
+leaving body HP unchanged. Football charge/animation state is intentionally
+not migrated. Run the guarded differential with:
+
+```sh
+python3 scripts/compare_phase13_fixtures.py
+```
+
+The report is written to `docs/rust_phase13_comparison.latest.json`, and
+scenarios outside the support gate continue to use the Python fallback.
+
 Phase 11 固定夹具可单独运行 Python/Rust 对照（Rust 从 stdin 读取场景）：
 
 ```sh

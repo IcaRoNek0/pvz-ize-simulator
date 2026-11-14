@@ -93,3 +93,15 @@ Rust slice 现在与 `catalog.ZOMBIES` 对齐三种基础护甲僵尸：`conehea
 
 `pvz_ize.rust_core.SUPPORTED_ZOMBIES` 同步扩展为允许这三种单位通过 Rust
 后端支持门；不满足其他切片条件的场景仍回退 Python。
+
+### Phase 13：橄榄球僵尸基础默认值
+
+Rust simple slice now accepts `football` through the guarded backend gate and
+uses the catalog defaults that are observable without animation: body HP 270,
+helmet HP 1400, and speed 0.32 px/tick. The existing straight projectile
+pipeline is exercised by `examples/rust_phase13_football_defaults.json`; one
+pea hit consumes 20 helmet HP (1400 → 1380) and leaves body HP at 270. No
+football charge animation or special movement state is claimed. Run
+`python3 scripts/compare_phase13_fixtures.py` to regenerate
+`docs/rust_phase13_comparison.latest.json`; unsupported scenarios retain the
+Python fallback.

@@ -203,6 +203,7 @@ fn zombie_default_helmet(kind: &str) -> i32 {
     match kind {
         "conehead" => 370,
         "buckethead" => 1100,
+        "football" => 1400,
         "digger" => 100,
         _ => 0,
     }
@@ -213,6 +214,13 @@ fn zombie_default_shield(kind: &str) -> i32 {
         "screen_door" => 1100,
         "ladder" => 500,
         _ => 0,
+    }
+}
+
+fn zombie_default_speed(kind: &str) -> f64 {
+    match kind {
+        "football" => 0.32,
+        _ => 0.143,
     }
 }
 
@@ -336,6 +344,7 @@ pub fn parse_scenario(input: &str) -> Result<Scenario, InputError> {
         let default_hp = zombie_default_hp(&kind);
         let default_helmet = zombie_default_helmet(&kind);
         let default_shield = zombie_default_shield(&kind);
+        let default_speed = zombie_default_speed(&kind);
         zombies.push(Zombie {
             id,
             kind,
@@ -343,7 +352,8 @@ pub fn parse_scenario(input: &str) -> Result<Scenario, InputError> {
             col: c,
             x,
             x_fp: (x * 1000.0).round() as i64,
-            speed_fp: (f64_field(z.get("speed"), 0.143, "zombie.speed")? * 1000.0).round() as i64,
+            speed_fp: (f64_field(z.get("speed"), default_speed, "zombie.speed")? * 1000.0).round()
+                as i64,
             hp: i64_field(z.get("hp"), i64::from(default_hp), "zombie.hp")? as i32,
             helmet_hp: i64_field(
                 z.get("helmet_hp"),
@@ -355,7 +365,7 @@ pub fn parse_scenario(input: &str) -> Result<Scenario, InputError> {
                 i64::from(default_shield),
                 "zombie.shield_hp",
             )? as i32,
-            speed: f64_field(z.get("speed"), 0.143, "zombie.speed")?,
+            speed: f64_field(z.get("speed"), default_speed, "zombie.speed")?,
             age: u64_field(z.get("age"), 0, "zombie.age")?,
             chilled: u64_field(z.get("chilled"), 0, "zombie.chilled")? as u32,
             headless: bool_field(z.get("headless"), false, "zombie.headless")?,
@@ -1272,6 +1282,21 @@ mod tests {
                 .collect::<Vec<_>>(),
             vec![(270, 370, 0), (270, 1100, 0), (270, 0, 1100)]
         );
+    }
+
+    #[test]
+    fn simple_football_defaults_use_catalog_armor_and_speed() {
+        let text = r#"{"max_frames":1,"plants":[{"type":"peashooter","row":3,"col":1,"cooldown":0}],"zombies":[{"type":"football","row":3,"x":90}],"brains":[3]}"#;
+        let mut s = SimpleState::from(parse_scenario(text).unwrap());
+        assert_eq!(s.zombies[0].helmet_hp, 1400);
+        assert!((s.zombies[0].speed - 0.32).abs() < f64::EPSILON);
+        s.step();
+        assert_eq!(s.events.get("projectile_hit"), Some(&1));
+        assert_eq!(s.zombies[0].helmet_hp, 1380);
+        assert_eq!(s.zombies[0].hp, 270);
+        // The football zombie is already in bite range of the shooter cell,
+        // so the movement phase holds it in place after the direct hit.
+        assert!((s.zombies[0].x - 90.0).abs() < 1e-9);
     }
 
     #[test]
