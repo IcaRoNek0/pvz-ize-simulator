@@ -113,12 +113,13 @@ python3 -m pvz_ize run --help
 
 ## Rust Simulator 迁移（进行中）
 
-`native_sim/` 正在逐步迁移 `Simulator` 核心。当前已完成输入/状态边界、普通移动/终结条件，以及一个不接入默认后端的普通豌豆射手—普通僵尸垂直切片。运行该切片的固定 Python/Rust 差分门：
+`native_sim/` 正在逐步迁移 `Simulator` 核心。当前已完成输入/状态边界、普通移动/终结条件，以及一个不接入默认后端的普通/寒冰豌豆、坚果、窝瓜—普通僵尸垂直切片。运行该切片的固定 Python/Rust 差分门：
 
 ```sh
 cargo build --release --manifest-path native_sim/Cargo.toml
 python3 scripts/diff_rust_simple.py \
-  examples/rust_slice_pea.json examples/rust_slice_bite.json examples/rust_slice_empty.json
+  examples/rust_slice_pea.json examples/rust_slice_bite.json examples/rust_slice_empty.json \
+  examples/rust_slice_nuts.json examples/rust_slice_squash.json examples/rust_slice_ice.json
 ```
 
 完整战斗规则仍以 Python `Simulator` 为 oracle；Rust 尚未替代默认后端。迁移路线和完整差分门见 `docs/RUST_CORE_MIGRATION.md`、`docs/RUST_DIFF.md` 与 `docs/RUST_SIMPLE_SLICE.md`。

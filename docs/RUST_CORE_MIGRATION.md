@@ -33,7 +33,7 @@ python3 scripts/benchmark_backends.py examples/v2_random.json \
 
 ## 当前 vertical slice 基准
 
-当前 `native_sim --slice simple` 已迁移一个可验证的最小闭环：豌豆射手、普通僵尸、直线豌豆、固定 4 帧啃食、脑子结算。它不代表完整 `Simulator`，只能用专用基准比较同一小契约：
+当前 `native_sim --slice simple` 已迁移一个可验证的最小闭环：豌豆射手/寒冰豌豆、普通僵尸、直线投射物、固定 4 帧啃食、坚果/高坚果默认血量、窝瓜一次性攻击、减速状态与脑子结算。它不代表完整 `Simulator`，只能用专用基准比较同一小契约：
 
 ```bash
 cargo build --release --manifest-path native_sim/Cargo.toml
@@ -42,11 +42,7 @@ python3 scripts/benchmark_rust_slice.py \
   --out docs/benchmark_rust_slice.latest.json
 ```
 
-最近一次 100 轮结果（独立场景、4 workers）：
-
-- Python reference：约 **256.9 runs/s**；
-- Python ProcessPool reference：约 **569.6 runs/s**；
-- Rust `--slice simple`：约 **1126.6 runs/s**；
-- 三者 winner 全部一致（100/100），Rust slice 约为 Python ProcessPool 的 1.98 倍。
+最近一次 100 轮结果（独立场景、4 workers）写入
+`docs/benchmark_rust_slice.latest.json`；该文件是可重跑的证据，不把一次机器时延写死在路线文档中。当前运行仍验证 100/100 winner 与 Python oracle 一致。
 
 该数字包含每轮启动 Rust 子进程的开销；未来完整 Rust 核心应改为单进程批量/Rayon 调度后再重新测量。此 slice 仍未接入生产默认后端。
