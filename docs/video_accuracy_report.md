@@ -27,4 +27,6 @@ python3 scripts/audit_recorded_rounds.py \
   --out docs/video_accuracy.latest.json
 ```
 
-当前结果：`match=1`、`mismatch=1`、`skipped=4`。准确率按可评分对局计算为 **1/2 = 50%**；4 个跳过项含自定义/不支持物件或无法从录像可靠还原初态，不进入分母。
+用户补充 3/10—6/10 阵容后，已建立 `examples/video_round_3.json`、`video_round_4.json`、`video_round_5.json`、`video_round_6.json`；其中 3/10、4/10 暂采用录像中观察到的植物胜作为预期，5/10、6/10 仍标记 unknown，等待终局确认。
+
+当前结果：`match=1`、`mismatch=3`、`skipped=2`。这不是最终准确率：3/10、4/10 的位置/终局仍需用户确认；当前已评分样本为 `1/4 = 25%`。`run/5` 的已知机制偏差仍单独保留。

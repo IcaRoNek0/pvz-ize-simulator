@@ -8,36 +8,37 @@
   },
   {
     "id": "run5-reference",
-    "scenario": "../examples/video_round_5.json",
+    "scenario": "../examples/regression_run_5.json",
     "expected": "zombies",
-    "timestamp": "reference video: round 5",
-    "notes": "用户复核为后方僵尸进家；用于记录当前模型偏差。"
+    "timestamp": "用户回归记录 run/5",
+    "notes": "用户复核为后方僵尸进家；保留为机制偏差回归，不与 20.14 视频第5轮混同。"
   },
   {
     "id": "screen20-round3",
+    "scenario": "../examples/video_round_3.json",
     "expected": "plants",
     "timestamp": "Screen Recording 2026-11-13 20.14.webm 0-90s",
-    "unsupported_or_custom": ["紫色自定义物件", "大型黄色自定义/无法确认物件"],
-    "notes": "结果可见但含不支持/无法确认物件，按规则跳过。"
+    "notes": "用户补充完整阵容：第三行冰菇、胆小菇、冰瓜、窝瓜、仙人掌；同格魅惑橄榄球；气球、高坚果头、冰车。"
   },
   {
     "id": "screen20-round4",
-    "expected": "unknown",
+    "scenario": "../examples/video_round_4.json",
+    "expected": "plants",
     "timestamp": "Screen Recording 2026-11-13 20.14.webm 90-180s",
-    "notes": "结果可见，但初始位置无法从压缩视频可靠还原；不构造猜测输入。"
+    "notes": "用户补充完整阵容；辣椒头初始倒计时 18.8 秒；撑杆与旗帜同格。"
   },
   {
     "id": "screen20-round5",
+    "scenario": "../examples/video_round_5.json",
     "expected": "unknown",
     "timestamp": "Screen Recording 2026-11-13 20.14.webm 180-280s",
-    "unsupported_or_custom": ["植物身份不确定", "可能存在附着小鬼"],
-    "notes": "阵容身份不确定，跳过。"
+    "notes": "用户补充完整阵容：魅惑菇、火爆辣椒、双向、玉米投手带梯子、小喷菇；地下矿工、伴舞、白眼巨人、普通僵尸。等待确认录像终局后再计分。"
   },
   {
     "id": "screen20-round6",
+    "scenario": "../examples/video_round_6.json",
     "expected": "unknown",
     "timestamp": "Screen Recording 2026-11-13 20.14.webm 280-360s",
-    "unsupported_or_custom": ["钉耙/地面特殊物件初态无法可靠复原"],
-    "notes": "保留观察记录，不计入准确率。"
+    "notes": "用户补充完整阵容；第三行四株植物，投石车/地下矿工/路障/气球；第二行第五列星星果。等待确认录像终局后再计分。"
   }
 ]

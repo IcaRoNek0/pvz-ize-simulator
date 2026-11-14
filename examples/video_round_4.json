@@ -1,0 +1,64 @@
+{
+  "version": 2,
+  "seed": 2026,
+  "runs": 1,
+  "brains": [
+    3
+  ],
+  "plants": [
+    {
+      "type": "potato_mine",
+      "row": 3,
+      "col": 1
+    },
+    {
+      "type": "jalapeno",
+      "row": 3,
+      "col": 2
+    },
+    {
+      "type": "winter_melon",
+      "row": 3,
+      "col": 3
+    },
+    {
+      "type": "magnet_shroom",
+      "row": 3,
+      "col": 4
+    },
+    {
+      "type": "snow_pea",
+      "row": 3,
+      "col": 5
+    }
+  ],
+  "zombies": [
+    {
+      "type": "buckethead",
+      "row": 3,
+      "col": 6
+    },
+    {
+      "type": "gargantuar",
+      "row": 3,
+      "col": 7
+    },
+    {
+      "type": "jalapeno_head",
+      "row": 3,
+      "col": 8,
+      "phase": "head_walking",
+      "phase_timer": 1880
+    },
+    {
+      "type": "pole_vaulting",
+      "row": 3,
+      "col": 9
+    },
+    {
+      "type": "flag",
+      "row": 3,
+      "col": 9
+    }
+  ]
+}

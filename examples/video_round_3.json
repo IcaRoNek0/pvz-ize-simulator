@@ -1,0 +1,58 @@
+{
+  "version": 2,
+  "seed": 2026,
+  "runs": 1,
+  "brains": [
+    3
+  ],
+  "plants": [
+    {
+      "type": "ice_shroom",
+      "row": 3,
+      "col": 1
+    },
+    {
+      "type": "scaredy_shroom",
+      "row": 3,
+      "col": 2
+    },
+    {
+      "type": "winter_melon",
+      "row": 3,
+      "col": 3
+    },
+    {
+      "type": "squash",
+      "row": 3,
+      "col": 4
+    },
+    {
+      "type": "cactus",
+      "row": 3,
+      "col": 5
+    }
+  ],
+  "zombies": [
+    {
+      "type": "football",
+      "row": 3,
+      "col": 5,
+      "hypnotized": true
+    },
+    {
+      "type": "balloon",
+      "row": 3,
+      "col": 6
+    },
+    {
+      "type": "tallnut_head",
+      "row": 3,
+      "col": 7
+    },
+    {
+      "type": "zamboni",
+      "row": 3,
+      "col": 8
+    }
+  ]
+}

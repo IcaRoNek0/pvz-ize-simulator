@@ -1,17 +1,64 @@
 {
   "version": 2,
   "seed": 2026,
-  "runs": 10,
-  "brains": [3],
+  "runs": 1,
+  "brains": [
+    3
+  ],
   "plants": [
-    {"type": "puff_shroom", "row": 3, "col": 1},
-    {"type": "spikeweed", "row": 3, "col": 2},
-    {"type": "potato_mine", "row": 3, "col": 3},
-    {"type": "wallnut", "row": 3, "col": 4},
-    {"type": "repeater", "row": 3, "col": 5}
+    {
+      "type": "hypno_shroom",
+      "row": 3,
+      "col": 1
+    },
+    {
+      "type": "jalapeno",
+      "row": 3,
+      "col": 2
+    },
+    {
+      "type": "split_pea",
+      "row": 3,
+      "col": 3
+    },
+    {
+      "type": "kernelpult",
+      "row": 3,
+      "col": 4
+    },
+    {
+      "type": "puff_shroom",
+      "row": 3,
+      "col": 5
+    }
   ],
   "zombies": [
-    {"type": "conehead", "row": 3, "col": 6},
-    {"type": "pole_vaulting", "row": 3, "col": 8}
+    {
+      "type": "digger",
+      "row": 3,
+      "col": 6,
+      "underground": true
+    },
+    {
+      "type": "backup_dancer",
+      "row": 3,
+      "col": 7
+    },
+    {
+      "type": "gargantuar",
+      "row": 3,
+      "col": 8
+    },
+    {
+      "type": "normal",
+      "row": 3,
+      "col": 9
+    }
+  ],
+  "ladders": [
+    {
+      "row": 3,
+      "col": 4
+    }
   ]
 }

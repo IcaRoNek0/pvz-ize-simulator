@@ -1,0 +1,58 @@
+{
+  "version": 2,
+  "seed": 2026,
+  "runs": 1,
+  "brains": [
+    3
+  ],
+  "plants": [
+    {
+      "type": "snow_pea",
+      "row": 3,
+      "col": 1
+    },
+    {
+      "type": "spikerock",
+      "row": 3,
+      "col": 2
+    },
+    {
+      "type": "cattail",
+      "row": 3,
+      "col": 3
+    },
+    {
+      "type": "umbrella_leaf",
+      "row": 3,
+      "col": 4
+    },
+    {
+      "type": "starfruit",
+      "row": 2,
+      "col": 5
+    }
+  ],
+  "zombies": [
+    {
+      "type": "catapult",
+      "row": 3,
+      "col": 6
+    },
+    {
+      "type": "digger",
+      "row": 3,
+      "col": 7,
+      "underground": true
+    },
+    {
+      "type": "conehead",
+      "row": 3,
+      "col": 8
+    },
+    {
+      "type": "balloon",
+      "row": 3,
+      "col": 9
+    }
+  ]
+}
