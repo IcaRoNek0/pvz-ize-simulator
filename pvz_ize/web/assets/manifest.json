@@ -14,11 +14,11 @@
     },
     "balloon": {
       "file": "balloon.png",
-      "bytes": 16447,
-      "sha256": "daf376709b77a479c0e9458e6cc82ab8bbf9f297e4d27339a4836fb201d5bc40",
+      "bytes": 19513,
+      "sha256": "89bc200b8b7e147e41430dd563880990cd08ae9a123b382350381c24dd1e97b2",
       "dimensions": [
-        143,
-        143
+        147,
+        147
       ],
       "source_file": "Balloon_Zombie1.png"
     },
@@ -34,8 +34,8 @@
     },
     "buckethead": {
       "file": "buckethead.png",
-      "bytes": 15501,
-      "sha256": "498091909604be6e9d9e7f590644d06b6e46a25dfe03b002f7fdc16b7b68e94f",
+      "bytes": 15905,
+      "sha256": "68d010b370a491b7bf8aa8920b79acfb0f52fa16f5bc655f6807aa6b6e1f716b",
       "dimensions": [
         150,
         150
@@ -44,8 +44,8 @@
     },
     "bungee": {
       "file": "bungee.png",
-      "bytes": 19171,
-      "sha256": "3e9e82db9dec5b825653f07e711591244e9c049b4a2432587f6720c43e1c48ac",
+      "bytes": 22039,
+      "sha256": "f0adf39256fee2dd0f0b64de3b61de2be10f902968df99ee0e5b575482d3562d",
       "dimensions": [
         184,
         184
@@ -54,21 +54,21 @@
     },
     "cabbage_pult": {
       "file": "cabbage_pult.png",
-      "bytes": 15217,
-      "sha256": "7ce98fade486f6cb10879c67ad8a6458756bae274ef5d31b4c561e2fda338976",
+      "bytes": 9910,
+      "sha256": "6590ee0b0c06a2dd20b539558cd70c70eb22bc2e717d69f281d1725024eadc1d",
       "dimensions": [
-        96,
-        96
+        160,
+        160
       ],
       "source_file": "Cabbage-pult.png"
     },
     "cactus": {
       "file": "cactus.png",
-      "bytes": 15886,
-      "sha256": "256fe82caf83c9db0c1fae0e3de8a7dd939949eeb58dc5a9fed3881caedf6867",
+      "bytes": 15136,
+      "sha256": "cc8427073446ed37b05246ffdf2dca4a0266b9dbb25fa3b5ec3f0793e47e2876",
       "dimensions": [
-        96,
-        96
+        160,
+        160
       ],
       "source_file": "Cactus.png"
     },
@@ -84,48 +84,48 @@
     },
     "cattail": {
       "file": "cattail.png",
-      "bytes": 17842,
-      "sha256": "dda4b4fbc3c2423cb98b84f7a98d857c56bbb9e8d5807c70b25314b06421defd",
+      "bytes": 13061,
+      "sha256": "a5634eed91e26f74e164c5eec81eea74bbef850f0002904eb0ea6800ad6d342c",
       "dimensions": [
-        96,
-        96
+        160,
+        160
       ],
       "source_file": "Cattail.png"
     },
     "cherry_bomb": {
       "file": "cherry_bomb.png",
-      "bytes": 13974,
-      "sha256": "11a30d3664682108c29b1615799955ad8ca5db1e5f65a6737e72eee038f8c6c4",
+      "bytes": 11445,
+      "sha256": "45753e9527c85c3f2ddf10c292957ab3cbb9a7773605a1ce42d3079821278390",
       "dimensions": [
-        96,
-        96
+        160,
+        160
       ],
       "source_file": "Cherry_Bomb.png"
     },
     "chomper": {
       "file": "chomper.png",
-      "bytes": 19116,
-      "sha256": "b80433bb4878eba9e518e570641f72533dcd56bc16cb4658c20a9023432fc024",
+      "bytes": 13401,
+      "sha256": "66250206084b1d935c24510b34f5a6044f507ec4e713b8debfbca8b309c0af36",
       "dimensions": [
-        96,
-        96
+        160,
+        160
       ],
       "source_file": "Chomper.png"
     },
     "cob_cannon": {
       "file": "cob_cannon.png",
-      "bytes": 41643,
-      "sha256": "3b17c92061d19f7dce04b81cfe98b4e4698f563ef62691f8a524ee287bc9a2da",
+      "bytes": 32702,
+      "sha256": "f99481022e3941ddecac980a432bfc08a73137227c222877c0e0250e0a0fde5c",
       "dimensions": [
-        183,
-        132
+        160,
+        160
       ],
       "source_file": "Cob_Cannon.png"
     },
     "conehead": {
       "file": "conehead.png",
-      "bytes": 15314,
-      "sha256": "d5bc0bb4c03f418f58bac8a79540dea970c34d2e44953be2f7d596301f4eda7b",
+      "bytes": 15712,
+      "sha256": "f32c5b1fa29c42fe917b10e89db2138d5c3bf354bc1d15942948f2e7a7e42017",
       "dimensions": [
         158,
         158
@@ -134,41 +134,41 @@
     },
     "dancing": {
       "file": "dancing.png",
-      "bytes": 17015,
-      "sha256": "aafe3642d744386974e264501027c47e5711449cdd813d05c7586722fdd3ea70",
+      "bytes": 19566,
+      "sha256": "2eeb1f088e2bc4fadc573fafb5f94a83ca94b5ae2692423afe6dbc22b0dc6e40",
       "dimensions": [
-        160,
-        160
+        164,
+        164
       ],
       "source_file": "Dancing_Zombie1.png"
     },
     "digger": {
       "file": "digger.png",
-      "bytes": 21439,
-      "sha256": "2cdef53e99f81f7d4986b501749b4d42caa9a004b8701879590a8e2ae719c423",
+      "bytes": 27935,
+      "sha256": "b6bdaa7712c91ddc0f5d2b1f238179b744fbbfec6cc0cb86809566fafe481aef",
       "dimensions": [
-        147,
-        147
+        168,
+        168
       ],
       "source_file": "Digger_Zombie1.png"
     },
     "doom_shroom": {
       "file": "doom_shroom.png",
-      "bytes": 15005,
-      "sha256": "d84d0c32c6b31fd0f1edd223120b4bc32af4a76d45043a169d68b0aa27d54c17",
+      "bytes": 11778,
+      "sha256": "635646444cdc1dae602b44054c37d0d97ab4fb1c2e5e1c26b478dae42db3fa7a",
       "dimensions": [
-        210,
-        197
+        160,
+        160
       ],
       "source_file": "Doom-shroom.png"
     },
     "flag": {
       "file": "flag.png",
-      "bytes": 14557,
-      "sha256": "c0459d85597602a76be839a2df84ca73d77e632e4a59327961db73f1a36a58a4",
+      "bytes": 21209,
+      "sha256": "2c8b15a0b1b813d06b3846c686572b2318b408fb68de76b121ef855870eb2fdb",
       "dimensions": [
-        136,
-        136
+        152,
+        152
       ],
       "source_file": "Flag_Zombie.png"
     },
@@ -194,18 +194,18 @@
     },
     "fume_shroom": {
       "file": "fume_shroom.png",
-      "bytes": 13877,
-      "sha256": "287e4d2ed00b9a510503aaf7ea2e8d3a1e47cee4e0850c8be084cd79e0462edd",
+      "bytes": 11419,
+      "sha256": "d413e855fb9750a2ee6f862a76ed474ee291e7a50e8f5086112e87ada8ca454c",
       "dimensions": [
-        96,
-        96
+        160,
+        160
       ],
       "source_file": "Fume-shroom.png"
     },
     "gargantuar": {
       "file": "gargantuar.png",
-      "bytes": 50213,
-      "sha256": "5bb83bc75d4d5023303195372e7104b46578d373b2faa131937e56f11a92f307",
+      "bytes": 50279,
+      "sha256": "c79753dc3d8fabe3699769d4b9725dcb6037c237091d21b73c2113307ae615b4",
       "dimensions": [
         200,
         200
@@ -214,31 +214,31 @@
     },
     "garlic": {
       "file": "garlic.png",
-      "bytes": 13429,
-      "sha256": "8f0d110f043403ffec1f87a437aecb9fcfd0b13acf8eb9401bfcc038813678dc",
+      "bytes": 8037,
+      "sha256": "aac1da1a25c89bc79877a958840936fcafa4b0778fb2be830cb8bee9df65b0df",
       "dimensions": [
-        96,
-        96
+        160,
+        160
       ],
       "source_file": "Garlic.png"
     },
     "gatling_pea": {
       "file": "gatling_pea.png",
-      "bytes": 15903,
-      "sha256": "1421ecde9e1d6818868401771c1e29a9ef22f67e75ac0ef8122fd879b12f3162",
+      "bytes": 10639,
+      "sha256": "febb68ba1f95d19e5ed164ef330427cce391034b96a747e63a3ff4cc534a56ee",
       "dimensions": [
-        96,
-        96
+        160,
+        160
       ],
       "source_file": "Gatling_Pea.png"
     },
     "gloom_shroom": {
       "file": "gloom_shroom.png",
-      "bytes": 15728,
-      "sha256": "d12e69cc4f69ae09ddd490be5a00bb72231679739815cd8283642dceb4b02d47",
+      "bytes": 14166,
+      "sha256": "859ef0aee26f25493f1ce50c8773bc0c1220307f053856358bb817cf108fdc35",
       "dimensions": [
-        96,
-        96
+        160,
+        160
       ],
       "source_file": "Gloom-shroom1.png"
     },
@@ -254,11 +254,11 @@
     },
     "ice_shroom": {
       "file": "ice_shroom.png",
-      "bytes": 15280,
-      "sha256": "f1bbd26b209104790e5bce01c88c266fb1d9750012f8457a39a536a84206bbc4",
+      "bytes": 12184,
+      "sha256": "2703add12ffa544ec5a326d779aefe1f63783ff743fe86ce806f446944e10ca6",
       "dimensions": [
-        96,
-        96
+        160,
+        160
       ],
       "source_file": "Ice-shroom1.png"
     },
@@ -274,21 +274,21 @@
     },
     "jack_in_the_box": {
       "file": "jack_in_the_box.png",
-      "bytes": 21915,
-      "sha256": "6459679413b3c3756dabc0551c4406ed1fc03760a1e9299e1b75f6917f0860e1",
+      "bytes": 23029,
+      "sha256": "3ade7cb2ccfa29e0aa1236515c7252c5cee84e0ebd7d6a53d626940f3de375be",
       "dimensions": [
-        96,
-        96
+        149,
+        149
       ],
       "source_file": "Jack-in-the-Box_Zombie1.png"
     },
     "jalapeno": {
       "file": "jalapeno.png",
-      "bytes": 13022,
-      "sha256": "70626fc7e721a6d67425862ef06613ce0aa5d1ecdc04979cf5511e9d6d40664d",
+      "bytes": 7471,
+      "sha256": "3529acf2235f32e095079082f1eec669ccd2cef3355d8105227258e1c7da99f9",
       "dimensions": [
-        96,
-        96
+        160,
+        160
       ],
       "source_file": "Jalapeno.png"
     },
@@ -304,8 +304,8 @@
     },
     "ladder": {
       "file": "ladder.png",
-      "bytes": 22660,
-      "sha256": "e363e089e0b3e2c21d04ed18b98f2c85d01bde038a95f026f7d010d57ab2b09f",
+      "bytes": 22696,
+      "sha256": "60a0b199d83b297fb04465c6aa6e02f6b5409da631fbf98bee38632b35748d4d",
       "dimensions": [
         140,
         140
@@ -323,38 +323,38 @@
     },
     "lily_pad": {
       "file": "lily_pad.png",
-      "bytes": 13839,
-      "sha256": "64e9263cebc80fea300a8a08aead4595d39d57a102d0a0dd75af75f0484dac12",
+      "bytes": 8347,
+      "sha256": "7950861f1329d42ba69daac0132d9608c618a967cfc939a4fbeea56c037c2427",
       "dimensions": [
-        96,
-        96
+        160,
+        160
       ],
       "source_file": "Lily_Pad1.png"
     },
     "magnet_shroom": {
       "file": "magnet_shroom.png",
-      "bytes": 11267,
-      "sha256": "19c8ae2a4b4a07ea635b0abaa8226069733c9d507e1ff7b50d3be462dc679747",
+      "bytes": 7001,
+      "sha256": "6af6bfd2ba169a0678f86d4754c8219b807d698bb757dd46fe283e5439c98d5d",
       "dimensions": [
-        96,
-        96
+        160,
+        160
       ],
       "source_file": "Magnet-shroom1.png"
     },
     "melon_pult": {
       "file": "melon_pult.png",
-      "bytes": 15772,
-      "sha256": "ba8d744ec793dbc20cb5b3bf642bf707aa596d2f4150bf991f8aa4e2a3f846d7",
+      "bytes": 12509,
+      "sha256": "0b7663a2d48a1a1ad634373bb349adf65d01dbdfa9c5601d4f317b92fd4608d8",
       "dimensions": [
-        96,
-        96
+        160,
+        160
       ],
       "source_file": "Melon-pult.png"
     },
     "newspaper": {
       "file": "newspaper.png",
-      "bytes": 19721,
-      "sha256": "687c1fc81d05fe26d5b424b0379f01ba5d69f5d520fd2c0678a8407930e1f44e",
+      "bytes": 19849,
+      "sha256": "6db91d2116b65ab406f732640f16b583897e281b1471d482fa101576426b59a0",
       "dimensions": [
         137,
         137
@@ -363,31 +363,31 @@
     },
     "normal": {
       "file": "normal.png",
-      "bytes": 13598,
-      "sha256": "2e3092058d2eb5ffd3cfda599a98352af6572f82b840d51df3ef3d33e673982c",
+      "bytes": 15684,
+      "sha256": "c269485d3334323b99acf0eefaed2d4e7351c00cace7fb671e16159b4adbc29a",
       "dimensions": [
-        136,
-        136
+        160,
+        160
       ],
       "source_file": "Normal_Zombie.png"
     },
     "peashooter": {
       "file": "peashooter.png",
-      "bytes": 13267,
-      "sha256": "5ca813deb5ab2b6a5285ad1828eaa2152bb0118960f6432c2df62f5e26fcd55b",
+      "bytes": 7567,
+      "sha256": "ffcac1451fd10048a855e0cb2e1b7add0eb0018aaba362e9fc82086d95cf3e1e",
       "dimensions": [
-        96,
-        96
+        160,
+        160
       ],
       "source_file": "Peashooter.png"
     },
     "pogo": {
       "file": "pogo.png",
-      "bytes": 20372,
-      "sha256": "23cabd2d96df343aad1427657243b2ba2ddabc8d6d0fc90a29acae284c84ed55",
+      "bytes": 16227,
+      "sha256": "76e5551efb88e8ce15f18a2d4d96d860c03cca35832a79d57e2064209f01ebd0",
       "dimensions": [
-        96,
-        96
+        146,
+        146
       ],
       "source_file": "Pogo_Zombie1.png"
     },
@@ -403,21 +403,21 @@
     },
     "potato_mine": {
       "file": "potato_mine.png",
-      "bytes": 12583,
-      "sha256": "f157bca5840e3eb47623593ce7cdc4ac8fdd642c50f3afc65b25665b95aad14b",
+      "bytes": 12317,
+      "sha256": "c94e37326b4eec77bd39a8dd60e3149408f08e2e0dc993b7db3466297621a51e",
       "dimensions": [
-        96,
-        96
+        160,
+        160
       ],
       "source_file": "Potato_Mine.png"
     },
     "puff_shroom": {
       "file": "puff_shroom.png",
-      "bytes": 7735,
-      "sha256": "6bae207c3e39442256e5e6751aaf591536285de345c53f99c07a061b345fff76",
+      "bytes": 3400,
+      "sha256": "18bce4e90a6a8eb21dcc3561b8f2de608951b620c5a40e48f789c7d1ea7c0c18",
       "dimensions": [
-        96,
-        96
+        160,
+        160
       ],
       "source_file": "Puff-shroom.png"
     },
@@ -442,8 +442,8 @@
     },
     "red_eye_gargantuar": {
       "file": "red_eye_gargantuar.png",
-      "bytes": 50213,
-      "sha256": "5bb83bc75d4d5023303195372e7104b46578d373b2faa131937e56f11a92f307",
+      "bytes": 50279,
+      "sha256": "c79753dc3d8fabe3699769d4b9725dcb6037c237091d21b73c2113307ae615b4",
       "dimensions": [
         200,
         200
@@ -461,18 +461,18 @@
     },
     "scaredy_shroom": {
       "file": "scaredy_shroom.png",
-      "bytes": 10483,
-      "sha256": "16223f40ef8edea7053557b1df0d2bc9bc163d4352a65ce3d4316aa0fcaf7979",
+      "bytes": 5156,
+      "sha256": "6079178a4cae371136901ecf89814b9c836d93a780108347bf59e88359efd285",
       "dimensions": [
-        96,
-        96
+        160,
+        160
       ],
       "source_file": "Scaredy-shroom.png"
     },
     "screen_door": {
       "file": "screen_door.png",
-      "bytes": 22519,
-      "sha256": "35e66f6d9ed5d60bc85fe2acc9263609e8e3be616f4c3968c3da5b44a45d23cc",
+      "bytes": 22862,
+      "sha256": "f1dd65ea9258d5b9b8486ace49a755c5a4001c2aab158a27844d8936379b68e1",
       "dimensions": [
         140,
         140
@@ -481,21 +481,21 @@
     },
     "snow_pea": {
       "file": "snow_pea.png",
-      "bytes": 13883,
-      "sha256": "f9a962d8fc1e155fbc3772d3365e259d866f7e2e86ed3a84747d5e8303627743",
+      "bytes": 8372,
+      "sha256": "a964f8352e0529747cc51da78e80e5c7011cf1dbb130e50c3882813cc48187db",
       "dimensions": [
-        96,
-        96
+        160,
+        160
       ],
       "source_file": "Snow_Pea1.png"
     },
     "spikerock": {
       "file": "spikerock.png",
-      "bytes": 12824,
-      "sha256": "254712fcd38683a6346eb04c80f371af34804d195da955978ebd896d87a82d9e",
+      "bytes": 7964,
+      "sha256": "5ef8f04c3518bf8bc2de4dbde4118baec448bf8b8a040f684b39b27a35354183",
       "dimensions": [
-        96,
-        96
+        160,
+        160
       ],
       "source_file": "Spikerock.png"
     },
@@ -511,38 +511,38 @@
     },
     "split_pea": {
       "file": "split_pea.png",
-      "bytes": 14835,
-      "sha256": "f2da038703d065f8033238b53c6a709e178000511ada4d66012d98f1e9bea754",
+      "bytes": 4340,
+      "sha256": "87237cec1f1f990017ac40d543d6dfe9bfd3934929c1e20ef384bae3ec31c3de",
       "dimensions": [
-        96,
-        96
+        160,
+        160
       ],
       "source_file": "Split_Pea.png"
     },
     "squash": {
       "file": "squash.png",
-      "bytes": 15957,
-      "sha256": "d3c579b556f5b2649d73f519f3d3d39081cd6ddb0d5dc2efcaca16cd0dde484f",
+      "bytes": 11693,
+      "sha256": "bb99472083a75089754787bfb9070105390f6e156a0145b59c23f7d7ad696697",
       "dimensions": [
-        96,
-        96
+        160,
+        160
       ],
       "source_file": "Squash1.png"
     },
     "starfruit": {
       "file": "starfruit.png",
-      "bytes": 12738,
-      "sha256": "1cd752f901fa93ba6879708c5d8ff85494e20cfc32af7856dc98836393e1fbf2",
+      "bytes": 7633,
+      "sha256": "032899fded7621a3495baf6c899906165e8101752df2812a7d642c2f81f606b8",
       "dimensions": [
-        96,
-        96
+        160,
+        160
       ],
       "source_file": "Starfruit.png"
     },
     "sunflower": {
       "file": "sunflower.png",
-      "bytes": 9211,
-      "sha256": "968f93521e9848ab0ba09fc3c49a0fbbe06de70a46cb1ac9ba428e2bb1d10d6b",
+      "bytes": 9186,
+      "sha256": "99976cbc01631d3de0b12eb2310a0c5bd1c38595c4ff40974f57f6bea8113afc",
       "dimensions": [
         160,
         160
@@ -551,48 +551,48 @@
     },
     "tallnut": {
       "file": "tallnut.png",
-      "bytes": 18281,
-      "sha256": "c04fe2f385ab5d6484542bb0331c8a1d7547a41d32bd52304dcd5d940be2a9af",
+      "bytes": 15318,
+      "sha256": "ac27fba797ed60b6056dbb92050fd822b80921f7c58ea620ec7d3c9db3656eb3",
       "dimensions": [
-        96,
-        96
+        160,
+        160
       ],
       "source_file": "Tall-nut.png"
     },
     "threepeater": {
       "file": "threepeater.png",
-      "bytes": 15312,
-      "sha256": "e52e0f94c9d76213aa4bfa8f840470cf214a18e78a2d19bc4e7e1d53875e625f",
+      "bytes": 9573,
+      "sha256": "7f7255bd4f5283ccbb174d14ed83a2916ce24caff3afae979048731f00bc33f1",
       "dimensions": [
-        96,
-        96
+        160,
+        160
       ],
       "source_file": "Threepeater.png"
     },
     "torchwood": {
       "file": "torchwood.png",
-      "bytes": 14750,
-      "sha256": "77deaebfeb7d75fa25d3c2e06933dd225d0cd555391cc2c7b4e3fbefc4955515",
+      "bytes": 9825,
+      "sha256": "5602a14c464fd685e73dcd8e923d1c565a2fd3430cc198a43e1f1926f2f6c711",
       "dimensions": [
-        96,
-        96
+        160,
+        160
       ],
       "source_file": "Torchwood.png"
     },
     "umbrella_leaf": {
       "file": "umbrella_leaf.png",
-      "bytes": 14486,
-      "sha256": "b30740be3967a306ea9b1ecc6496caa9bf92deb7ac0e1b834e18a9d0418c884c",
+      "bytes": 9533,
+      "sha256": "ef1ddcec32c52c89cea0be52c9ccfc78ebf4ed4c4e6df11d823d1a7d419f1629",
       "dimensions": [
-        96,
-        96
+        160,
+        160
       ],
       "source_file": "Umbrella_Leaf.png"
     },
     "wallnut": {
       "file": "wallnut.png",
-      "bytes": 2590,
-      "sha256": "4840f085d04094d4e8a6fcebeed1aefeb959fd90b4bcff29b9425b83ca3ae256",
+      "bytes": 9234,
+      "sha256": "912b998dee236c4fc739103773aa26c5f9dfa6cdace033e4e8e9e66d900a5a55",
       "dimensions": [
         160,
         160
@@ -601,31 +601,31 @@
     },
     "winter_melon": {
       "file": "winter_melon.png",
-      "bytes": 16869,
-      "sha256": "aad0cdba15ebbe17f54e35da511ca140b8acc21736f8ddb2f6889726648a8124",
+      "bytes": 14662,
+      "sha256": "e8429afd45d084841ece75fef449855b1b439ced4c5de1a1b854878843b95c30",
       "dimensions": [
-        96,
-        96
+        160,
+        160
       ],
       "source_file": "Winter_Melon.png"
     },
     "yeti": {
       "file": "yeti.png",
-      "bytes": 25735,
-      "sha256": "c2519e604a1d833069f17df677b31f3e9f0023c85d15d1b4baa3ee9553873ce9",
+      "bytes": 29969,
+      "sha256": "110dc7e99bc8d5082956308699a53379f05ca742e0c9df43386c5560f65dbdb3",
       "dimensions": [
-        160,
-        160
+        172,
+        172
       ],
       "source_file": "Yeti1.png"
     },
     "zamboni": {
       "file": "zamboni.png",
-      "bytes": 40747,
-      "sha256": "c2a9873ba5165a4f4a27e39c0253587447c2b94653bd4aef242c2cf10b7c2e61",
+      "bytes": 41811,
+      "sha256": "061e7b84e484812f94bb3c33353ac3f6f7d5929d7a2da111f913e7334679ac38",
       "dimensions": [
-        189,
-        189
+        243,
+        243
       ],
       "source_file": "Zomboni.png"
     }
