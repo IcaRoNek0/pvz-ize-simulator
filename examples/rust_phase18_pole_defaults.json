@@ -1,0 +1,8 @@
+{
+  "version": 2,
+  "seed": 1801,
+  "max_frames": 1,
+  "brains": [3],
+  "plants": [],
+  "zombies": [{"id": "pole", "type": "pole_vaulting", "row": 3, "x": 500}]
+}

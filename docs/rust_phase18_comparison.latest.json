@@ -1,0 +1,215 @@
+{
+  "fixtures": [
+    {
+      "fixture": "/private/tmp/pvz-ize-simulator.igLHFO/examples/rust_phase18_pole_defaults.json",
+      "python": {
+        "frames": 1,
+        "reason": "max_frames_reached",
+        "state": {
+          "brains": [
+            {
+              "hp": 70,
+              "row": 3
+            }
+          ],
+          "events": {},
+          "frame": 1,
+          "ladders": [],
+          "mode": "ize",
+          "plants": [],
+          "projectiles": [],
+          "rakes": [],
+          "zombies": [
+            {
+              "age": 1,
+              "chilled": 0,
+              "col": 7,
+              "headless": false,
+              "helmet_hp": 0,
+              "hp": 500,
+              "hypnotized": false,
+              "id": "pole",
+              "row": 3,
+              "shield_hp": 0,
+              "speed": 0.32,
+              "status": "active",
+              "tool": true,
+              "type": "pole_vaulting",
+              "underground": null,
+              "x": 499.68
+            }
+          ]
+        },
+        "winner": "undecided"
+      },
+      "rust": {
+        "frames": 1,
+        "reason": "max_frames_reached",
+        "state": {
+          "brains": [
+            {
+              "hp": 70,
+              "row": 3
+            }
+          ],
+          "events": {},
+          "frame": 1,
+          "ladders": [],
+          "mode": "ize",
+          "plants": [],
+          "projectiles": [],
+          "rakes": [],
+          "zombies": [
+            {
+              "age": 1,
+              "chilled": 0,
+              "col": 7,
+              "headless": false,
+              "helmet_hp": 0,
+              "hp": 500,
+              "hypnotized": false,
+              "id": "pole",
+              "row": 3,
+              "shield_hp": 0,
+              "speed": 0.32,
+              "status": "active",
+              "tool": true,
+              "type": "pole_vaulting",
+              "underground": null,
+              "x": 499.68
+            }
+          ]
+        },
+        "winner": "undecided"
+      },
+      "rust_exit_status": 0,
+      "sha256": "3adee44891ab556ec2a9c0000d51ac3f782253288d059d1bd79a52031a430569",
+      "status": "match",
+      "stderr": ""
+    },
+    {
+      "fixture": "/private/tmp/pvz-ize-simulator.igLHFO/examples/rust_phase18_pole_projectile.json",
+      "python": {
+        "frames": 1,
+        "reason": "max_frames_reached",
+        "state": {
+          "brains": [
+            {
+              "hp": 70,
+              "row": 3
+            }
+          ],
+          "events": {
+            "projectile_fired": 1,
+            "projectile_hit": 1
+          },
+          "frame": 1,
+          "ladders": [],
+          "mode": "ize",
+          "plants": [
+            {
+              "col": 1,
+              "cooldown": 150,
+              "footprint": [
+                1
+              ],
+              "hp": 300,
+              "id": "pea",
+              "layer": "main",
+              "row": 3,
+              "state_timer": 0,
+              "type": "peashooter"
+            }
+          ],
+          "projectiles": [],
+          "rakes": [],
+          "zombies": [
+            {
+              "age": 1,
+              "chilled": 0,
+              "col": 2,
+              "headless": false,
+              "helmet_hp": 0,
+              "hp": 480,
+              "hypnotized": false,
+              "id": "pole",
+              "row": 3,
+              "shield_hp": 0,
+              "speed": 0.143,
+              "status": "active",
+              "tool": false,
+              "type": "pole_vaulting",
+              "underground": null,
+              "x": 90.0
+            }
+          ]
+        },
+        "winner": "undecided"
+      },
+      "rust": {
+        "frames": 1,
+        "reason": "max_frames_reached",
+        "state": {
+          "brains": [
+            {
+              "hp": 70,
+              "row": 3
+            }
+          ],
+          "events": {
+            "projectile_fired": 1,
+            "projectile_hit": 1
+          },
+          "frame": 1,
+          "ladders": [],
+          "mode": "ize",
+          "plants": [
+            {
+              "col": 1,
+              "cooldown": 150,
+              "footprint": [
+                1
+              ],
+              "hp": 300,
+              "id": "pea",
+              "layer": "main",
+              "row": 3,
+              "state_timer": 0,
+              "type": "peashooter"
+            }
+          ],
+          "projectiles": [],
+          "rakes": [],
+          "zombies": [
+            {
+              "age": 1,
+              "chilled": 0,
+              "col": 2,
+              "headless": false,
+              "helmet_hp": 0,
+              "hp": 480,
+              "hypnotized": false,
+              "id": "pole",
+              "row": 3,
+              "shield_hp": 0,
+              "speed": 0.143,
+              "status": "active",
+              "tool": false,
+              "type": "pole_vaulting",
+              "underground": null,
+              "x": 90.0
+            }
+          ]
+        },
+        "winner": "undecided"
+      },
+      "rust_exit_status": 0,
+      "sha256": "97a1be41159db391747227872fc434389f98525c7dd3bf9473beb1ebfe3a12c5",
+      "status": "match",
+      "stderr": ""
+    }
+  ],
+  "rust_binary": "/private/tmp/pvz-ize-simulator.igLHFO/native_sim/target/release/pvz-ize-native-sim",
+  "schema": "pvz-ize/rust-phase18-pole-v1",
+  "status": "match"
+}
