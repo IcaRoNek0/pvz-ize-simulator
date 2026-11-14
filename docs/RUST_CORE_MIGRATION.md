@@ -46,3 +46,7 @@ python3 scripts/benchmark_rust_slice.py \
 `docs/benchmark_rust_slice.latest.json`；该文件是可重跑的证据，不把一次机器时延写死在路线文档中。当前运行仍验证 100/100 winner 与 Python oracle 一致。
 
 该数字包含每轮启动 Rust 子进程的开销；未来完整 Rust 核心应改为单进程批量/Rayon 调度后再重新测量。此 slice 仍未接入生产默认后端。
+
+## 可选 Rust 后端
+
+`pvz-ize run/predict --backend rust-core` 仅调度已通过差分门的切片单位；不满足支持门（例如梯子、钉耙、玉米加农炮、未迁移僵尸，或省略射击植物的初始 `cooldown`）时使用 Python `Simulator`，不会套用错误规则。默认后端仍是 Python。
