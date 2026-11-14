@@ -6,3 +6,6 @@ __pycache__/
 outputs/
 
 native_batch/target/
+
+# native simulator build output
+native_sim/target/
