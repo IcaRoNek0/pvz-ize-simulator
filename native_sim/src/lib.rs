@@ -615,6 +615,40 @@ impl SimpleState {
         self.frame += 1;
         let mut fired = 0_u64;
         let mut squash_hits = 0_u64;
+        let mut potato_kills = 0_u64;
+        let mut potato_explosions = 0_u64;
+        // Potato mine arms on contact and destroys itself.  Once triggered,
+        // the simple slice applies its row-wide lethal blast to active hostile
+        // zombies; underground/special targetability remains a later slice.
+        for pi in 0..self.plants.len() {
+            if self.plants[pi].hp <= 0 || self.plants[pi].kind != "potato_mine" {
+                continue;
+            }
+            let px_fp = plant_x_fp(self.plants[pi].col);
+            let triggered = self.zombies.iter().any(|z| {
+                z.status == UnitStatus::Active
+                    && z.hp > 0
+                    && !z.hypnotized
+                    && z.row == self.plants[pi].row
+                    && z.x_fp >= px_fp
+                    && z.x_fp - px_fp <= 55_000
+            });
+            if triggered {
+                for z in &mut self.zombies {
+                    if z.status == UnitStatus::Active
+                        && z.hp > 0
+                        && !z.hypnotized
+                        && z.row == self.plants[pi].row
+                    {
+                        z.hp = 0;
+                        z.status = UnitStatus::Dead;
+                        potato_kills += 1;
+                    }
+                }
+                self.plants[pi].hp = 0;
+                potato_explosions += 1;
+            }
+        }
         // High-health shells use the same bite pipeline; squash is a one-shot
         // close-range attacker in this first special-mechanism slice.
         for pi in 0..self.plants.len() {
@@ -667,7 +701,7 @@ impl SimpleState {
             }
         }
         let mut hits = 0_u64;
-        let mut deaths = squash_hits;
+        let mut deaths = squash_hits + potato_kills;
         let mut chilled = 0_u64;
         for qi in 0..self.projectiles.len() {
             if !self.projectiles[qi].active {
@@ -841,6 +875,7 @@ impl SimpleState {
             ("plant_bitten", bites),
             ("brain_eaten", brain_eaten),
             ("squash_impact", squash_hits),
+            ("explosion", potato_explosions),
             ("chill_applied", chilled),
             ("digger_emerged", digger_emerged),
             ("rake_triggered", rake_hits),
@@ -982,6 +1017,18 @@ mod tests {
         s.step();
         assert_eq!(s.zombies[0].status, UnitStatus::Dead);
         assert_eq!(s.events.get("squash_impact"), Some(&1));
+    }
+
+    #[test]
+    fn simple_potato_mine_explodes_on_contact_and_only_hits_its_row() {
+        let text = r#"{"max_frames":1,"plants":[{"type":"potato_mine","row":3,"col":1}],"zombies":[{"type":"normal","row":3,"x":90},{"type":"normal","row":2,"x":90}],"brains":[3]}"#;
+        let mut s = SimpleState::from(parse_scenario(text).unwrap());
+        s.step();
+        assert_eq!(s.plants[0].hp, 0);
+        assert_eq!(s.zombies[0].status, UnitStatus::Dead);
+        assert_eq!(s.zombies[1].status, UnitStatus::Active);
+        assert_eq!(s.events.get("explosion"), Some(&1));
+        assert_eq!(s.events.get("zombie_died"), Some(&1));
     }
 
     #[test]

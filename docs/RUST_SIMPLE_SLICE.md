@@ -2,7 +2,7 @@
 
 `native_sim` 当前包含一个**不接入默认后端**的极简切片：普通/寒冰豌豆、普通僵尸、固定 tick、直线投射物、命中扣血、普通啃食、坚果/高坚果默认血量、窝瓜一次性近战、寒冷减速和脑子结算。坐标与速度在核心内部使用 1/1000 像素定点整数，JSON 边界仍输出浮点，避免长局累计浮点误差。
 
-构建并运行十四份固定 Python/Rust 差分夹具：
+构建并运行十五份固定 Python/Rust 差分夹具：
 
 ```sh
 cargo build --release --manifest-path native_sim/Cargo.toml
@@ -14,10 +14,11 @@ python3 scripts/diff_rust_simple.py \
   examples/rust_slice_armor_helmet.json examples/rust_slice_armor_shield.json \
   examples/rust_slice_ladder.json examples/rust_slice_hypnotized.json \
   examples/rust_slice_who_will_win_row_scope.json \
-  examples/rust_slice_cob_cannon_footprint.json
+  examples/rust_slice_cob_cannon_footprint.json \
+  examples/rust_slice_potato_mine.json
 ```
 
-当前十四份均应输出 `status: "match"` 并以退出码 0 结束：
+当前十五份均应输出 `status: "match"` 并以退出码 0 结束：
 
 - `rust_slice_pea.json`：豌豆命中普通僵尸；
 - `rust_slice_bite.json`：普通僵尸啃食植物并吃掉脑子；
@@ -33,6 +34,7 @@ python3 scripts/diff_rust_simple.py \
 - `rust_slice_hypnotized.json`：魅惑僵尸转为友方，向右行走并离场，不啃食植物或脑子。
 - `rust_slice_who_will_win_row_scope.json`：`who_will_win` 模式只检查第三行；仅第二行僵尸时第 0 帧植物胜利。
 - `rust_slice_cob_cannon_footprint.json`：玉米加农炮保留 `[col, col+1]` 双格占位。
+- `rust_slice_potato_mine.json`：土豆雷在同一行接触后爆炸，击杀该行僵尸并销毁自身。
 
 护甲顺序与 Python `Simulator.damage` 一致：普通投射物先消耗
 `shield_hp`，剩余伤害再消耗 `helmet_hp`，最后作用于 `hp`；每层耐久降到零时
@@ -46,5 +48,8 @@ python3 scripts/diff_rust_simple.py \
 
 Rust 输入解析器会拒绝 `cob_cannon` 放在第 9 列，并在 `Plant.footprint` 输出左右两格；
 当前仅迁移占位不含玉米炮弹攻击。
+
+土豆雷切片采用已验证的简单接触范围（同一行、植物中心右侧 55 像素内）；复杂地下、撑杆
+和跳跳僵尸的特殊触发条件仍由 Python `Simulator` 处理。
 
 该参考实现只覆盖上述固定切片；完整 Python `Simulator` 仍是行为 oracle，复杂植物、特殊僵尸和动画尚未迁移。

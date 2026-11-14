@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "seed": 14,
+  "max_frames": 1,
+  "brains": [3],
+  "plants": [
+    {"id": "mine", "type": "potato_mine", "row": 3, "col": 1, "state_timer": 0}
+  ],
+  "zombies": [
+    {"id": "near", "type": "normal", "row": 3, "x": 90, "hp": 270},
+    {"id": "other-row", "type": "normal", "row": 2, "x": 90, "hp": 270}
+  ]
+}

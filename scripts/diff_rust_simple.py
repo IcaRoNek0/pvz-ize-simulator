@@ -45,11 +45,23 @@ def python_reference(data):
             return None
         if not any(z["status"]=="active" and z["hp"]>0 and not z["hypnotized"] for z in zombies): return ("plants","no_on_board_zombies")
     max_frames=int(data.get("max_frames",100000))
-    squash_hits=0
+    squash_hits=0; potato_kills=0; potato_explosions=0
     result=terminal()
     while result is None and frame<max_frames:
         frame+=1
         squash_hits=0
+        potato_kills=0; potato_explosions=0
+        for p in plants:
+            if p["hp"]<=0 or p["type"]!="potato_mine": continue
+            px_fp=int(round((40.0+80.0*(p["col"]-1))*FP))
+            triggered=any(z["status"]=="active" and z["hp"]>0 and not z["hypnotized"]
+                          and z["row"]==p["row"] and z["x_fp"]>=px_fp and z["x_fp"]-px_fp<=55000
+                          for z in zombies)
+            if triggered:
+                for z in zombies:
+                    if z["status"]=="active" and z["hp"]>0 and not z["hypnotized"] and z["row"]==p["row"]:
+                        z["hp"]=0; z["status"]="dead"; potato_kills+=1
+                p["hp"]=0; potato_explosions+=1
         for p in plants:
             if p["hp"]<=0 or p["type"]!="squash": continue
             px_fp=int(round((40.0+80.0*(p["col"]-1))*FP))
@@ -133,9 +145,11 @@ def python_reference(data):
         result=terminal()
     if result is None: winner,reason="undecided","max_frames_reached"
     else: winner,reason=result
+    if potato_explosions: ev("explosion", potato_explosions)
     if squash_hits:
         ev("squash_impact", squash_hits)
-        ev("zombie_died", squash_hits)
+    if squash_hits or potato_kills:
+        ev("zombie_died", squash_hits + potato_kills)
     public_zombies=[{k:v for k,v in z.items() if k!="x_fp"} for z in zombies]
     return {"winner":winner,"reason":reason,"frames":frame,"state":{"frame":frame,"mode":mode,"plants":plants,"zombies":public_zombies,"brains":brains,"projectiles":[{k:v for k,v in q.items() if k!="x_fp"} for q in projectiles],"events":events,"rakes":rakes,"ladders":ladders}}
 
