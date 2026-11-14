@@ -20,7 +20,7 @@ from .batch import run_seed, wilson_interval
 
 SUPPORTED_PLANTS = {"peashooter", "repeater", "snow_pea", "wallnut", "tallnut", "squash", "potato_mine", "cherry_bomb", "jalapeno", "spikeweed", "spikerock"}
 SUPPORTED_ZOMBIES = {
-    "normal", "digger", "ladder", "conehead", "buckethead", "screen_door", "football", "newspaper",
+    "normal", "digger", "ladder", "conehead", "buckethead", "screen_door", "football", "newspaper", "imp",
 }
 
 

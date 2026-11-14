@@ -115,3 +115,11 @@ machine remains in Python. Fixtures `examples/rust_phase14_newspaper_defaults.js
 and `examples/rust_phase14_newspaper_armor_order.json` are checked by
 `scripts/compare_phase14_fixtures.py` and recorded in
 `docs/rust_phase14_comparison.latest.json`.
+
+### Phase 15：小鬼僵尸基础默认值
+
+Rust simple slice now accepts `imp` with catalog defaults: body HP 70 and
+speed 0.423 px/tick. Throwing/landing animation states remain in Python. The
+fixture `examples/rust_phase15_imp_defaults.json` is checked by
+`scripts/compare_phase15_fixtures.py` and recorded in
+`docs/rust_phase15_comparison.latest.json`.

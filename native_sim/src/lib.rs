@@ -194,6 +194,7 @@ fn plant_default_hp(kind: &str) -> i32 {
 
 fn zombie_default_hp(kind: &str) -> i32 {
     match kind {
+        "imp" => 70,
         "ladder" => 500,
         _ => 270,
     }
@@ -221,6 +222,7 @@ fn zombie_default_shield(kind: &str) -> i32 {
 fn zombie_default_speed(kind: &str) -> f64 {
     match kind {
         "football" => 0.32,
+        "imp" => 0.423,
         "newspaper" => 0.09,
         _ => 0.143,
     }
@@ -1307,6 +1309,16 @@ mod tests {
         let s = SimpleState::from(parse_scenario(text).unwrap());
         assert_eq!(s.zombies[0].shield_hp, 150);
         assert!((s.zombies[0].speed - 0.09).abs() < f64::EPSILON);
+    }
+
+    #[test]
+    fn simple_imp_defaults_use_catalog_health_and_speed() {
+        let text = r#"{"max_frames":1,"plants":[],"zombies":[{"type":"imp","row":3,"x":500}],"brains":[3]}"#;
+        let mut s = SimpleState::from(parse_scenario(text).unwrap());
+        assert_eq!(s.zombies[0].hp, 70);
+        assert!((s.zombies[0].speed - 0.423).abs() < f64::EPSILON);
+        s.step();
+        assert!((s.zombies[0].x - 499.577).abs() < 1e-9);
     }
 
     #[test]

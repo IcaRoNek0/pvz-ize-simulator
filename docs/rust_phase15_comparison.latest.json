@@ -1,0 +1,88 @@
+{
+  "fixture": "/private/tmp/pvz-ize-simulator.igLHFO/examples/rust_phase15_imp_defaults.json",
+  "python": {
+    "frames": 1,
+    "reason": "max_frames_reached",
+    "state": {
+      "brains": [
+        {
+          "hp": 70,
+          "row": 3
+        }
+      ],
+      "events": {},
+      "frame": 1,
+      "ladders": [],
+      "mode": "ize",
+      "plants": [],
+      "projectiles": [],
+      "rakes": [],
+      "zombies": [
+        {
+          "age": 1,
+          "chilled": 0,
+          "col": 7,
+          "headless": false,
+          "helmet_hp": 0,
+          "hp": 70,
+          "hypnotized": false,
+          "id": "imp",
+          "row": 3,
+          "shield_hp": 0,
+          "speed": 0.423,
+          "status": "active",
+          "tool": true,
+          "type": "imp",
+          "underground": null,
+          "x": 499.577
+        }
+      ]
+    },
+    "winner": "undecided"
+  },
+  "rust": {
+    "frames": 1,
+    "reason": "max_frames_reached",
+    "state": {
+      "brains": [
+        {
+          "hp": 70,
+          "row": 3
+        }
+      ],
+      "events": {},
+      "frame": 1,
+      "ladders": [],
+      "mode": "ize",
+      "plants": [],
+      "projectiles": [],
+      "rakes": [],
+      "zombies": [
+        {
+          "age": 1,
+          "chilled": 0,
+          "col": 7,
+          "headless": false,
+          "helmet_hp": 0,
+          "hp": 70,
+          "hypnotized": false,
+          "id": "imp",
+          "row": 3,
+          "shield_hp": 0,
+          "speed": 0.423,
+          "status": "active",
+          "tool": true,
+          "type": "imp",
+          "underground": null,
+          "x": 499.577
+        }
+      ]
+    },
+    "winner": "undecided"
+  },
+  "rust_exit_status": 0,
+  "schema": "pvz-ize/rust-phase15-imp/v1",
+  "sha256": "ef990809d4fd0eaaf9f4b2bfb661a1fb3445cfeb00ff0e84562d88cde00d55e7",
+  "status": "match",
+  "stderr": ""
+}

@@ -1,0 +1,8 @@
+{
+  "version": 2,
+  "seed": 1501,
+  "max_frames": 1,
+  "brains": [3],
+  "plants": [],
+  "zombies": [{"id": "imp", "type": "imp", "row": 3, "x": 500}]
+}
