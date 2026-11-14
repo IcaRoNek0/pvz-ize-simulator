@@ -64,8 +64,14 @@ def _core_unit(unit: dict[str, Any], zombie: bool = False) -> dict[str, Any]:
 def core_projection(result: dict[str, Any]) -> dict[str, Any]:
     """Compare the currently ported state boundary, not unported effects."""
     state = result.get("state", result)
+    # CoreState uses ``None`` while the Python public result labels the same
+    # max-frame terminal as ``undecided``.  Normalize this representation at
+    # the harness boundary so the differential check compares semantics.
+    winner = result.get("winner")
+    if winner is None:
+        winner = "undecided"
     return {
-        "winner": result.get("winner"),
+        "winner": winner,
         "reason": result.get("reason"),
         "frames": result.get("frames", state.get("frame")),
         "state": {
