@@ -40,7 +40,7 @@ def supports_scenario(data: dict[str, Any]) -> bool:
         return False
     if data.get("time_limit_frames") is not None or data.get("timeout_winner") not in (None, "undecided"):
         return False
-    if data.get("rakes") or data.get("ladders"):
+    if data.get("ladders"):
         return False
     plants = data.get("plants", [])
     zombies = data.get("zombies", [])
@@ -83,6 +83,7 @@ def _public_result(raw: dict[str, Any], elapsed: float) -> dict[str, Any]:
         "active_hostile_zombies": active_hostile,
         "active_friendly_zombies": active_friendly,
         "ladders": [],
+        "rakes": state.get("rakes", []),
         "status": "finished" if raw.get("winner") != "undecided" else "max_frames_reached",
         "backend": "rust-core-slice",
     }

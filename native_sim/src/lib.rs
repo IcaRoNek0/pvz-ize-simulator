@@ -511,6 +511,7 @@ pub struct SimpleState {
     pub brains: Vec<Brain>,
     pub projectiles: Vec<SimpleProjectile>,
     pub events: std::collections::BTreeMap<String, u64>,
+    pub rakes: Vec<GridObject>,
 }
 
 impl From<Scenario> for SimpleState {
@@ -522,6 +523,7 @@ impl From<Scenario> for SimpleState {
             brains: s.brains,
             projectiles: Vec::new(),
             events: std::collections::BTreeMap::new(),
+            rakes: s.rakes,
         }
     }
 }
@@ -717,6 +719,28 @@ impl SimpleState {
                 }
             }
         }
+        // A lawn rake is a one-shot pre-placed object.  The Python engine
+        // triggers it after movement; mirror its 63x80 cell rectangle here.
+        let mut rake_hits = 0_u64;
+        self.rakes.retain(|rake| {
+            let rx_fp = plant_x_fp(rake.col);
+            let hit = self.zombies.iter_mut().find(|z| {
+                z.status == UnitStatus::Active
+                    && z.hp > 0
+                    && !z.hypnotized
+                    && z.row == rake.row
+                    && z.x_fp >= rx_fp - 60_000
+                    && z.x_fp <= rx_fp + 63_000
+            });
+            if let Some(z) = hit {
+                z.hp = 0;
+                z.status = UnitStatus::Dead;
+                rake_hits += 1;
+                false
+            } else {
+                true
+            }
+        });
         for (name, count) in [
             ("projectile_fired", fired),
             ("projectile_hit", hits),
@@ -726,6 +750,8 @@ impl SimpleState {
             ("squash_impact", squash_hits),
             ("chill_applied", chilled),
             ("digger_emerged", digger_emerged),
+            ("rake_triggered", rake_hits),
+            ("zombie_died", rake_hits),
         ] {
             if count > 0 {
                 *self.events.entry(name.into()).or_default() += count;
@@ -896,6 +922,16 @@ mod tests {
         }
         assert_eq!(s.zombies[0].underground, Some(false));
         assert_eq!(s.events.get("digger_emerged"), Some(&1));
+    }
+
+    #[test]
+    fn simple_rake_triggers_on_first_occupied_cell() {
+        let text = r#"{"max_frames":1,"rakes":[{"row":3,"col":8}],"plants":[],"zombies":[{"type":"normal","row":3,"col":9}],"brains":[3]}"#;
+        let mut s = SimpleState::from(parse_scenario(text).unwrap());
+        s.step();
+        assert!(s.rakes.is_empty());
+        assert_eq!(s.zombies[0].status, UnitStatus::Dead);
+        assert_eq!(s.events.get("rake_triggered"), Some(&1));
     }
 
     #[test]

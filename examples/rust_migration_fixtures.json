@@ -23,8 +23,8 @@
   {
     "id": "rake-trigger",
     "mechanism": "rake",
-    "profile": "terminal",
+    "profile": "simple",
     "scenario": "rust_migration_rake.json",
-    "expected_status": "mismatch_until_ported"
+    "expected_status": "match"
   }
 ]

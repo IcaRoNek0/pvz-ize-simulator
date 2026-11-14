@@ -24,6 +24,7 @@ def python_reference(data):
         zombies.append({"id":z.get("id",f"z{i+1}"),"type":kind,"row":int(z.get("row",3)),"col":int(round((x-10.0)/80.0))+1,"x":x,"x_fp":int(round(x*FP)),"hp":int(z.get("hp",270)),"helmet_hp":int(z.get("helmet_hp",0)),"shield_hp":int(z.get("shield_hp",0)),"speed":float(z.get("speed",0.143)),"age":int(z.get("age",0)),"chilled":int(z.get("chilled",0)),"headless":bool(z.get("headless",False)),"hypnotized":bool(z.get("hypnotized",False)),"tool":bool(z.get("tool",True)),"underground":z.get("underground") if isinstance(z.get("underground"),bool) else None,"status":"active"})
     brains=[]
     for b in data.get("brains",[3]): brains.append({"row":int(b if isinstance(b,int) else b["row"]),"hp":70 if isinstance(b,int) else int(b.get("hp",70))})
+    rakes=[{"row":int(r["row"]),"col":int(r["col"])} for r in data.get("rakes",[])]
     projectiles=[]; events={}; frame=0
     def ev(name,n=1): events[name]=events.get(name,0)+n
     def terminal():
@@ -89,13 +90,24 @@ def python_reference(data):
                     brain=next((b for b in brains if b["row"]==row and b["hp"]>0),None)
                     if brain is not None: brain["hp"]=0; ev("brain_eaten")
         result=terminal()
+        rake_hits=0
+        remaining_rakes=[]
+        for rake in rakes:
+            rx_fp=int(round((40.0+80.0*(rake["col"]-1))*FP))
+            target=next((z for z in zombies if z["status"]=="active" and z["hp"]>0 and not z["hypnotized"] and z["row"]==rake["row"] and rx_fp-60000<=z["x_fp"]<=rx_fp+63000),None)
+            if target is None:
+                remaining_rakes.append(rake)
+            else:
+                target["hp"]=0; target["status"]="dead"; rake_hits+=1; ev("rake_triggered"); ev("zombie_died")
+        rakes=remaining_rakes
+        result=terminal()
     if result is None: winner,reason="undecided","max_frames_reached"
     else: winner,reason=result
     if squash_hits:
         ev("squash_impact", squash_hits)
         ev("zombie_died", squash_hits)
     public_zombies=[{k:v for k,v in z.items() if k!="x_fp"} for z in zombies]
-    return {"winner":winner,"reason":reason,"frames":frame,"state":{"frame":frame,"plants":plants,"zombies":public_zombies,"brains":brains,"projectiles":[{k:v for k,v in q.items() if k!="x_fp"} for q in projectiles],"events":events}}
+    return {"winner":winner,"reason":reason,"frames":frame,"state":{"frame":frame,"plants":plants,"zombies":public_zombies,"brains":brains,"projectiles":[{k:v for k,v in q.items() if k!="x_fp"} for q in projectiles],"events":events,"rakes":rakes}}
 
 def main():
     ap=argparse.ArgumentParser(); ap.add_argument("scenarios",nargs="+",type=Path); ap.add_argument("--rust-binary",type=Path,default=ROOT/"native_sim/target/release/pvz-ize-native-sim"); args=ap.parse_args()
