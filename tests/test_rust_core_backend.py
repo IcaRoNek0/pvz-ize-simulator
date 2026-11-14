@@ -18,6 +18,11 @@ class RustCoreBridgeTests(unittest.TestCase):
         self.assertFalse(supports_scenario({
             "plants": [], "zombies": [{"type": "buckethead", "row": 3, "col": 2}],
         }))
+        self.assertTrue(supports_scenario({
+            "plants": [{"type": "wallnut", "row": 3, "col": 1}],
+            "zombies": [{"type": "ladder", "row": 3, "x": 90}],
+            "rakes": [{"row": 3, "col": 8}],
+        }))
 
     @unittest.skipUnless(rust_core_available(), "native Rust slice is not built")
     def test_supported_fixture_runs_through_rust(self):

@@ -19,7 +19,7 @@ from typing import Any
 from .batch import run_seed, wilson_interval
 
 SUPPORTED_PLANTS = {"peashooter", "repeater", "snow_pea", "wallnut", "tallnut", "squash"}
-SUPPORTED_ZOMBIES = {"normal", "digger"}
+SUPPORTED_ZOMBIES = {"normal", "digger", "ladder"}
 
 
 def rust_core_binary() -> Path:
@@ -82,7 +82,7 @@ def _public_result(raw: dict[str, Any], elapsed: float) -> dict[str, Any]:
         "plant_head_state": {},
         "active_hostile_zombies": active_hostile,
         "active_friendly_zombies": active_friendly,
-        "ladders": [],
+        "ladders": state.get("ladders", []),
         "rakes": state.get("rakes", []),
         "status": "finished" if raw.get("winner") != "undecided" else "max_frames_reached",
         "backend": "rust-core-slice",
