@@ -26,4 +26,4 @@ pvz-ize run examples/v2_random.json --runs 100 \
   --workers 4 --backend rust --json
 ```
 
-带 `--trace` 或 `--dump-initial` 时 CLI 保持串行路径，以保证事件和可重放初态的顺序。Rust 协调器不是完整 Rust 引擎重写；其作用是复用 Python 规则并减少父进程调度开销。
+带 `--trace` 或 `--dump-initial` 时 CLI 保持串行路径，以保证事件和可重放初态的顺序。Rust 协调器不是完整 Rust 引擎重写；其作用是复用 Python 规则并提供可复用的原生调度入口；当前基准中 Python ProcessPool 更快，因此 Python 仍是默认后端。

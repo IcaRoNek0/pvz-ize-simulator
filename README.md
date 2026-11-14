@@ -168,11 +168,15 @@ python3 -m pvz_ize run examples/v2_animation.json --runs 100 --json \
 # 大批量预测可启用多进程（结果与串行逐轮一致；trace/初态清单会自动走串行）
 python3 -m pvz_ize run examples/v2_random.json --runs 1000 --workers 4 --json
 python3 scripts/benchmark_batch.py examples/v2_random.json --runs 100 --workers 4
+
+# 可选 Rust 协调器（先 cargo build；规则仍由 Python Simulator 执行）
+cargo build --release --manifest-path native_batch/Cargo.toml
+python3 -m pvz_ize run examples/v2_random.json --runs 100 --workers 4 --backend rust --json
 ```
 
 大蒜 `garlic_direction: "up"/"down"/"random"`；矿工 `underground: false` 指地上向右走；
 僵尸 `hypnotized: true` 指初始魅惑。可逐体设置HP/头盔/盾及冻结/寒冷/黄油剩余帧。
-批量概率包含未决分母，是本模型的样本频率，不是已经验证的原版胜率。
+批量概率包含未决分母，是本模型的样本频率，不是已经验证的原版胜率。Python ProcessPool 是默认高速后端；Rust 协调器为显式可选后端，基准见 `docs/NATIVE_BATCH.md`。
 
 动画模式使用 `movement_mode: "animation"`，可固定 `animation_phase`、`velocity_parameter` 和 `walk_variant`；
 只对已列出的步行段使用数值轨道，未覆盖动作明确保留近似，见对齐说明。
