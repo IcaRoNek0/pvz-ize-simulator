@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "slice": "peashooter/normal projectile-bite contract",
+  "scenarios": [
+    "examples/rust_slice_benchmark.json"
+  ],
+  "runs": 100,
+  "workers": 4,
+  "rust_binary": "/private/tmp/pvz-ize-simulator.igLHFO/native_sim/target/release/pvz-ize-native-sim",
+  "results": [
+    {
+      "backend": "python-reference",
+      "seconds": 0.38929645900498144,
+      "runs_per_second": 256.8736439462975,
+      "winner_counts": {
+        "zombies": 100
+      },
+      "matches_oracle": true,
+      "mismatch_indexes": []
+    },
+    {
+      "backend": "python-processpool-reference",
+      "seconds": 0.17555387500033248,
+      "runs_per_second": 569.6257060677847,
+      "winner_counts": {
+        "zombies": 100
+      },
+      "matches_oracle": true,
+      "mismatch_indexes": []
+    },
+    {
+      "backend": "rust-slice",
+      "seconds": 0.08876579100615345,
+      "runs_per_second": 1126.5601181097768,
+      "winner_counts": {
+        "zombies": 100
+      },
+      "matches_oracle": true,
+      "mismatch_indexes": []
+    }
+  ],
+  "production_backend_changed": false,
+  "notes": [
+    "Python reference and Rust --slice use the same deliberately small contract.",
+    "Python processpool uses independent scenarios; Rust subprocesses are launched concurrently.",
+    "A full Simulator migration must pass scripts/diff_rust_python.py before replacing the default backend."
+  ]
+}
