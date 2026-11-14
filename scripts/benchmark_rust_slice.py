@@ -108,13 +108,17 @@ def main(argv: list[str] | None = None) -> int:
             return list(pool.map(_rust_one, tasks))
     rows.append(_timed("rust-slice", rust_run, args.runs, reference))
 
+    try:
+        binary_label = str(binary.resolve().relative_to(ROOT.resolve()))
+    except ValueError:
+        binary_label = str(binary.resolve())
     report = {
         "schema": 1,
         "slice": "peashooter/normal projectile-bite contract",
         "scenarios": [str(path) for path in args.scenarios],
         "runs": args.runs,
         "workers": args.workers,
-        "rust_binary": str(binary.resolve()),
+        "rust_binary": binary_label,
         "results": rows,
         "production_backend_changed": False,
         "notes": [

@@ -6,12 +6,12 @@
   ],
   "runs": 100,
   "workers": 4,
-  "rust_binary": "/private/tmp/pvz-ize-simulator.igLHFO/native_sim/target/release/pvz-ize-native-sim",
+  "rust_binary": "native_sim/target/release/pvz-ize-native-sim",
   "results": [
     {
       "backend": "python-reference",
-      "seconds": 0.38929645900498144,
-      "runs_per_second": 256.8736439462975,
+      "seconds": 0.4358202919975156,
+      "runs_per_second": 229.45237254021677,
       "winner_counts": {
         "zombies": 100
       },
@@ -20,8 +20,8 @@
     },
     {
       "backend": "python-processpool-reference",
-      "seconds": 0.17555387500033248,
-      "runs_per_second": 569.6257060677847,
+      "seconds": 0.18867904201033525,
+      "runs_per_second": 530.0005709935834,
       "winner_counts": {
         "zombies": 100
       },
@@ -30,8 +30,8 @@
     },
     {
       "backend": "rust-slice",
-      "seconds": 0.08876579100615345,
-      "runs_per_second": 1126.5601181097768,
+      "seconds": 0.08951762500510085,
+      "runs_per_second": 1117.0984484262383,
       "winner_counts": {
         "zombies": 100
       },
