@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "max_frames": 4,
+  "runs": 1,
+  "brains": [3],
+  "plants": [
+    {"type": "wallnut", "row": 3, "col": 1, "hp": 4000, "cooldown": 150}
+  ],
+  "zombies": [
+    {"type": "normal", "row": 3, "x": 90, "age": 3, "hp": 270}
+  ]
+}

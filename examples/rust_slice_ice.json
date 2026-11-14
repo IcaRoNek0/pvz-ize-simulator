@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "max_frames": 1,
+  "runs": 1,
+  "brains": [3],
+  "plants": [
+    {"type": "snow_pea", "row": 3, "col": 1, "cooldown": 0}
+  ],
+  "zombies": [
+    {"type": "normal", "row": 3, "x": 90, "hp": 270}
+  ]
+}

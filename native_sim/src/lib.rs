@@ -180,6 +180,14 @@ fn string_field(v: Option<&Value>, default: &str, name: &str) -> Result<String, 
             .ok_or_else(|| InputError::Invalid(format!("{name}: expected string"))),
     }
 }
+fn plant_default_hp(kind: &str) -> i32 {
+    match kind {
+        "wallnut" => 4_000,
+        "tallnut" => 8_000,
+        _ => 300,
+    }
+}
+
 fn spawn_offset(kind: &str) -> f64 {
     match kind {
         "bungee" => 0.0,
@@ -242,12 +250,14 @@ pub fn parse_scenario(input: &str) -> Result<Scenario, InputError> {
         }
         let r = row(p.get("row"), &format!("plants[{i}].row"))?;
         let c = col(p.get("col"), &format!("plants[{i}].col"))?;
+        let kind = string_field(p.get("type"), "peashooter", "plant.type")?;
+        let default_hp = plant_default_hp(&kind);
         plants.push(Plant {
             id,
-            kind: string_field(p.get("type"), "peashooter", "plant.type")?,
+            kind,
             row: r,
             col: c,
-            hp: i64_field(p.get("hp"), 300, "plant.hp")? as i32,
+            hp: i64_field(p.get("hp"), i64::from(default_hp), "plant.hp")? as i32,
             cooldown: u64_field(p.get("cooldown"), 0, "plant.cooldown")? as u32,
             state_timer: u64_field(p.get("state_timer"), 0, "plant.state_timer")? as u32,
             layer: string_field(p.get("layer"), "main", "plant.layer")?,
@@ -485,6 +495,7 @@ impl CoreState {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct SimpleProjectile {
     pub row: u8,
+    pub kind: String,
     pub x: f64,
     #[serde(skip)]
     pub x_fp: i64,
@@ -546,16 +557,40 @@ impl SimpleState {
     pub fn step(&mut self) {
         self.frame += 1;
         let mut fired = 0_u64;
+        let mut squash_hits = 0_u64;
+        // High-health shells use the same bite pipeline; squash is a one-shot
+        // close-range attacker in this first special-mechanism slice.
+        for pi in 0..self.plants.len() {
+            if self.plants[pi].hp <= 0 || self.plants[pi].kind != "squash" {
+                continue;
+            }
+            let px_fp = plant_x_fp(self.plants[pi].col);
+            if let Some(z) = self.zombies.iter_mut().find(|z| {
+                z.status == UnitStatus::Active
+                    && z.hp > 0
+                    && !z.hypnotized
+                    && z.row == self.plants[pi].row
+                    && z.x_fp >= px_fp
+                    && z.x_fp - px_fp <= 120_000
+            }) {
+                z.hp = 0;
+                z.status = UnitStatus::Dead;
+                self.plants[pi].hp = 0;
+                squash_hits += 1;
+            }
+        }
         for p in &mut self.plants {
-            if p.hp <= 0 || p.kind != "peashooter" {
+            if p.hp <= 0 || !matches!(p.kind.as_str(), "peashooter" | "snow_pea") {
                 continue;
             }
             if p.cooldown > 0 {
                 p.cooldown -= 1;
             }
             if p.cooldown == 0 {
+                let kind = if p.kind == "snow_pea" { "ice" } else { "pea" };
                 self.projectiles.push(SimpleProjectile {
                     row: p.row,
+                    kind: kind.into(),
                     x: p.x() + 50.0,
                     x_fp: plant_x_fp(p.col) + 50_000,
                     damage: 20,
@@ -572,15 +607,17 @@ impl SimpleState {
             }
         }
         let mut hits = 0_u64;
-        let mut deaths = 0_u64;
+        let mut deaths = squash_hits;
+        let mut chilled = 0_u64;
         for qi in 0..self.projectiles.len() {
             if !self.projectiles[qi].active {
                 continue;
             }
-            let (row, x_fp, damage) = (
+            let (row, x_fp, damage, kind) = (
                 self.projectiles[qi].row,
                 self.projectiles[qi].x_fp,
                 self.projectiles[qi].damage,
+                self.projectiles[qi].kind.clone(),
             );
             if let Some(z) = self.zombies.iter_mut().find(|z| {
                 z.status == UnitStatus::Active
@@ -591,6 +628,10 @@ impl SimpleState {
                 z.hp = (z.hp - damage).max(0);
                 self.projectiles[qi].active = false;
                 hits += 1;
+                if kind == "ice" {
+                    z.chilled = 300;
+                    chilled += 1;
+                }
                 if z.hp == 0 {
                     z.status = UnitStatus::Dead;
                     deaths += 1;
@@ -608,6 +649,9 @@ impl SimpleState {
                 continue;
             }
             self.zombies[zi].age += 1;
+            if self.zombies[zi].chilled > 0 {
+                self.zombies[zi].chilled -= 1;
+            }
             let zx_fp = self.zombies[zi].x_fp;
             let row = self.zombies[zi].row;
             let target = self
@@ -625,7 +669,12 @@ impl SimpleState {
                     bites += 1;
                 }
             } else {
-                self.zombies[zi].x_fp -= self.zombies[zi].speed_fp;
+                let speed = if self.zombies[zi].chilled > 0 {
+                    (self.zombies[zi].speed_fp / 2).max(1)
+                } else {
+                    self.zombies[zi].speed_fp
+                };
+                self.zombies[zi].x_fp -= speed;
                 self.zombies[zi].x = self.zombies[zi].x_fp as f64 / 1000.0;
                 if self.zombies[zi].x_fp <= 20_000 {
                     self.zombies[zi].status = UnitStatus::EnteredHouse;
@@ -642,6 +691,8 @@ impl SimpleState {
             ("zombie_died", deaths),
             ("plant_bitten", bites),
             ("brain_eaten", brain_eaten),
+            ("squash_impact", squash_hits),
+            ("chill_applied", chilled),
         ] {
             if count > 0 {
                 *self.events.entry(name.into()).or_default() += count;
@@ -747,6 +798,32 @@ mod tests {
         }
         assert_eq!(s.zombies[0].x_fp, 98_999);
         assert!((s.zombies[0].x - 98.999).abs() < 1e-9);
+    }
+
+    #[test]
+    fn simple_nut_default_health_survives_one_bite() {
+        let text = r#"{"plants":[{"type":"wallnut","row":3,"col":1}],"zombies":[{"type":"normal","row":3,"x":90,"age":3}],"brains":[3]}"#;
+        let mut s = SimpleState::from(parse_scenario(text).unwrap());
+        s.step();
+        assert_eq!(s.plants[0].hp, 3996);
+    }
+
+    #[test]
+    fn simple_squash_one_shot_kills_close_zombie() {
+        let text = r#"{"plants":[{"type":"squash","row":3,"col":1}],"zombies":[{"type":"normal","row":3,"x":90}],"brains":[3]}"#;
+        let mut s = SimpleState::from(parse_scenario(text).unwrap());
+        s.step();
+        assert_eq!(s.zombies[0].status, UnitStatus::Dead);
+        assert_eq!(s.events.get("squash_impact"), Some(&1));
+    }
+
+    #[test]
+    fn simple_ice_pea_applies_chill_state() {
+        let text = r#"{"plants":[{"type":"snow_pea","row":3,"col":1}],"zombies":[{"type":"normal","row":3,"x":90}],"brains":[3]}"#;
+        let mut s = SimpleState::from(parse_scenario(text).unwrap());
+        s.step();
+        assert_eq!(s.zombies[0].chilled, 299);
+        assert_eq!(s.events.get("chill_applied"), Some(&1));
     }
 
     #[test]
