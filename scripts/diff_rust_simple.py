@@ -76,9 +76,19 @@ def python_reference(data):
                     break
         projectiles=[q for q in projectiles if q["active"] and q["x_fp"]<900000]
         for z in zombies:
-            if z["status"]!="active" or z["hp"]<=0 or z["hypnotized"]: continue
+            if z["status"]!="active" or z["hp"]<=0: continue
             z["age"]+=1
             if z["chilled"]>0: z["chilled"]-=1
+            if z["hypnotized"]:
+                # Charmed zombies are friendly: walk right and leave the
+                # board, without biting plants/brains.  Friendly-vs-hostile
+                # combat is intentionally deferred to the social-special
+                # migration slice.
+                z["x_fp"] += max(1, int(round(z["speed"]*FP)))
+                z["x"] = z["x_fp"]/FP
+                if z["x_fp"] > 850000:
+                    z["status"] = "exited"; ev("zombie_exited")
+                continue
             if z.get("underground") is True:
                 if z["age"]>=2: z["underground"]=False; ev("digger_emerged")
                 continue

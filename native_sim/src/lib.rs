@@ -698,13 +698,25 @@ impl SimpleState {
         for zi in 0..self.zombies.len() {
             if self.zombies[zi].status != UnitStatus::Active
                 || self.zombies[zi].hp <= 0
-                || self.zombies[zi].hypnotized
             {
                 continue;
             }
             self.zombies[zi].age += 1;
             if self.zombies[zi].chilled > 0 {
                 self.zombies[zi].chilled -= 1;
+            }
+            // A charmed zombie is friendly: it walks toward the right edge,
+            // never bites plants/brains, and does not block the hostile-board
+            // terminal predicate.  Combat between friendly and hostile
+            // zombies belongs to a later social-special slice.
+            if self.zombies[zi].hypnotized {
+                self.zombies[zi].x_fp += self.zombies[zi].speed_fp.max(1);
+                self.zombies[zi].x = self.zombies[zi].x_fp as f64 / 1000.0;
+                if self.zombies[zi].x_fp > 850_000 {
+                    self.zombies[zi].status = UnitStatus::Exited;
+                    *self.events.entry("zombie_exited".into()).or_default() += 1;
+                }
+                continue;
             }
             if self.zombies[zi].underground == Some(true) {
                 if self.zombies[zi].age >= 2 {
@@ -964,6 +976,19 @@ mod tests {
         s.step();
         assert_eq!((s.zombies[0].helmet_hp, s.zombies[0].shield_hp, s.zombies[0].hp), (0, 0, 260));
         assert_eq!(s.events.get("armor_lost"), Some(&1));
+    }
+
+    #[test]
+    fn simple_hypnotized_zombie_walks_right_without_attacking() {
+        let text = r#"{"max_frames":3,"plants":[],"zombies":[{"id":"friend","type":"normal","row":3,"x":90,"speed":0.143,"hypnotized":true},{"id":"hostile","type":"normal","row":3,"x":500,"speed":0.143}],"brains":[3]}"#;
+        let mut s = SimpleState::from(parse_scenario(text).unwrap());
+        let result = s.run(3);
+        assert_eq!(result.winner, "undecided");
+        assert_eq!(result.frames, 3);
+        assert_eq!(s.zombies[0].x_fp, 90_429);
+        assert_eq!(s.zombies[0].age, 3);
+        assert_eq!(s.zombies[0].status, UnitStatus::Active);
+        assert_eq!(s.zombies[1].x_fp, 499_571);
     }
 
     #[test]

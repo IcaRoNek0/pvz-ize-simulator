@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "seed": 11,
+  "max_frames": 3,
+  "brains": [3],
+  "plants": [],
+  "zombies": [
+    {"id": "friend", "type": "normal", "row": 3, "x": 90, "hp": 270, "speed": 0.143, "hypnotized": true},
+    {"id": "hostile", "type": "normal", "row": 3, "x": 500, "hp": 270, "speed": 0.143}
+  ]
+}
