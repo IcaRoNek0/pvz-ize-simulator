@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "seed": 42,
+  "max_frames": 1200,
+  "brains": [3],
+  "rakes": [
+    {"row": 3, "col": 8}
+  ],
+  "plants": [
+    {"type": "repeater", "row": 3, "col": 1}
+  ],
+  "zombies": [
+    {"type": "normal", "row": 3, "col": 9}
+  ]
+}

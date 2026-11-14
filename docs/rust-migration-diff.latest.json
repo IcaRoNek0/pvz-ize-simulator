@@ -1,0 +1,496 @@
+{
+  "schema": 1,
+  "rust_binary": "/private/tmp/pvz-ize-simulator.igLHFO/native_sim/target/release/pvz-ize-native-sim",
+  "records": [
+    {
+      "id": "projectile-pea",
+      "mechanism": "projectile",
+      "profile": "simple",
+      "scenario": "/private/tmp/pvz-ize-simulator.igLHFO/examples/rust_slice_pea.json",
+      "expected_status": "match",
+      "actual_status": "match",
+      "exit_code": 0,
+      "comparison": {
+        "scenario": "/private/tmp/pvz-ize-simulator.igLHFO/examples/rust_slice_pea.json",
+        "status": "match",
+        "python": {
+          "winner": "undecided",
+          "reason": "max_frames_reached",
+          "frames": 1,
+          "state": {
+            "frame": 1,
+            "plants": [
+              {
+                "id": "p1",
+                "type": "peashooter",
+                "row": 3,
+                "col": 1,
+                "hp": 300,
+                "cooldown": 150,
+                "state_timer": 0,
+                "layer": "main"
+              }
+            ],
+            "zombies": [
+              {
+                "id": "z1",
+                "type": "normal",
+                "row": 3,
+                "col": 2,
+                "x": 90.0,
+                "hp": 250,
+                "helmet_hp": 0,
+                "shield_hp": 0,
+                "speed": 0.143,
+                "age": 1,
+                "chilled": 0,
+                "headless": false,
+                "hypnotized": false,
+                "tool": true,
+                "underground": null,
+                "status": "active"
+              }
+            ],
+            "brains": [
+              {
+                "row": 3,
+                "hp": 70
+              }
+            ],
+            "projectiles": [],
+            "events": {
+              "projectile_fired": 1,
+              "projectile_hit": 1
+            }
+          }
+        },
+        "rust": {
+          "winner": "undecided",
+          "reason": "max_frames_reached",
+          "frames": 1,
+          "state": {
+            "frame": 1,
+            "plants": [
+              {
+                "id": "p1",
+                "type": "peashooter",
+                "row": 3,
+                "col": 1,
+                "hp": 300,
+                "cooldown": 150,
+                "state_timer": 0,
+                "layer": "main"
+              }
+            ],
+            "zombies": [
+              {
+                "id": "z1",
+                "type": "normal",
+                "row": 3,
+                "col": 2,
+                "x": 90.0,
+                "hp": 250,
+                "helmet_hp": 0,
+                "shield_hp": 0,
+                "speed": 0.143,
+                "age": 1,
+                "chilled": 0,
+                "headless": false,
+                "hypnotized": false,
+                "tool": true,
+                "underground": null,
+                "status": "active"
+              }
+            ],
+            "brains": [
+              {
+                "row": 3,
+                "hp": 70
+              }
+            ],
+            "projectiles": [],
+            "events": {
+              "projectile_fired": 1,
+              "projectile_hit": 1
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "bucket-armor",
+      "mechanism": "armor",
+      "profile": "terminal",
+      "scenario": "/private/tmp/pvz-ize-simulator.igLHFO/examples/rust_migration_armor.json",
+      "expected_status": "mismatch_until_ported",
+      "actual_status": "mismatch",
+      "exit_code": 2,
+      "comparison": {
+        "scenario": "/private/tmp/pvz-ize-simulator.igLHFO/examples/rust_migration_armor.json",
+        "status": "mismatch",
+        "python": {
+          "winner": "undecided",
+          "reason": "max_frames_reached",
+          "status": "timeout",
+          "frames": 1200,
+          "brains": [
+            {
+              "row": 3,
+              "hp": 70
+            }
+          ],
+          "plants": [
+            {
+              "id": "p1",
+              "type": "repeater",
+              "row": 3,
+              "col": 1,
+              "hp": 300,
+              "cooldown": 42,
+              "state_timer": 0,
+              "shots": [],
+              "target": null,
+              "state": "ready",
+              "recently_eaten": 0,
+              "layer": "main",
+              "garlic_direction": "random",
+              "animation_phase": null,
+              "animation_rate": null
+            }
+          ],
+          "zombies": [
+            {
+              "id": "z1",
+              "type": "buckethead",
+              "row": 3,
+              "x": 158.40000000001388,
+              "hp": 270,
+              "helmet_hp": 780,
+              "shield_hp": 0,
+              "speed": 0.143,
+              "age": 1200,
+              "chilled": 0,
+              "headless": false,
+              "eating": false,
+              "status": "active",
+              "last_damage_age": 1171,
+              "phase": "initial",
+              "phase_timer": 0,
+              "direction": -1,
+              "target_col": null,
+              "target": null,
+              "tool": true,
+              "leader": null,
+              "buttered": 0,
+              "hypnotized": false,
+              "underground": null,
+              "animation_phase": null,
+              "frozen": 0,
+              "velocity_parameter": null,
+              "walk_variant": null,
+              "jack_countdown_frames": null
+            }
+          ],
+          "projectiles": [],
+          "pending_effects": {
+            "basketballs": [],
+            "garlic": {},
+            "boss": {}
+          },
+          "zombie_special_state": {},
+          "plant_head_state": {},
+          "active_hostile_zombies": 1,
+          "active_friendly_zombies": 0,
+          "ladders": [],
+          "events": {
+            "attack_started": 16,
+            "damage": 16,
+            "finished": 1,
+            "projectile_fired": 16,
+            "projectile_hit": 16
+          }
+        },
+        "rust": {
+          "winner": null,
+          "reason": "max_frames_reached",
+          "status": null,
+          "frames": 1200,
+          "brains": null,
+          "plants": null,
+          "zombies": null,
+          "projectiles": null,
+          "pending_effects": null,
+          "zombie_special_state": null,
+          "plant_head_state": null,
+          "active_hostile_zombies": null,
+          "active_friendly_zombies": null,
+          "ladders": null,
+          "events": null
+        }
+      }
+    },
+    {
+      "id": "ladder-placement",
+      "mechanism": "ladder",
+      "profile": "terminal",
+      "scenario": "/private/tmp/pvz-ize-simulator.igLHFO/examples/rust_migration_ladder.json",
+      "expected_status": "mismatch_until_ported",
+      "actual_status": "mismatch",
+      "exit_code": 2,
+      "comparison": {
+        "scenario": "/private/tmp/pvz-ize-simulator.igLHFO/examples/rust_migration_ladder.json",
+        "status": "mismatch",
+        "python": {
+          "winner": "undecided",
+          "reason": "max_frames_reached",
+          "status": "timeout",
+          "frames": 1200,
+          "brains": [
+            {
+              "row": 3,
+              "hp": 70
+            }
+          ],
+          "plants": [
+            {
+              "id": "p1",
+              "type": "wallnut",
+              "row": 3,
+              "col": 2,
+              "hp": 4000,
+              "cooldown": 0,
+              "state_timer": 0,
+              "shots": [],
+              "target": null,
+              "state": "ready",
+              "recently_eaten": 0,
+              "layer": "main",
+              "garlic_direction": "random",
+              "animation_phase": null,
+              "animation_rate": null
+            },
+            {
+              "id": "p2",
+              "type": "repeater",
+              "row": 3,
+              "col": 1,
+              "hp": 0,
+              "cooldown": 126,
+              "state_timer": 0,
+              "shots": [],
+              "target": null,
+              "state": "destroyed",
+              "recently_eaten": 50,
+              "layer": "main",
+              "garlic_direction": "random",
+              "animation_phase": null,
+              "animation_rate": null
+            }
+          ],
+          "zombies": [
+            {
+              "id": "z1",
+              "type": "ladder",
+              "row": 3,
+              "x": 9.387999999999806,
+              "hp": 360,
+              "helmet_hp": 0,
+              "shield_hp": 0,
+              "speed": 0.143,
+              "age": 1200,
+              "chilled": 0,
+              "headless": false,
+              "eating": false,
+              "status": "active",
+              "last_damage_age": 979,
+              "phase": "walking",
+              "phase_timer": 0,
+              "direction": -1,
+              "target_col": 2,
+              "target": null,
+              "tool": false,
+              "leader": null,
+              "buttered": 0,
+              "hypnotized": false,
+              "underground": null,
+              "animation_phase": null,
+              "frozen": 0,
+              "velocity_parameter": null,
+              "walk_variant": null,
+              "jack_countdown_frames": null
+            }
+          ],
+          "projectiles": [],
+          "pending_effects": {
+            "basketballs": [],
+            "garlic": {},
+            "boss": {}
+          },
+          "zombie_special_state": {},
+          "plant_head_state": {},
+          "active_hostile_zombies": 1,
+          "active_friendly_zombies": 0,
+          "ladders": [
+            {
+              "row": 3,
+              "col": 2
+            }
+          ],
+          "events": {
+            "attack_started": 14,
+            "damage": 13,
+            "eating_started": 1,
+            "finished": 1,
+            "ladder_climb_finished": 1,
+            "ladder_climb_started": 1,
+            "ladder_placed": 1,
+            "plant_bitten": 75,
+            "plant_died": 1,
+            "projectile_fired": 13,
+            "projectile_hit": 13,
+            "tool_removed": 1,
+            "walking_started": 1,
+            "zombie_phase": 5
+          }
+        },
+        "rust": {
+          "winner": null,
+          "reason": "max_frames_reached",
+          "status": null,
+          "frames": 1200,
+          "brains": null,
+          "plants": null,
+          "zombies": null,
+          "projectiles": null,
+          "pending_effects": null,
+          "zombie_special_state": null,
+          "plant_head_state": null,
+          "active_hostile_zombies": null,
+          "active_friendly_zombies": null,
+          "ladders": null,
+          "events": null
+        }
+      }
+    },
+    {
+      "id": "rake-trigger",
+      "mechanism": "rake",
+      "profile": "terminal",
+      "scenario": "/private/tmp/pvz-ize-simulator.igLHFO/examples/rust_migration_rake.json",
+      "expected_status": "mismatch_until_ported",
+      "actual_status": "mismatch",
+      "exit_code": 2,
+      "comparison": {
+        "scenario": "/private/tmp/pvz-ize-simulator.igLHFO/examples/rust_migration_rake.json",
+        "status": "mismatch",
+        "python": {
+          "winner": "plants",
+          "reason": "no_on_board_zombies",
+          "status": "finished",
+          "frames": 1,
+          "brains": [
+            {
+              "row": 3,
+              "hp": 70
+            }
+          ],
+          "plants": [
+            {
+              "id": "p1",
+              "type": "repeater",
+              "row": 3,
+              "col": 1,
+              "hp": 300,
+              "cooldown": 91,
+              "state_timer": 0,
+              "shots": [],
+              "target": null,
+              "state": "ready",
+              "recently_eaten": 0,
+              "layer": "main",
+              "garlic_direction": "random",
+              "animation_phase": null,
+              "animation_rate": null
+            }
+          ],
+          "zombies": [
+            {
+              "id": "z1",
+              "type": "normal",
+              "row": 3,
+              "x": 649.857,
+              "hp": 0,
+              "helmet_hp": 0,
+              "shield_hp": 0,
+              "speed": 0.143,
+              "age": 1,
+              "chilled": 0,
+              "headless": false,
+              "eating": false,
+              "status": "dead",
+              "last_damage_age": 26,
+              "phase": "initial",
+              "phase_timer": 0,
+              "direction": -1,
+              "target_col": null,
+              "target": null,
+              "tool": true,
+              "leader": null,
+              "buttered": 0,
+              "hypnotized": false,
+              "underground": null,
+              "animation_phase": null,
+              "frozen": 0,
+              "velocity_parameter": null,
+              "walk_variant": null,
+              "jack_countdown_frames": null
+            }
+          ],
+          "projectiles": [],
+          "pending_effects": {
+            "basketballs": [],
+            "garlic": {},
+            "boss": {}
+          },
+          "zombie_special_state": {},
+          "plant_head_state": {},
+          "active_hostile_zombies": 0,
+          "active_friendly_zombies": 0,
+          "ladders": [],
+          "events": {
+            "damage": 1,
+            "finished": 1,
+            "rake_triggered": 1,
+            "zombie_died": 1
+          }
+        },
+        "rust": {
+          "winner": null,
+          "reason": "max_frames_reached",
+          "status": null,
+          "frames": 1200,
+          "brains": null,
+          "plants": null,
+          "zombies": null,
+          "projectiles": null,
+          "pending_effects": null,
+          "zombie_special_state": null,
+          "plant_head_state": null,
+          "active_hostile_zombies": null,
+          "active_friendly_zombies": null,
+          "ladders": null,
+          "events": null
+        }
+      }
+    }
+  ],
+  "counts": {
+    "match": 1,
+    "mismatch": 3,
+    "error": 0
+  },
+  "notes": [
+    "mismatch_until_ported is intentional evidence for unported Rust mechanisms.",
+    "No mismatch is converted into a pass by this audit."
+  ]
+}

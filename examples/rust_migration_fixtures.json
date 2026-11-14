@@ -1,0 +1,30 @@
+[
+  {
+    "id": "projectile-pea",
+    "mechanism": "projectile",
+    "profile": "simple",
+    "scenario": "rust_slice_pea.json",
+    "expected_status": "match"
+  },
+  {
+    "id": "bucket-armor",
+    "mechanism": "armor",
+    "profile": "terminal",
+    "scenario": "rust_migration_armor.json",
+    "expected_status": "mismatch_until_ported"
+  },
+  {
+    "id": "ladder-placement",
+    "mechanism": "ladder",
+    "profile": "terminal",
+    "scenario": "rust_migration_ladder.json",
+    "expected_status": "mismatch_until_ported"
+  },
+  {
+    "id": "rake-trigger",
+    "mechanism": "rake",
+    "profile": "terminal",
+    "scenario": "rust_migration_rake.json",
+    "expected_status": "mismatch_until_ported"
+  }
+]

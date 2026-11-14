@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "seed": 42,
+  "max_frames": 1200,
+  "brains": [3],
+  "plants": [
+    {"type": "repeater", "row": 3, "col": 1}
+  ],
+  "zombies": [
+    {"type": "buckethead", "row": 3, "col": 5}
+  ]
+}
