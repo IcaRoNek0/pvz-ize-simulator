@@ -37,3 +37,17 @@ class RustCoreBridgeTests(unittest.TestCase):
         self.assertEqual(result["events"]["projectile_hit"], 2)
         self.assertEqual(result["zombies"][0]["hp"], 230)
 
+    @unittest.skipUnless(rust_core_available(), "native Rust slice is not built")
+    def test_who_will_win_row_scope_uses_rust_slice(self):
+        result = run_rust_core({
+            "version": 2,
+            "mode": "who_will_win",
+            "max_frames": 120,
+            "plants": [],
+            "zombies": [{"type": "normal", "row": 2, "x": 500}],
+            "brains": [3],
+        })
+        self.assertEqual(result["backend"], "rust-core-slice")
+        self.assertEqual(result["winner"], "plants")
+        self.assertEqual(result["reason"], "no_row_3_threats")
+

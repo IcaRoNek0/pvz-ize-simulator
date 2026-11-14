@@ -36,7 +36,7 @@ def rust_core_available() -> bool:
 
 def supports_scenario(data: dict[str, Any]) -> bool:
     """Return true only for the exact rules currently covered by Rust diffs."""
-    if data.get("mode", "ize") != "ize":
+    if data.get("mode", "ize") not in {"ize", "who_will_win"}:
         return False
     if data.get("time_limit_frames") is not None or data.get("timeout_winner") not in (None, "undecided"):
         return False
