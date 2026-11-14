@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "seed": 42,
+  "max_frames": 1000,
+  "brains": [3],
+  "plants": [
+    {"type": "potato_mine", "row": 3, "col": 2}
+  ],
+  "zombies": [
+    {"type": "normal", "row": 3, "col": 3}
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "seed": 42,
+  "max_frames": 100,
+  "brains": [3],
+  "plants": [
+    {"type": "cherry_bomb", "row": 3, "col": 3}
+  ],
+  "zombies": [
+    {"type": "normal", "row": 3, "col": 4},
+    {"type": "conehead", "row": 3, "col": 5}
+  ]
+}
