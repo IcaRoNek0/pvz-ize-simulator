@@ -49,7 +49,7 @@ python3 scripts/benchmark_rust_slice.py \
 
 ## 可选 Rust 后端
 
-`pvz-ize run/predict --backend rust-core` 仅调度已通过差分门的切片单位（包括一次性钉耙）；不满足支持门（例如梯子、玉米加农炮、未迁移僵尸，或省略射击植物的初始 `cooldown`）时使用 Python `Simulator`，不会套用错误规则。默认后端仍是 Python。
+`pvz-ize run/predict --backend rust-core` 仅调度已通过差分门的切片单位（包括钉耙、梯子、土豆雷和延迟樱桃炸弹）；不满足支持门（例如玉米炮弹、未迁移僵尸，或省略射击植物的初始 `cooldown`）时使用 Python `Simulator`，不会套用错误规则。默认后端仍是 Python。
 
 可重复运行 guarded backend 基准：
 
