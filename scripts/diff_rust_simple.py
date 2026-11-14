@@ -42,10 +42,12 @@ def python_reference(data):
                 if z["status"]=="active" and z["hp"]>0 and not z["hypnotized"] and z["row"]==p["row"] and z["x_fp"]>=px_fp and z["x_fp"]-px_fp<=120000:
                     z["hp"]=0; z["status"]="dead"; p["hp"]=0; squash_hits+=1; break
         for p in plants:
-            if p["hp"]<=0 or p["type"] not in ("peashooter","snow_pea"): continue
+            if p["hp"]<=0 or p["type"] not in ("peashooter","snow_pea","repeater"): continue
             if p["cooldown"]>0: p["cooldown"]-=1
             if p["cooldown"]==0:
-                px=40.0+80.0*(p["col"]-1); projectiles.append({"row":p["row"],"kind":"ice" if p["type"]=="snow_pea" else "pea","x_fp":int(round((px+50)*FP)),"x":px+50,"damage":20,"active":True}); p["cooldown"]=150; ev("projectile_fired")
+                px=40.0+80.0*(p["col"]-1); shots=2 if p["type"]=="repeater" else 1
+                for _ in range(shots): projectiles.append({"row":p["row"],"kind":"ice" if p["type"]=="snow_pea" else "pea","x_fp":int(round((px+50)*FP)),"x":px+50,"damage":20,"active":True})
+                p["cooldown"]=150; ev("projectile_fired",shots)
         for q in projectiles:
             if q["active"]: q["x_fp"]+=8000; q["x"]=q["x_fp"]/FP
         for q in projectiles:
@@ -61,6 +63,9 @@ def python_reference(data):
             if z["status"]!="active" or z["hp"]<=0 or z["hypnotized"]: continue
             z["age"]+=1
             if z["chilled"]>0: z["chilled"]-=1
+            if z.get("underground") is True:
+                if z["age"]>=2: z["underground"]=False; ev("digger_emerged")
+                continue
             zx_fp=z["x_fp"]; row=z["row"]
             target=next((p for p in plants if p["hp"]>0 and p["row"]==row and zx_fp>=int(round((40+80*(p["col"]-1))*FP)) and zx_fp-int(round((40+80*(p["col"]-1))*FP))<=60000),None)
             if target is not None:

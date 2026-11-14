@@ -580,7 +580,7 @@ impl SimpleState {
             }
         }
         for p in &mut self.plants {
-            if p.hp <= 0 || !matches!(p.kind.as_str(), "peashooter" | "snow_pea") {
+            if p.hp <= 0 || !matches!(p.kind.as_str(), "peashooter" | "snow_pea" | "repeater") {
                 continue;
             }
             if p.cooldown > 0 {
@@ -588,16 +588,19 @@ impl SimpleState {
             }
             if p.cooldown == 0 {
                 let kind = if p.kind == "snow_pea" { "ice" } else { "pea" };
-                self.projectiles.push(SimpleProjectile {
-                    row: p.row,
-                    kind: kind.into(),
-                    x: p.x() + 50.0,
-                    x_fp: plant_x_fp(p.col) + 50_000,
-                    damage: 20,
-                    active: true,
-                });
+                let shots = if p.kind == "repeater" { 2 } else { 1 };
+                for _ in 0..shots {
+                    self.projectiles.push(SimpleProjectile {
+                        row: p.row,
+                        kind: kind.into(),
+                        x: p.x() + 50.0,
+                        x_fp: plant_x_fp(p.col) + 50_000,
+                        damage: 20,
+                        active: true,
+                    });
+                }
                 p.cooldown = 150;
-                fired += 1;
+                fired += shots;
             }
         }
         for q in &mut self.projectiles {
@@ -641,6 +644,7 @@ impl SimpleState {
         self.projectiles.retain(|q| q.active && q.x < 900.0);
         let mut bites = 0_u64;
         let mut brain_eaten = 0_u64;
+        let mut digger_emerged = 0_u64;
         for zi in 0..self.zombies.len() {
             if self.zombies[zi].status != UnitStatus::Active
                 || self.zombies[zi].hp <= 0
@@ -651,6 +655,13 @@ impl SimpleState {
             self.zombies[zi].age += 1;
             if self.zombies[zi].chilled > 0 {
                 self.zombies[zi].chilled -= 1;
+            }
+            if self.zombies[zi].underground == Some(true) {
+                if self.zombies[zi].age >= 2 {
+                    self.zombies[zi].underground = Some(false);
+                    digger_emerged += 1;
+                }
+                continue;
             }
             let zx_fp = self.zombies[zi].x_fp;
             let row = self.zombies[zi].row;
@@ -693,6 +704,7 @@ impl SimpleState {
             ("brain_eaten", brain_eaten),
             ("squash_impact", squash_hits),
             ("chill_applied", chilled),
+            ("digger_emerged", digger_emerged),
         ] {
             if count > 0 {
                 *self.events.entry(name.into()).or_default() += count;
@@ -824,6 +836,27 @@ mod tests {
         s.step();
         assert_eq!(s.zombies[0].chilled, 299);
         assert_eq!(s.events.get("chill_applied"), Some(&1));
+    }
+
+    #[test]
+    fn simple_repeater_fires_two_projectiles() {
+        let text = r#"{"plants":[{"type":"repeater","row":3,"col":1}],"zombies":[{"type":"normal","row":3,"x":90}],"brains":[3]}"#;
+        let mut s = SimpleState::from(parse_scenario(text).unwrap());
+        s.step();
+        assert_eq!(s.events.get("projectile_fired"), Some(&2));
+        assert_eq!(s.events.get("projectile_hit"), Some(&2));
+        assert_eq!(s.zombies[0].hp, 230);
+    }
+
+    #[test]
+    fn simple_digger_emerges_after_two_underground_ticks() {
+        let text = r#"{"max_frames":3,"plants":[],"zombies":[{"type":"digger","row":3,"x":90,"underground":true}],"brains":[3]}"#;
+        let mut s = SimpleState::from(parse_scenario(text).unwrap());
+        for _ in 0..3 {
+            s.step();
+        }
+        assert_eq!(s.zombies[0].underground, Some(false));
+        assert_eq!(s.events.get("digger_emerged"), Some(&1));
     }
 
     #[test]

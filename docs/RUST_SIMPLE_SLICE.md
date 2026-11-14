@@ -9,7 +9,8 @@ cargo build --release --manifest-path native_sim/Cargo.toml
 python3 scripts/diff_rust_simple.py \
   examples/rust_slice_pea.json examples/rust_slice_bite.json \
   examples/rust_slice_empty.json examples/rust_slice_nuts.json \
-  examples/rust_slice_squash.json examples/rust_slice_ice.json
+  examples/rust_slice_squash.json examples/rust_slice_ice.json \
+  examples/rust_slice_repeater.json examples/rust_slice_digger.json
 ```
 
 当前六份均应输出 `status: "match"` 并以退出码 0 结束：
@@ -20,5 +21,7 @@ python3 scripts/diff_rust_simple.py \
 - `rust_slice_nuts.json`：坚果默认血量和啃食；
 - `rust_slice_squash.json`：窝瓜一次性近距离击杀；
 - `rust_slice_ice.json`：寒冰豌豆的减速状态。
+- `rust_slice_repeater.json`：双发豌豆的两枚投射物。
+- `rust_slice_digger.json`：矿工地下两帧后出土。
 
 该参考实现只覆盖上述固定切片；完整 Python `Simulator` 仍是行为 oracle，复杂植物、特殊僵尸和动画尚未迁移。

@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "max_frames": 3,
+  "runs": 1,
+  "brains": [3],
+  "plants": [],
+  "zombies": [
+    {"type": "digger", "row": 3, "x": 90, "underground": true, "hp": 270}
+  ]
+}
