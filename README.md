@@ -125,7 +125,7 @@ python3 scripts/diff_rust_simple.py \
   examples/rust_slice_ladder.json examples/rust_slice_hypnotized.json \
   examples/rust_slice_who_will_win_row_scope.json \
   examples/rust_slice_cob_cannon_footprint.json \
-  examples/rust_slice_potato_mine.json
+  examples/rust_slice_potato_mine.json examples/rust_migration_cherry_bomb.json
 ```
 
 完整战斗规则仍以 Python `Simulator` 为 oracle；Rust 尚未替代默认后端。迁移路线和完整差分门见 `docs/RUST_CORE_MIGRATION.md`、`docs/RUST_DIFF.md` 与 `docs/RUST_SIMPLE_SLICE.md`。

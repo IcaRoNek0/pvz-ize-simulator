@@ -45,12 +45,22 @@ def python_reference(data):
             return None
         if not any(z["status"]=="active" and z["hp"]>0 and not z["hypnotized"] for z in zombies): return ("plants","no_on_board_zombies")
     max_frames=int(data.get("max_frames",100000))
-    squash_hits=0; potato_kills=0; potato_explosions=0
+    squash_hits=0; potato_kills=0; potato_explosions=0; cherry_kills=0; cherry_explosions=0
     result=terminal()
     while result is None and frame<max_frames:
         frame+=1
         squash_hits=0
-        potato_kills=0; potato_explosions=0
+        potato_kills=0; potato_explosions=0; cherry_kills=0; cherry_explosions=0
+        for p in plants:
+            if p["hp"]<=0 or p["type"]!="cherry_bomb": continue
+            if p["state_timer"]==0: p["state_timer"]=100
+            p["state_timer"]-=1
+            if p["state_timer"]==0:
+                px_fp=int(round((40.0+80.0*(p["col"]-1))*FP))
+                for z in zombies:
+                    if z["status"]=="active" and z["hp"]>0 and not z["hypnotized"] and abs(z["row"]-p["row"])<=1 and abs(z["x_fp"]-px_fp)<=115000:
+                        z["hp"]=0; z["status"]="dead"; cherry_kills+=1
+                p["hp"]=0; cherry_explosions+=1
         for p in plants:
             if p["hp"]<=0 or p["type"]!="potato_mine": continue
             px_fp=int(round((40.0+80.0*(p["col"]-1))*FP))
@@ -146,10 +156,11 @@ def python_reference(data):
     if result is None: winner,reason="undecided","max_frames_reached"
     else: winner,reason=result
     if potato_explosions: ev("explosion", potato_explosions)
+    if cherry_explosions: ev("explosion", cherry_explosions)
     if squash_hits:
         ev("squash_impact", squash_hits)
-    if squash_hits or potato_kills:
-        ev("zombie_died", squash_hits + potato_kills)
+    if squash_hits or potato_kills or cherry_kills:
+        ev("zombie_died", squash_hits + potato_kills + cherry_kills)
     public_zombies=[{k:v for k,v in z.items() if k!="x_fp"} for z in zombies]
     return {"winner":winner,"reason":reason,"frames":frame,"state":{"frame":frame,"mode":mode,"plants":plants,"zombies":public_zombies,"brains":brains,"projectiles":[{k:v for k,v in q.items() if k!="x_fp"} for q in projectiles],"events":events,"rakes":rakes,"ladders":ladders}}
 

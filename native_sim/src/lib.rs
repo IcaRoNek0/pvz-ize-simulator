@@ -617,6 +617,35 @@ impl SimpleState {
         let mut squash_hits = 0_u64;
         let mut potato_kills = 0_u64;
         let mut potato_explosions = 0_u64;
+        let mut cherry_kills = 0_u64;
+        let mut cherry_explosions = 0_u64;
+        for pi in 0..self.plants.len() {
+            if self.plants[pi].hp <= 0 || self.plants[pi].kind != "cherry_bomb" {
+                continue;
+            }
+            if self.plants[pi].state_timer == 0 {
+                self.plants[pi].state_timer = 100;
+            }
+            self.plants[pi].state_timer -= 1;
+            if self.plants[pi].state_timer == 0 {
+                let px_fp = plant_x_fp(self.plants[pi].col);
+                let row = self.plants[pi].row;
+                for z in &mut self.zombies {
+                    if z.status == UnitStatus::Active
+                        && z.hp > 0
+                        && !z.hypnotized
+                        && (i16::from(z.row) - i16::from(row)).abs() <= 1
+                        && (z.x_fp - px_fp).abs() <= 115_000
+                    {
+                        z.hp = 0;
+                        z.status = UnitStatus::Dead;
+                        cherry_kills += 1;
+                    }
+                }
+                self.plants[pi].hp = 0;
+                cherry_explosions += 1;
+            }
+        }
         // Potato mine arms on contact and destroys itself.  Once triggered,
         // the simple slice applies its row-wide lethal blast to active hostile
         // zombies; underground/special targetability remains a later slice.
@@ -701,7 +730,7 @@ impl SimpleState {
             }
         }
         let mut hits = 0_u64;
-        let mut deaths = squash_hits + potato_kills;
+        let mut deaths = squash_hits + potato_kills + cherry_kills;
         let mut chilled = 0_u64;
         for qi in 0..self.projectiles.len() {
             if !self.projectiles[qi].active {
@@ -876,6 +905,7 @@ impl SimpleState {
             ("brain_eaten", brain_eaten),
             ("squash_impact", squash_hits),
             ("explosion", potato_explosions),
+            ("explosion", cherry_explosions),
             ("chill_applied", chilled),
             ("digger_emerged", digger_emerged),
             ("rake_triggered", rake_hits),
@@ -1029,6 +1059,18 @@ mod tests {
         assert_eq!(s.zombies[1].status, UnitStatus::Active);
         assert_eq!(s.events.get("explosion"), Some(&1));
         assert_eq!(s.events.get("zombie_died"), Some(&1));
+    }
+
+    #[test]
+    fn simple_cherry_bomb_delayed_blast_hits_nearby_zombie() {
+        let text = r#"{"max_frames":100,"plants":[{"type":"cherry_bomb","row":3,"col":3}],"zombies":[{"type":"normal","row":3,"col":4},{"type":"normal","row":3,"col":5}],"brains":[3]}"#;
+        let mut s = SimpleState::from(parse_scenario(text).unwrap());
+        let result = s.run(100);
+        assert_eq!(result.frames, 100);
+        assert_eq!(s.plants[0].hp, 0);
+        assert_eq!(s.zombies[0].status, UnitStatus::Dead);
+        assert_eq!(s.zombies[1].status, UnitStatus::Active);
+        assert_eq!(s.events.get("explosion"), Some(&1));
     }
 
     #[test]

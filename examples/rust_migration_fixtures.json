@@ -37,8 +37,8 @@
   {
     "id": "cherry-bomb-explosion",
     "mechanism": "cherry_bomb",
-    "profile": "terminal",
+    "profile": "simple",
     "scenario": "rust_migration_cherry_bomb.json",
-    "expected_status": "mismatch_until_ported"
+    "expected_status": "match"
   }
 ]
