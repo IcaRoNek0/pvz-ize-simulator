@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "seed": 0,
+  "max_frames": 1,
+  "runs": 1,
+  "brains": [3],
+  "plants": [
+    {"type": "peashooter", "row": 3, "col": 1, "hp": 300, "cooldown": 0}
+  ],
+  "zombies": [
+    {"type": "normal", "row": 3, "col": 2, "hp": 270}
+  ]
+}

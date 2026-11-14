@@ -474,6 +474,189 @@ impl CoreState {
     }
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct SimpleProjectile {
+    pub row: u8,
+    pub x: f64,
+    pub damage: i32,
+    pub active: bool,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct SimpleState {
+    pub frame: u64,
+    pub plants: Vec<Plant>,
+    pub zombies: Vec<Zombie>,
+    pub brains: Vec<Brain>,
+    pub projectiles: Vec<SimpleProjectile>,
+    pub events: std::collections::BTreeMap<String, u64>,
+}
+
+impl From<Scenario> for SimpleState {
+    fn from(s: Scenario) -> Self {
+        Self {
+            frame: 0,
+            plants: s.plants,
+            zombies: s.zombies,
+            brains: s.brains,
+            projectiles: Vec::new(),
+            events: std::collections::BTreeMap::new(),
+        }
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct SimpleResult {
+    pub winner: String,
+    pub reason: String,
+    pub frames: u64,
+    pub state: SimpleState,
+}
+
+impl SimpleState {
+    fn terminal(&self) -> Option<(String, String)> {
+        if self.brains.iter().all(|b| b.hp <= 0) {
+            return Some(("zombies".into(), "all_brains_eaten".into()));
+        }
+        if !self
+            .zombies
+            .iter()
+            .any(|z| z.status == UnitStatus::Active && z.hp > 0 && !z.hypnotized)
+        {
+            return Some(("plants".into(), "no_on_board_zombies".into()));
+        }
+        None
+    }
+    /// Deterministic pea-vs-normal slice; special handlers are intentionally
+    /// excluded until their corresponding migration gate is ported.
+    pub fn step(&mut self) {
+        self.frame += 1;
+        let mut fired = 0_u64;
+        for p in &mut self.plants {
+            if p.hp <= 0 || p.kind != "peashooter" {
+                continue;
+            }
+            if p.cooldown > 0 {
+                p.cooldown -= 1;
+            }
+            if p.cooldown == 0 {
+                self.projectiles.push(SimpleProjectile {
+                    row: p.row,
+                    x: p.x() + 50.0,
+                    damage: 20,
+                    active: true,
+                });
+                p.cooldown = 150;
+                fired += 1;
+            }
+        }
+        for q in &mut self.projectiles {
+            if q.active {
+                q.x += 8.0;
+            }
+        }
+        let mut hits = 0_u64;
+        let mut deaths = 0_u64;
+        for qi in 0..self.projectiles.len() {
+            if !self.projectiles[qi].active {
+                continue;
+            }
+            let (row, x, damage) = (
+                self.projectiles[qi].row,
+                self.projectiles[qi].x,
+                self.projectiles[qi].damage,
+            );
+            if let Some(z) = self.zombies.iter_mut().find(|z| {
+                z.status == UnitStatus::Active
+                    && z.hp > 0
+                    && z.row == row
+                    && (z.x - x).abs() <= 25.0
+            }) {
+                z.hp = (z.hp - damage).max(0);
+                self.projectiles[qi].active = false;
+                hits += 1;
+                if z.hp == 0 {
+                    z.status = UnitStatus::Dead;
+                    deaths += 1;
+                }
+            }
+        }
+        self.projectiles.retain(|q| q.active && q.x < 900.0);
+        let mut bites = 0_u64;
+        let mut brain_eaten = 0_u64;
+        for zi in 0..self.zombies.len() {
+            if self.zombies[zi].status != UnitStatus::Active
+                || self.zombies[zi].hp <= 0
+                || self.zombies[zi].hypnotized
+            {
+                continue;
+            }
+            self.zombies[zi].age += 1;
+            let zx = self.zombies[zi].x;
+            let row = self.zombies[zi].row;
+            let target = self
+                .plants
+                .iter()
+                .enumerate()
+                .find(|(_, p)| p.hp > 0 && p.row == row && zx >= p.x() && zx - p.x() <= 60.0)
+                .map(|(i, _)| i);
+            if let Some(pi) = target {
+                if self.zombies[zi].age % 4 == 0 {
+                    self.plants[pi].hp = (self.plants[pi].hp - 4).max(0);
+                    bites += 1;
+                }
+            } else {
+                self.zombies[zi].x -= self.zombies[zi].speed;
+                if self.zombies[zi].x <= 20.0 {
+                    self.zombies[zi].status = UnitStatus::EnteredHouse;
+                    if let Some(brain) = self.brains.iter_mut().find(|b| b.row == row && b.hp > 0) {
+                        brain.hp = 0;
+                        brain_eaten += 1;
+                    }
+                }
+            }
+        }
+        for (name, count) in [
+            ("projectile_fired", fired),
+            ("projectile_hit", hits),
+            ("zombie_died", deaths),
+            ("plant_bitten", bites),
+            ("brain_eaten", brain_eaten),
+        ] {
+            if count > 0 {
+                *self.events.entry(name.into()).or_default() += count;
+            }
+        }
+    }
+    pub fn run(&mut self, max_frames: u64) -> SimpleResult {
+        if let Some((winner, reason)) = self.terminal() {
+            return SimpleResult {
+                winner,
+                reason,
+                frames: self.frame,
+                state: self.clone(),
+            };
+        }
+        while self.frame < max_frames {
+            self.step();
+            if let Some((winner, reason)) = self.terminal() {
+                return SimpleResult {
+                    winner,
+                    reason,
+                    frames: self.frame,
+                    state: self.clone(),
+                };
+            }
+        }
+        SimpleResult {
+            winner: "undecided".into(),
+            reason: "max_frames_reached".into(),
+            frames: self.frame,
+            state: self.clone(),
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -524,5 +707,25 @@ mod tests {
             s.terminal("ize"),
             Some(("zombies".into(), "all_brains_eaten".into()))
         );
+    }
+    #[test]
+    fn simple_pea_projectile_damages_normal_zombie() {
+        let text = r#"{"max_frames":1,"plants":[{"type":"peashooter","row":3,"col":1,"cooldown":0}],"zombies":[{"type":"normal","row":3,"col":2,"hp":270}],"brains":[3]}"#;
+        let mut s = SimpleState::from(parse_scenario(text).unwrap());
+        s.step();
+        assert_eq!(s.events.get("projectile_fired"), Some(&1));
+        assert_eq!(s.zombies[0].hp, 250);
+        assert_eq!(s.events.get("projectile_hit"), Some(&1));
+    }
+
+    #[test]
+    fn simple_zombie_bites_plant_on_fixed_four_tick() {
+        let text = r#"{"max_frames":4,"plants":[{"type":"peashooter","row":3,"col":1,"cooldown":150}],"zombies":[{"type":"normal","row":3,"x":90,"hp":270}],"brains":[3]}"#;
+        let mut s = SimpleState::from(parse_scenario(text).unwrap());
+        for _ in 0..4 {
+            s.step();
+        }
+        assert_eq!(s.plants[0].hp, 296);
+        assert_eq!(s.events.get("plant_bitten"), Some(&1));
     }
 }

@@ -1,4 +1,4 @@
-use pvz_ize_native_sim::{parse_scenario, CoreState};
+use pvz_ize_native_sim::{parse_scenario, CoreState, SimpleState};
 use std::io::{self, Read};
 
 fn main() {
@@ -16,9 +16,17 @@ fn main() {
     };
     let max_frames = scenario.max_frames;
     let mode = scenario.mode.clone();
-    let result = CoreState::from(scenario).run_motion(max_frames, &mode);
-    println!(
-        "{}",
-        serde_json::to_string(&result).expect("serialize result")
-    );
+    if std::env::args().any(|arg| arg == "--slice" || arg == "simple") {
+        let result = SimpleState::from(scenario).run(max_frames);
+        println!(
+            "{}",
+            serde_json::to_string(&result).expect("serialize result")
+        );
+    } else {
+        let result = CoreState::from(scenario).run_motion(max_frames, &mode);
+        println!(
+            "{}",
+            serde_json::to_string(&result).expect("serialize result")
+        );
+    }
 }
