@@ -22,10 +22,15 @@ scenario's `runs` must be positive; `--workers` is clamped to
 ```
 
 `results` is always sorted by `run_index`, even though Rayon executes replicas
-out of order. The Rust bridge (`pvz_ize.rust_core.run_batch_rust_core`) maps
-each nested `result` to the public Python result shape and preserves the same
-envelope fields (`batch`, `runs`, `seed`, `outcomes`, `results`,
-`parallel_workers`). Unsupported scenarios remain on the Python fallback.
+out of order. The raw native envelope intentionally contains only deterministic
+counts/probabilities. The Rust bridge
+(`pvz_ize.rust_core.run_batch_rust_core`) is the canonical public adapter: it
+maps each nested `result` to the Python result shape, adds `wilson_95` to all
+three outcome entries, and sets `backend: "rust-core-slice-rayon"`. The CLI
+therefore has the same batch fields as the Python backend (`batch`, `runs`,
+`seed`, `outcomes`, `results`, `parallel_workers`, `backend`); batch results do
+not expose per-process `seconds`, matching the existing Python batch schema.
+Unsupported scenarios remain on the Python fallback.
 
 Boundary coverage is in `tests/test_rust_core_backend.py` and the Rust unit
 tests: `runs=1`, worker counts larger than `runs`, and signed-64-bit seed

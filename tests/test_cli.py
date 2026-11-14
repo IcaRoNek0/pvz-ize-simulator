@@ -66,6 +66,22 @@ class CliTests(unittest.TestCase):
         self.assertEqual(first.returncode, 2, first.stderr)
         self.assertEqual(json.loads(first.stdout), json.loads(second.stdout))
 
+    def test_rust_core_batch_cli_schema_and_order(self):
+        fixture = ROOT / "examples" / "rust_batch_simple.json"
+        result = self.cli("run", str(fixture), "--backend", "rust-core",
+                          "--workers", "2", "--json")
+        self.assertEqual(result.returncode, 2, result.stderr)
+        data = json.loads(result.stdout)
+        self.assertEqual(data["batch"], True)
+        self.assertEqual(data["backend"], "rust-core-slice-rayon")
+        self.assertEqual(data["runs"], 8)
+        self.assertEqual([row["run_index"] for row in data["results"]], list(range(8)))
+        self.assertEqual([row["seed"] for row in data["results"]], list(range(2026, 2034)))
+        self.assertEqual(set(data["outcomes"]), {"plants", "zombies", "undecided"})
+        for outcome in data["outcomes"].values():
+            self.assertIn("wilson_95", outcome)
+            self.assertEqual(len(outcome["wilson_95"]), 2)
+
     def test_max_frames_override_file(self):
         data = {"max_frames": 5000,
                 "zombies": [{"type": "normal", "row": 3, "col": 8}]}
