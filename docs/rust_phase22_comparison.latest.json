@@ -314,6 +314,6 @@
     }
   ],
   "rust_binary": "/private/tmp/pvz-ize-simulator.igLHFO/native_sim/target/release/pvz-ize-native-sim",
-  "schema": "pvz-ize/rust-phase20-rake-ladder/v1",
+  "schema": "pvz-ize/rust-phase22-rake-ladder/v1",
   "status": "match"
 }

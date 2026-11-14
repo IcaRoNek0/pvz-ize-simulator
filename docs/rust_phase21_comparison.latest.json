@@ -1,0 +1,303 @@
+{
+  "fixtures": [
+    {
+      "fixture": "/private/tmp/pvz-ize-simulator.igLHFO/examples/rust_phase21_threepeater.json",
+      "python": {
+        "frames": 1,
+        "reason": "max_frames_reached",
+        "state": {
+          "brains": [
+            {
+              "hp": 70,
+              "row": 2
+            },
+            {
+              "hp": 70,
+              "row": 3
+            },
+            {
+              "hp": 70,
+              "row": 4
+            }
+          ],
+          "events": {
+            "projectile_fired": 3,
+            "projectile_hit": 3
+          },
+          "frame": 1,
+          "ladders": [],
+          "mode": "ize",
+          "plants": [
+            {
+              "col": 1,
+              "cooldown": 150,
+              "footprint": [
+                1
+              ],
+              "hp": 300,
+              "id": "three",
+              "layer": "main",
+              "row": 3,
+              "state_timer": 0,
+              "type": "threepeater"
+            }
+          ],
+          "projectiles": [],
+          "rakes": [],
+          "zombies": [
+            {
+              "age": 1,
+              "chilled": 0,
+              "col": 2,
+              "headless": false,
+              "helmet_hp": 0,
+              "hp": 250,
+              "hypnotized": false,
+              "id": "upper",
+              "row": 2,
+              "shield_hp": 0,
+              "speed": 0.143,
+              "status": "active",
+              "tool": true,
+              "type": "normal",
+              "underground": null,
+              "x": 89.857
+            },
+            {
+              "age": 1,
+              "chilled": 0,
+              "col": 2,
+              "headless": false,
+              "helmet_hp": 0,
+              "hp": 250,
+              "hypnotized": false,
+              "id": "middle",
+              "row": 3,
+              "shield_hp": 0,
+              "speed": 0.143,
+              "status": "active",
+              "tool": true,
+              "type": "normal",
+              "underground": null,
+              "x": 90.0
+            },
+            {
+              "age": 1,
+              "chilled": 0,
+              "col": 2,
+              "headless": false,
+              "helmet_hp": 0,
+              "hp": 250,
+              "hypnotized": false,
+              "id": "lower",
+              "row": 4,
+              "shield_hp": 0,
+              "speed": 0.143,
+              "status": "active",
+              "tool": true,
+              "type": "normal",
+              "underground": null,
+              "x": 89.857
+            }
+          ]
+        },
+        "winner": "undecided"
+      },
+      "rust": {
+        "frames": 1,
+        "reason": "max_frames_reached",
+        "state": {
+          "brains": [
+            {
+              "hp": 70,
+              "row": 2
+            },
+            {
+              "hp": 70,
+              "row": 3
+            },
+            {
+              "hp": 70,
+              "row": 4
+            }
+          ],
+          "events": {
+            "projectile_fired": 3,
+            "projectile_hit": 3
+          },
+          "frame": 1,
+          "ladders": [],
+          "mode": "ize",
+          "plants": [
+            {
+              "col": 1,
+              "cooldown": 150,
+              "footprint": [
+                1
+              ],
+              "hp": 300,
+              "id": "three",
+              "layer": "main",
+              "row": 3,
+              "state_timer": 0,
+              "type": "threepeater"
+            }
+          ],
+          "projectiles": [],
+          "rakes": [],
+          "zombies": [
+            {
+              "age": 1,
+              "chilled": 0,
+              "col": 2,
+              "headless": false,
+              "helmet_hp": 0,
+              "hp": 250,
+              "hypnotized": false,
+              "id": "upper",
+              "row": 2,
+              "shield_hp": 0,
+              "speed": 0.143,
+              "status": "active",
+              "tool": true,
+              "type": "normal",
+              "underground": null,
+              "x": 89.857
+            },
+            {
+              "age": 1,
+              "chilled": 0,
+              "col": 2,
+              "headless": false,
+              "helmet_hp": 0,
+              "hp": 250,
+              "hypnotized": false,
+              "id": "middle",
+              "row": 3,
+              "shield_hp": 0,
+              "speed": 0.143,
+              "status": "active",
+              "tool": true,
+              "type": "normal",
+              "underground": null,
+              "x": 90.0
+            },
+            {
+              "age": 1,
+              "chilled": 0,
+              "col": 2,
+              "headless": false,
+              "helmet_hp": 0,
+              "hp": 250,
+              "hypnotized": false,
+              "id": "lower",
+              "row": 4,
+              "shield_hp": 0,
+              "speed": 0.143,
+              "status": "active",
+              "tool": true,
+              "type": "normal",
+              "underground": null,
+              "x": 89.857
+            }
+          ]
+        },
+        "winner": "undecided"
+      },
+      "rust_exit_status": 0,
+      "sha256": "13b22cb8bd3abd307d29b4d9de6e7b0190d0c26a715d7cf13b64b1393af30aa3",
+      "status": "match",
+      "stderr": ""
+    },
+    {
+      "fixture": "/private/tmp/pvz-ize-simulator.igLHFO/examples/rust_phase21_zamboni_defaults.json",
+      "python": {
+        "frames": 1,
+        "reason": "max_frames_reached",
+        "state": {
+          "brains": [
+            {
+              "hp": 70,
+              "row": 3
+            }
+          ],
+          "events": {},
+          "frame": 1,
+          "ladders": [],
+          "mode": "ize",
+          "plants": [],
+          "projectiles": [],
+          "rakes": [],
+          "zombies": [
+            {
+              "age": 1,
+              "chilled": 0,
+              "col": 8,
+              "headless": false,
+              "helmet_hp": 0,
+              "hp": 1350,
+              "hypnotized": false,
+              "id": "zamboni",
+              "row": 3,
+              "shield_hp": 0,
+              "speed": 0.25,
+              "status": "active",
+              "tool": true,
+              "type": "zamboni",
+              "underground": null,
+              "x": 599.75
+            }
+          ]
+        },
+        "winner": "undecided"
+      },
+      "rust": {
+        "frames": 1,
+        "reason": "max_frames_reached",
+        "state": {
+          "brains": [
+            {
+              "hp": 70,
+              "row": 3
+            }
+          ],
+          "events": {},
+          "frame": 1,
+          "ladders": [],
+          "mode": "ize",
+          "plants": [],
+          "projectiles": [],
+          "rakes": [],
+          "zombies": [
+            {
+              "age": 1,
+              "chilled": 0,
+              "col": 8,
+              "headless": false,
+              "helmet_hp": 0,
+              "hp": 1350,
+              "hypnotized": false,
+              "id": "zamboni",
+              "row": 3,
+              "shield_hp": 0,
+              "speed": 0.25,
+              "status": "active",
+              "tool": true,
+              "type": "zamboni",
+              "underground": null,
+              "x": 599.75
+            }
+          ]
+        },
+        "winner": "undecided"
+      },
+      "rust_exit_status": 0,
+      "sha256": "ead2259f920e7d24ed8128bd98df117a3b22e89bec19dc186b99c44574dd452d",
+      "status": "match",
+      "stderr": ""
+    }
+  ],
+  "rust_binary": "/private/tmp/pvz-ize-simulator.igLHFO/native_sim/target/release/pvz-ize-native-sim",
+  "schema": "pvz-ize/rust-phase21-threepeater-zamboni/v1",
+  "status": "match"
+}

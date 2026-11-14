@@ -1,0 +1,20 @@
+{
+  "version": 2,
+  "seed": 2001,
+  "max_frames": 1,
+  "brains": [2, 3, 4],
+  "plants": [
+    {
+      "id": "three",
+      "type": "threepeater",
+      "row": 3,
+      "col": 1,
+      "cooldown": 0
+    }
+  ],
+  "zombies": [
+    {"id": "upper", "type": "normal", "row": 2, "x": 90},
+    {"id": "middle", "type": "normal", "row": 3, "x": 90},
+    {"id": "lower", "type": "normal", "row": 4, "x": 90}
+  ]
+}

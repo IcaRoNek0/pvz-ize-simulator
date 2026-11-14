@@ -167,26 +167,18 @@ outside this slice; scenarios that could reach a shot stay on the Python
 fallback. Run `python3 scripts/compare_phase16_fixtures.py` to write
 `docs/rust_phase16_comparison.latest.json`.
 
-### Phase 20：钉耙与梯子僵尸对象交互
-
-The existing Rust slice now has a guarded differential for two board-object paths: a pre-placed rake consumes the first overlapping hostile zombie, and a ladder zombie places its ladder on a wallnut before the bite/movement phase. The fixtures `examples/rust_migration_rake.json` and `examples/rust_migration_ladder.json` are checked by `scripts/compare_phase20_fixtures.py` and recorded in `docs/rust_phase20_comparison.latest.json`. Pre-placed ladder objects, ladder traversal animation, and other tool interactions remain on the Python fallback.
-
 ### Phase 18：撑杆僵尸安全步行边界
 
-The guarded slice also normalizes pole-vaulting defaults: body HP 500, speed
-0.32 px/tick while the pole is carried, and 0.143 after the tool is spent.
-`examples/rust_phase18_pole_defaults.json` and
-`examples/rust_phase18_pole_projectile.json` exercise ordinary movement and
-direct pea damage. A carried pole approaching a same-row plant is rejected by
-the support gate because `pole_running`/`pole_jumping` collision and landing
-phases are not represented in `SimpleState`; those scenarios continue through
-the Python fallback.
+The guarded slice normalizes pole-vaulting defaults: body HP 500, speed 0.32 px/tick while the pole is carried, and 0.143 after the tool is spent. `examples/rust_phase18_pole_defaults.json` and `examples/rust_phase18_pole_projectile.json` exercise ordinary movement and direct pea damage. A carried pole approaching a same-row plant is rejected by the support gate because `pole_running`/`pole_jumping` collision and landing phases are not represented in `SimpleState`; those scenarios continue through the Python fallback.
 
 ### Phase 19：旗帜僵尸基础速度
 
-The Rust simple slice accepts `flag` with its catalog walk speed (0.22 px/tick)
-and reuses the ordinary straight pea path. The fixture
-`examples/rust_phase19_flag_defaults.json` covers a direct hit and an
-independent walking target; flag animation is not asserted as equivalent.
-Run `python3 scripts/compare_phase19_fixtures.py` to regenerate
-`docs/rust_phase19_comparison.latest.json`.
+The Rust simple slice accepts `flag` with catalog walk speed 0.22 px/tick and reuses the straight pea path. `examples/rust_phase19_flag_defaults.json` is checked by `scripts/compare_phase19_fixtures.py`; flag animation is not asserted equivalent.
+
+### Phase 21：三线射手与冰车僵尸安全切片
+
+`threepeater` emits one straight pea into each valid adjacent row (one, two, or three projectiles at board edges). `zamboni` is limited to catalog default HP/speed and movement when no plant target or machine interaction is present. The fixtures `examples/rust_phase21_threepeater.json` and `examples/rust_phase21_zamboni_defaults.json` are checked by `scripts/compare_phase21_fixtures.py`; ice trails, crushing, and other animation-driven behavior remain Python fallback.
+
+### Phase 22：钉耙与梯子僵尸对象交互
+
+The Rust slice has guarded differentials for a pre-placed rake consuming the first overlapping hostile zombie and a ladder zombie placing its ladder on a wallnut. `examples/rust_migration_rake.json` and `examples/rust_migration_ladder.json` are checked by `scripts/compare_phase22_fixtures.py` and recorded in `docs/rust_phase22_comparison.latest.json`. Pre-placed ladder objects and ladder traversal animation remain Python fallback.

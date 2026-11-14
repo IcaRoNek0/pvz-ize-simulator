@@ -207,6 +207,7 @@ fn zombie_default_hp(kind: &str) -> i32 {
     match kind {
         "imp" => 70,
         "pole_vaulting" => 500,
+        "zamboni" => 1_350,
         "ladder" => 500,
         _ => 270,
     }
@@ -236,6 +237,7 @@ fn zombie_default_speed(kind: &str) -> f64 {
         "football" => 0.32,
         "imp" => 0.423,
         "pole_vaulting" => 0.32,
+        "zamboni" => 0.25,
         "newspaper" => 0.09,
         "flag" => 0.22,
         _ => 0.143,
@@ -690,7 +692,11 @@ pub fn run_simple_batch(scenario: Scenario, workers: usize) -> SimpleBatchResult
         .unwrap_or_else(|_| execute());
     results.sort_by_key(|row| row.run_index);
 
-    let mut counts = std::collections::BTreeMap::<String, u32>::new();
+    let mut counts = std::collections::BTreeMap::<String, u32>::from([
+        ("plants".into(), 0),
+        ("zombies".into(), 0),
+        ("undecided".into(), 0),
+    ]);
     for row in &results {
         *counts.entry(row.result.winner.clone()).or_default() += 1;
     }
@@ -958,7 +964,12 @@ impl SimpleState {
             }
         }
         for p in &mut self.plants {
-            if p.hp <= 0 || !matches!(p.kind.as_str(), "peashooter" | "snow_pea" | "repeater") {
+            if p.hp <= 0
+                || !matches!(
+                    p.kind.as_str(),
+                    "peashooter" | "snow_pea" | "repeater" | "threepeater"
+                )
+            {
                 continue;
             }
             if p.cooldown > 0 {
@@ -966,10 +977,17 @@ impl SimpleState {
             }
             if p.cooldown == 0 {
                 let kind = if p.kind == "snow_pea" { "ice" } else { "pea" };
-                let shots = if p.kind == "repeater" { 2 } else { 1 };
-                for _ in 0..shots {
+                let rows: Vec<u8> = if p.kind == "threepeater" {
+                    [p.row.saturating_sub(1), p.row, p.row.saturating_add(1)]
+                        .into_iter()
+                        .filter(|row| (1..=5).contains(row))
+                        .collect()
+                } else {
+                    vec![p.row; if p.kind == "repeater" { 2 } else { 1 }]
+                };
+                for row in rows.iter().copied() {
                     self.projectiles.push(SimpleProjectile {
-                        row: p.row,
+                        row,
                         kind: kind.into(),
                         x: p.x() + 50.0,
                         x_fp: plant_x_fp(p.col) + 50_000,
@@ -978,7 +996,7 @@ impl SimpleState {
                     });
                 }
                 p.cooldown = 150;
-                fired += shots;
+                fired += rows.len() as u64;
             }
         }
         for q in &mut self.projectiles {
@@ -1376,6 +1394,19 @@ mod tests {
     }
 
     #[test]
+    fn simple_threepeater_fires_one_straight_pea_per_adjacent_row() {
+        let text = r#"{"max_frames":1,"plants":[{"type":"threepeater","row":3,"col":1,"cooldown":0}],"zombies":[{"type":"normal","row":2,"x":90},{"type":"normal","row":3,"x":90},{"type":"normal","row":4,"x":90}],"brains":[2,3,4]}"#;
+        let mut s = SimpleState::from(parse_scenario(text).unwrap());
+        s.step();
+        assert_eq!(s.events.get("projectile_fired"), Some(&3));
+        assert_eq!(s.events.get("projectile_hit"), Some(&3));
+        assert_eq!(
+            s.zombies.iter().map(|z| z.hp).collect::<Vec<_>>(),
+            vec![250, 250, 250]
+        );
+    }
+
+    #[test]
     fn simple_pea_strips_helmet_before_body_damage() {
         let text = r#"{"plants":[{"type":"peashooter","row":3,"col":1}],"zombies":[{"type":"buckethead","row":3,"x":90,"hp":270,"helmet_hp":10}],"brains":[3]}"#;
         let mut s = SimpleState::from(parse_scenario(text).unwrap());
@@ -1496,6 +1527,16 @@ mod tests {
         assert!((s.zombies[0].speed - 0.143).abs() < f64::EPSILON);
         s.step();
         assert!((s.zombies[0].x - 499.857).abs() < 1e-9);
+    }
+
+    #[test]
+    fn simple_zamboni_defaults_walk_without_machine_targets() {
+        let text = r#"{"max_frames":1,"plants":[],"zombies":[{"type":"zamboni","row":3,"x":800}],"brains":[3]}"#;
+        let mut s = SimpleState::from(parse_scenario(text).unwrap());
+        assert_eq!(s.zombies[0].hp, 1350);
+        assert!((s.zombies[0].speed - 0.25).abs() < f64::EPSILON);
+        s.step();
+        assert!((s.zombies[0].x - 799.75).abs() < 1e-9);
     }
 
     #[test]

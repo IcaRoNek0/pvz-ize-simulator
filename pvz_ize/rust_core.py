@@ -18,9 +18,9 @@ from typing import Any
 
 from .batch import run_seed, wilson_interval
 
-SUPPORTED_PLANTS = {"peashooter", "repeater", "snow_pea", "wallnut", "tallnut", "squash", "potato_mine", "cherry_bomb", "jalapeno", "spikeweed", "spikerock", "cob_cannon"}
+SUPPORTED_PLANTS = {"peashooter", "repeater", "snow_pea", "threepeater", "wallnut", "tallnut", "squash", "potato_mine", "cherry_bomb", "jalapeno", "spikeweed", "spikerock", "cob_cannon"}
 SUPPORTED_ZOMBIES = {
-    "normal", "digger", "ladder", "conehead", "buckethead", "screen_door", "football", "newspaper", "imp", "pole_vaulting", "flag",
+    "normal", "digger", "ladder", "conehead", "buckethead", "screen_door", "football", "newspaper", "imp", "pole_vaulting", "flag", "zamboni",
 }
 
 
@@ -71,6 +71,12 @@ def supports_scenario(data: dict[str, Any]) -> bool:
             px = 40.0 + 80.0 * (int(plant.get("col", 1)) - 1)
             if abs(float(zx) - px) <= 180.0:
                 return False
+    for zombie in zombies:
+        if zombie.get("type") == "zamboni" and plants:
+            # The machine's tire-crush/ice-trail scheduler is not in the
+            # simple state. Keep all board interactions on Python; a
+            # no-plant row is a deterministic catalog-speed walk only.
+            return False
     # The Rust slice currently verifies only COB's two-cell footprint and
     # arming/reload counter.  Keep targeted lob/splash combat on Python until
     # its projectile contract has a differential fixture.
@@ -90,7 +96,7 @@ def supports_scenario(data: dict[str, Any]) -> bool:
     # slice has no equivalent random wind-up, so only explicitly seeded
     # shooter cooldowns may cross the backend boundary.
     for item in plants:
-        if item.get("type") in {"peashooter", "repeater", "snow_pea"} and "cooldown" not in item:
+        if item.get("type") in {"peashooter", "repeater", "snow_pea", "threepeater"} and "cooldown" not in item:
             return False
     return True
 
@@ -161,7 +167,10 @@ def run_batch_rust_core(data: dict[str, Any], workers: int | None = None) -> dic
     """
     if not supports_scenario(data):
         raise ValueError("scenario is outside the migrated Rust slice")
-    runs = int(data.get("runs", 1))
+    raw_runs = data.get("runs", 1)
+    if isinstance(raw_runs, bool) or not isinstance(raw_runs, int) or raw_runs <= 0:
+        raise ValueError("runs must be a positive integer")
+    runs = raw_runs
     workers = min(runs, max(1, int(workers or (os.cpu_count() or 2))))
     binary = rust_core_binary()
     started = time.perf_counter()

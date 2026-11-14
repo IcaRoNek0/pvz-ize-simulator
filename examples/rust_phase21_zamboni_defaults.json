@@ -1,0 +1,8 @@
+{
+  "version": 2,
+  "seed": 2001,
+  "max_frames": 1,
+  "brains": [3],
+  "plants": [],
+  "zombies": [{"id": "zamboni", "type": "zamboni", "row": 3, "x": 600}]
+}

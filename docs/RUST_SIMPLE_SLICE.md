@@ -98,9 +98,7 @@ write `docs/rust_phase19_comparison.latest.json`.
 
 Phase 18 covers pole-vaulting defaults and direct damage only; a carried pole
 near a same-row plant remains gated to Python because jump/landing state is not
-in the Rust schema. Phase 20 covers the pre-placed rake and ladder-zombie
-placement paths with `scripts/compare_phase20_fixtures.py`; ladder traversal and
-pre-placed ladder animation remain Python.
+in the Rust schema.
 
 Phase 15 adds the imp's observable catalog defaults (70 HP, 0.423 px/tick),
 ordinary movement, and direct pea projectile damage. Imp throwing and landing
@@ -113,6 +111,12 @@ HP, 0.09 px/tick). The reading/rage animation state machine remains Python;
 run `python3 scripts/compare_phase14_fixtures.py` for the guarded defaults,
 shield-order, and one-tick shield-break audit fixtures. A broken shield does
 not claim the Python model's later `newspaper_maddening`/rage speed transition.
+
+Phase 21 adds deterministic `threepeater` fan-out using the existing straight
+projectile model and a zamboni catalog-only walk (HP 1350, speed 0.25). One pea
+is emitted on each valid adjacent row (2–4); ice trails, crushing, and other
+animations remain Python. Run `python3 scripts/compare_phase21_fixtures.py` to
+write `docs/rust_phase21_comparison.latest.json`.
 
 Phase 11 固定夹具可单独运行 Python/Rust 对照（Rust 从 stdin 读取场景）：
 

@@ -34,6 +34,13 @@ class RustCoreBridgeTests(unittest.TestCase):
             "plants": [{"type": "wallnut", "row": 3, "col": 6}],
             "zombies": [{"type": "pole_vaulting", "row": 3, "x": 500}],
         }))
+        self.assertTrue(supports_scenario({
+            "plants": [], "zombies": [{"type": "zamboni", "row": 3, "x": 800}],
+        }))
+        self.assertFalse(supports_scenario({
+            "plants": [{"type": "wallnut", "row": 3, "col": 6}],
+            "zombies": [{"type": "zamboni", "row": 3, "x": 800}],
+        }))
         # Giant-triggered imp throw/landing has no Rust phase/altitude fields;
         # keeping the giant outside the gate forces the complete Python path.
         self.assertFalse(supports_scenario({
@@ -149,6 +156,19 @@ class RustCoreBridgeTests(unittest.TestCase):
         self.assertEqual(result["events"]["projectile_hit"], 1)
         self.assertEqual(result["zombies"][0]["hp"], 480)
 
+    @unittest.skipUnless(rust_core_available(), "native Rust slice is not built")
+    def test_zamboni_catalog_defaults_run_without_board_targets(self):
+        result = run_rust_core({
+            "version": 2,
+            "max_frames": 1,
+            "plants": [],
+            "zombies": [{"type": "zamboni", "row": 3, "x": 800}],
+            "brains": [3],
+        })
+        self.assertEqual(result["backend"], "rust-core-slice")
+        self.assertEqual(result["zombies"][0]["hp"], 1350)
+        self.assertEqual(result["zombies"][0]["x"], 799.75)
+
     def test_cob_arming_support_gate_keeps_ballistic_path_on_python(self):
         self.assertTrue(supports_scenario({
             "max_frames": 1,
@@ -191,4 +211,48 @@ class RustCoreBridgeTests(unittest.TestCase):
         self.assertEqual([row["run_index"] for row in result["results"]], [0, 1, 2])
         self.assertEqual([row["seed"] for row in result["results"]], [9001, 9002, 9003])
         self.assertEqual(sum(item["count"] for item in result["outcomes"].values()), 3)
+
+    @unittest.skipUnless(rust_core_available(), "native Rust slice is not built")
+    def test_batch_bridge_clamps_workers_and_wraps_seed(self):
+        from pvz_ize.rust_core import run_batch_rust_core
+
+        result = run_batch_rust_core({
+            "version": 2,
+            "seed": 2**63 - 1,
+            "runs": 2,
+            "max_frames": 1,
+            "plants": [],
+            "zombies": [{"type": "normal", "row": 3, "x": 500}],
+            "brains": [3],
+        }, workers=99)
+        self.assertEqual(result["backend"], "rust-core-slice-rayon")
+        self.assertEqual(result["parallel_workers"], 2)
+        self.assertEqual([row["run_index"] for row in result["results"]], [0, 1])
+        self.assertEqual([row["seed"] for row in result["results"]], [2**63 - 1, -(2**63)])
+
+    @unittest.skipUnless(rust_core_available(), "native Rust slice is not built")
+    def test_batch_bridge_single_run_keeps_batch_schema(self):
+        from pvz_ize.rust_core import run_batch_rust_core
+
+        result = run_batch_rust_core({
+            "version": 2,
+            "seed": 17,
+            "runs": 1,
+            "max_frames": 1,
+            "plants": [],
+            "zombies": [{"type": "normal", "row": 3, "x": 500}],
+            "brains": [3],
+        }, workers=8)
+        self.assertTrue(result["batch"])
+        self.assertEqual(result["runs"], 1)
+        self.assertEqual(result["parallel_workers"], 1)
+        self.assertEqual(len(result["results"]), 1)
+        self.assertEqual(result["results"][0]["seed"], 17)
+
+    def test_batch_bridge_rejects_nonpositive_or_boolean_runs(self):
+        from pvz_ize.rust_core import run_batch_rust_core
+
+        for runs in (0, -1, True, 1.5):
+            with self.subTest(runs=runs), self.assertRaises(ValueError):
+                run_batch_rust_core({"runs": runs, "plants": [], "zombies": []})
 
