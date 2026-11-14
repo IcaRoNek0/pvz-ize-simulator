@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "seed": 12,
+  "mode": "who_will_win",
+  "max_frames": 120,
+  "brains": [3],
+  "plants": [],
+  "zombies": [
+    {"id": "row2", "type": "normal", "row": 2, "x": 500, "hp": 270}
+  ]
+}

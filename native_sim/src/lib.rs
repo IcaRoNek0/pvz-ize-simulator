@@ -530,6 +530,7 @@ pub struct SimpleProjectile {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct SimpleState {
     pub frame: u64,
+    pub mode: String,
     pub plants: Vec<Plant>,
     pub zombies: Vec<Zombie>,
     pub brains: Vec<Brain>,
@@ -543,6 +544,7 @@ impl From<Scenario> for SimpleState {
     fn from(s: Scenario) -> Self {
         Self {
             frame: 0,
+            mode: s.mode,
             plants: s.plants,
             zombies: s.zombies,
             brains: s.brains,
@@ -570,6 +572,19 @@ impl SimpleState {
     fn terminal(&self) -> Option<(String, String)> {
         if self.brains.iter().all(|b| b.hp <= 0) {
             return Some(("zombies".into(), "all_brains_eaten".into()));
+        }
+        if self.mode == "who_will_win" {
+            let row_three_threat = self.zombies.iter().any(|z| {
+                z.status == UnitStatus::Active
+                    && z.hp > 0
+                    && z.row == 3
+                    && !z.hypnotized
+                    && !z.headless
+            });
+            if !row_three_threat {
+                return Some(("plants".into(), "no_row_3_threats".into()));
+            }
+            return None;
         }
         if !self
             .zombies
@@ -989,6 +1004,17 @@ mod tests {
         assert_eq!(s.zombies[0].age, 3);
         assert_eq!(s.zombies[0].status, UnitStatus::Active);
         assert_eq!(s.zombies[1].x_fp, 499_571);
+    }
+
+    #[test]
+    fn simple_who_will_win_only_considers_row_three_at_frame_zero() {
+        let text = r#"{"mode":"who_will_win","max_frames":120,"plants":[],"zombies":[{"type":"normal","row":2,"x":500}],"brains":[3]}"#;
+        let mut s = SimpleState::from(parse_scenario(text).unwrap());
+        let result = s.run(120);
+        assert_eq!(result.frames, 0);
+        assert_eq!(result.winner, "plants");
+        assert_eq!(result.reason, "no_row_3_threats");
+        assert_eq!(s.mode, "who_will_win");
     }
 
     #[test]
