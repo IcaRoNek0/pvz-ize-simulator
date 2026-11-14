@@ -175,6 +175,14 @@ fn string_field(v: Option<&Value>, default: &str, name: &str) -> Result<String, 
             .ok_or_else(|| InputError::Invalid(format!("{name}: expected string"))),
     }
 }
+fn spawn_offset(kind: &str) -> f64 {
+    match kind {
+        "bungee" => 0.0,
+        "boss" => -40.0,
+        _ => -30.0,
+    }
+}
+
 fn row(v: Option<&Value>, name: &str) -> Result<u8, InputError> {
     let n = u64_field(v, 3, name)?;
     if !(1..=5).contains(&n) {
@@ -261,16 +269,19 @@ pub fn parse_scenario(input: &str) -> Result<Scenario, InputError> {
                 "zombies[{i}]: specify exactly one of col or x"
             )));
         }
-        let x = if has_col {
+        let kind = string_field(z.get("type"), "normal", "zombie.type")?;
+        let offset = spawn_offset(&kind);
+        let (x, c) = if has_col {
             let c = col(z.get("col"), &format!("zombies[{i}].col"))?;
-            40.0 - 30.0 + 80.0 * f64::from(c - 1)
+            (40.0 + offset + 80.0 * f64::from(c - 1), c)
         } else {
-            f64_field(z.get("x"), 680.0, &format!("zombies[{i}].x"))?
+            let x = f64_field(z.get("x"), 680.0, &format!("zombies[{i}].x"))?;
+            let c = ((x - 40.0 - offset) / 80.0).round().clamp(0.0, 8.0) as u8 + 1;
+            (x, c)
         };
-        let c = ((x - 10.0) / 80.0).floor().clamp(0.0, 8.0) as u8 + 1;
         zombies.push(Zombie {
             id,
-            kind: string_field(z.get("type"), "normal", "zombie.type")?,
+            kind,
             row: r,
             col: c,
             x,
