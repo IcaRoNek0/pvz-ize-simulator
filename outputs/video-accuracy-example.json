@@ -8,25 +8,34 @@
   "records": [
     {
       "id": "run7-reference",
-      "scenario": "run/7.json",
+      "scenario": "../examples/video_round_7.json",
       "expected": "zombies",
       "timestamp": "reference video: round 7",
       "notes": "Two miners are squash-killed; buckethead reaches the house.",
       "actual": "zombies",
       "frames": 7356,
       "reason": "all_brains_eaten",
-      "status": "match"
+      "status": "match",
+      "initial_zombies": 3,
+      "same_cell_zombies": [
+        [
+          0,
+          2
+        ]
+      ]
     },
     {
       "id": "run5-reference",
-      "scenario": "run/5.json",
+      "scenario": "../examples/video_round_5.json",
       "expected": "zombies",
       "timestamp": "reference video: round 5",
       "notes": "Reference observation says the later zombie reaches the house; compare mine trigger separation.",
       "actual": "plants",
       "frames": 2899,
       "reason": "no_on_board_zombies",
-      "status": "mismatch"
+      "status": "mismatch",
+      "initial_zombies": 2,
+      "same_cell_zombies": []
     }
   ]
 }
