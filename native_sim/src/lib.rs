@@ -628,7 +628,28 @@ impl SimpleState {
                     && z.row == row
                     && (z.x_fp - x_fp).abs() <= 25_000
             }) {
-                z.hp = (z.hp - damage).max(0);
+                // Match Simulator.damage's normal pea path: a projectile
+                // consumes the zombie's shield first, then helmet, then
+                // body HP.  `both`/bypass attacks are outside this simple
+                // slice, so every projectile follows the guarded path.
+                let mut remaining = damage.max(0);
+                if z.shield_hp > 0 && remaining > 0 {
+                    let absorbed = z.shield_hp.min(remaining);
+                    z.shield_hp -= absorbed;
+                    remaining -= absorbed;
+                    if z.shield_hp == 0 {
+                        *self.events.entry("armor_lost".into()).or_default() += 1;
+                    }
+                }
+                if z.helmet_hp > 0 && remaining > 0 {
+                    let absorbed = z.helmet_hp.min(remaining);
+                    z.helmet_hp -= absorbed;
+                    remaining -= absorbed;
+                    if z.helmet_hp == 0 {
+                        *self.events.entry("armor_lost".into()).or_default() += 1;
+                    }
+                }
+                z.hp = (z.hp - remaining).max(0);
                 self.projectiles[qi].active = false;
                 hits += 1;
                 if kind == "ice" {
@@ -846,6 +867,24 @@ mod tests {
         assert_eq!(s.events.get("projectile_fired"), Some(&2));
         assert_eq!(s.events.get("projectile_hit"), Some(&2));
         assert_eq!(s.zombies[0].hp, 230);
+    }
+
+    #[test]
+    fn simple_pea_strips_helmet_before_body_damage() {
+        let text = r#"{"plants":[{"type":"peashooter","row":3,"col":1}],"zombies":[{"type":"buckethead","row":3,"x":90,"hp":270,"helmet_hp":10}],"brains":[3]}"#;
+        let mut s = SimpleState::from(parse_scenario(text).unwrap());
+        s.step();
+        assert_eq!((s.zombies[0].helmet_hp, s.zombies[0].shield_hp, s.zombies[0].hp), (0, 0, 260));
+        assert_eq!(s.events.get("armor_lost"), Some(&1));
+    }
+
+    #[test]
+    fn simple_pea_strips_shield_before_helmet_and_body() {
+        let text = r#"{"plants":[{"type":"peashooter","row":3,"col":1}],"zombies":[{"type":"screen_door","row":3,"x":90,"hp":270,"shield_hp":10}],"brains":[3]}"#;
+        let mut s = SimpleState::from(parse_scenario(text).unwrap());
+        s.step();
+        assert_eq!((s.zombies[0].helmet_hp, s.zombies[0].shield_hp, s.zombies[0].hp), (0, 0, 260));
+        assert_eq!(s.events.get("armor_lost"), Some(&1));
     }
 
     #[test]

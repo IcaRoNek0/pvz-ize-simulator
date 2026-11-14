@@ -54,7 +54,18 @@ def python_reference(data):
             if not q["active"]: continue
             for z in zombies:
                 if z["status"]=="active" and z["hp"]>0 and z["row"]==q["row"] and abs(z["x_fp"]-q["x_fp"])<=25000:
-                    z["hp"]=max(0,z["hp"]-q["damage"]); q["active"]=False; ev("projectile_hit")
+                    remaining = max(0, q["damage"])
+                    # The normal Simulator damage path strips shield, then
+                    # helmet, before applying damage to body HP.
+                    if z["shield_hp"] > 0 and remaining:
+                        absorbed = min(z["shield_hp"], remaining)
+                        z["shield_hp"] -= absorbed; remaining -= absorbed
+                        if z["shield_hp"] == 0: ev("armor_lost")
+                    if z["helmet_hp"] > 0 and remaining:
+                        absorbed = min(z["helmet_hp"], remaining)
+                        z["helmet_hp"] -= absorbed; remaining -= absorbed
+                        if z["helmet_hp"] == 0: ev("armor_lost")
+                    z["hp"] = max(0, z["hp"]-remaining); q["active"]=False; ev("projectile_hit")
                     if q["kind"]=="ice": z["chilled"]=300; ev("chill_applied")
                     if z["hp"]==0: z["status"]="dead"; ev("zombie_died")
                     break
