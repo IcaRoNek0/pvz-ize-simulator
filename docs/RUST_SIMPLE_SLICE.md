@@ -39,6 +39,20 @@ python3 scripts/diff_rust_simple.py \
 - `rust_phase11_spikeweed.json`：地刺接触后等待 25 tick，在 timer=75 脉冲；僵尸不会啃食地刺。
 - `rust_phase11_spikerock.json`：地刺王在 timer=70、32 各脉冲一次；脉冲绕过铁门盾但仍消耗头盔耐久，僵尸不会啃食地刺王。
 
+Phase 12 additionally migrates the base armor defaults for `conehead`,
+`buckethead`, and `screen_door` (all retain 270 body HP): conehead has 370
+helmet HP, buckethead has 1100 helmet HP, and screen-door has 1100 shield HP.
+The projectile damage pipeline remains ordered `shield_hp -> helmet_hp -> hp`;
+the four default/order fixtures can be checked with the existing differential
+harness:
+
+```sh
+python3 scripts/compare_phase12_fixtures.py
+```
+
+The Rust backend support gate now admits these three zombie types.  No
+animation or movement mechanism is changed by this phase.
+
 Phase 11 固定夹具可单独运行 Python/Rust 对照（Rust 从 stdin 读取场景）：
 
 ```sh

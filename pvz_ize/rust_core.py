@@ -19,7 +19,9 @@ from typing import Any
 from .batch import run_seed, wilson_interval
 
 SUPPORTED_PLANTS = {"peashooter", "repeater", "snow_pea", "wallnut", "tallnut", "squash", "potato_mine", "cherry_bomb", "jalapeno", "spikeweed", "spikerock"}
-SUPPORTED_ZOMBIES = {"normal", "digger", "ladder"}
+SUPPORTED_ZOMBIES = {
+    "normal", "digger", "ladder", "conehead", "buckethead", "screen_door",
+}
 
 
 def rust_core_binary() -> Path:

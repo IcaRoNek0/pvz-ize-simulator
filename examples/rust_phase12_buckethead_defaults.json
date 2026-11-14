@@ -1,0 +1,8 @@
+{
+  "version": 2,
+  "seed": 1202,
+  "max_frames": 1,
+  "brains": [3],
+  "plants": [{"id": "pea", "type": "peashooter", "row": 3, "col": 1}],
+  "zombies": [{"id": "bucket", "type": "buckethead", "row": 3, "x": 90}]
+}

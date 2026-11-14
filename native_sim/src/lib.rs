@@ -201,6 +201,8 @@ fn zombie_default_hp(kind: &str) -> i32 {
 
 fn zombie_default_helmet(kind: &str) -> i32 {
     match kind {
+        "conehead" => 370,
+        "buckethead" => 1100,
         "digger" => 100,
         _ => 0,
     }
@@ -208,6 +210,7 @@ fn zombie_default_helmet(kind: &str) -> i32 {
 
 fn zombie_default_shield(kind: &str) -> i32 {
     match kind {
+        "screen_door" => 1100,
         "ladder" => 500,
         _ => 0,
     }
@@ -1253,6 +1256,22 @@ mod tests {
             (0, 0, 260)
         );
         assert_eq!(s.events.get("armor_lost"), Some(&1));
+    }
+
+    #[test]
+    fn simple_base_armor_zombies_use_catalog_defaults() {
+        let text = r#"{"plants":[],"zombies":[
+            {"type":"conehead","row":3,"x":90},
+            {"type":"buckethead","row":3,"x":170},
+            {"type":"screen_door","row":3,"x":250}],"brains":[3]}"#;
+        let s = parse_scenario(text).unwrap();
+        assert_eq!(
+            s.zombies
+                .iter()
+                .map(|z| (z.hp, z.helmet_hp, z.shield_hp))
+                .collect::<Vec<_>>(),
+            vec![(270, 370, 0), (270, 1100, 0), (270, 0, 1100)]
+        );
     }
 
     #[test]

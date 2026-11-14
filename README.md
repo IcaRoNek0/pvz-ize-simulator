@@ -128,6 +128,12 @@ python3 scripts/diff_rust_simple.py \
   examples/rust_slice_potato_mine.json examples/rust_migration_cherry_bomb.json
 ```
 
+基础护甲默认值（路障/铁桶/铁门）及投射物护甲顺序的 Phase 12 差分夹具：
+
+```sh
+python3 scripts/compare_phase12_fixtures.py
+```
+
 完整战斗规则仍以 Python `Simulator` 为 oracle；Rust 尚未替代默认后端。迁移路线和完整差分门见 `docs/RUST_CORE_MIGRATION.md`、`docs/RUST_DIFF.md` 与 `docs/RUST_SIMPLE_SLICE.md`。
 
 已迁移切片可显式试用 Rust 后端（未覆盖的单位会安全回退 Python；射击植物需在 JSON 中显式设置 `cooldown`）：

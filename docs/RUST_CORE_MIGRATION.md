@@ -77,3 +77,19 @@ python3 scripts/benchmark_rust_core.py \
 ### Phase 11：地刺与地刺王
 
 `spikeweed` 与 `spikerock` 已加入 Rust slice：它们不会成为啃食目标，重叠僵尸后进入攻击计时；地刺在 75 tick 脉冲一次，地刺王在 70/32 tick 脉冲两次，伤害绕过铁门盾牌但保留头盔吸收。固定夹具为 `examples/rust_phase11_spikeweed.json` 与 `examples/rust_phase11_spikerock.json`，由 `scripts/compare_phase11_fixtures.py` 写入 `docs/rust_phase11_comparison.latest.json`。当前 gate 比较 winner、reason、frames 与关键终态字段；事件名称仍保留用于后续逐帧校准。
+
+### Phase 12：基础护甲默认值
+
+Rust slice 现在与 `catalog.ZOMBIES` 对齐三种基础护甲僵尸：`conehead`（本体
+270、头盔 370）、`buckethead`（本体 270、头盔 1100）和 `screen_door`
+（本体 270、盾牌 1100）。普通投射物严格按盾牌、头盔、本体的顺序扣除，保留
+`armor_lost` 事件；动画与移动机制未在本阶段改动。默认值及跨层顺序夹具为：
+`examples/rust_phase12_conehead_defaults.json`、
+`examples/rust_phase12_buckethead_defaults.json`、
+`examples/rust_phase12_screen_door_defaults.json`、
+`examples/rust_phase12_armor_order.json`，可用
+`scripts/compare_phase12_fixtures.py` 运行 Python/Rust 差分并写入
+`docs/rust_phase12_comparison.latest.json`。
+
+`pvz_ize.rust_core.SUPPORTED_ZOMBIES` 同步扩展为允许这三种单位通过 Rust
+后端支持门；不满足其他切片条件的场景仍回退 Python。

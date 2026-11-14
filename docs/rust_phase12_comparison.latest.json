@@ -1,0 +1,493 @@
+{
+  "fixtures": [
+    {
+      "fixture": "/private/tmp/pvz-ize-simulator.igLHFO/examples/rust_phase12_conehead_defaults.json",
+      "python": {
+        "frames": 1,
+        "reason": "max_frames_reached",
+        "state": {
+          "brains": [
+            {
+              "hp": 70,
+              "row": 3
+            }
+          ],
+          "events": {
+            "projectile_fired": 1,
+            "projectile_hit": 1
+          },
+          "frame": 1,
+          "ladders": [],
+          "mode": "ize",
+          "plants": [
+            {
+              "col": 1,
+              "cooldown": 150,
+              "footprint": [
+                1
+              ],
+              "hp": 300,
+              "id": "pea",
+              "layer": "main",
+              "row": 3,
+              "state_timer": 0,
+              "type": "peashooter"
+            }
+          ],
+          "projectiles": [],
+          "rakes": [],
+          "zombies": [
+            {
+              "age": 1,
+              "chilled": 0,
+              "col": 2,
+              "headless": false,
+              "helmet_hp": 350,
+              "hp": 270,
+              "hypnotized": false,
+              "id": "cone",
+              "row": 3,
+              "shield_hp": 0,
+              "speed": 0.143,
+              "status": "active",
+              "tool": true,
+              "type": "conehead",
+              "underground": null,
+              "x": 90.0
+            }
+          ]
+        },
+        "winner": "undecided"
+      },
+      "rust": {
+        "frames": 1,
+        "reason": "max_frames_reached",
+        "state": {
+          "brains": [
+            {
+              "hp": 70,
+              "row": 3
+            }
+          ],
+          "events": {
+            "projectile_fired": 1,
+            "projectile_hit": 1
+          },
+          "frame": 1,
+          "ladders": [],
+          "mode": "ize",
+          "plants": [
+            {
+              "col": 1,
+              "cooldown": 150,
+              "footprint": [
+                1
+              ],
+              "hp": 300,
+              "id": "pea",
+              "layer": "main",
+              "row": 3,
+              "state_timer": 0,
+              "type": "peashooter"
+            }
+          ],
+          "projectiles": [],
+          "rakes": [],
+          "zombies": [
+            {
+              "age": 1,
+              "chilled": 0,
+              "col": 2,
+              "headless": false,
+              "helmet_hp": 350,
+              "hp": 270,
+              "hypnotized": false,
+              "id": "cone",
+              "row": 3,
+              "shield_hp": 0,
+              "speed": 0.143,
+              "status": "active",
+              "tool": true,
+              "type": "conehead",
+              "underground": null,
+              "x": 90.0
+            }
+          ]
+        },
+        "winner": "undecided"
+      },
+      "rust_exit_status": 0,
+      "sha256": "273ba7feb266e7527c6f49a91df42b1b619e6e56e23037e1b3613d39957e7e43",
+      "status": "match",
+      "stderr": ""
+    },
+    {
+      "fixture": "/private/tmp/pvz-ize-simulator.igLHFO/examples/rust_phase12_buckethead_defaults.json",
+      "python": {
+        "frames": 1,
+        "reason": "max_frames_reached",
+        "state": {
+          "brains": [
+            {
+              "hp": 70,
+              "row": 3
+            }
+          ],
+          "events": {
+            "projectile_fired": 1,
+            "projectile_hit": 1
+          },
+          "frame": 1,
+          "ladders": [],
+          "mode": "ize",
+          "plants": [
+            {
+              "col": 1,
+              "cooldown": 150,
+              "footprint": [
+                1
+              ],
+              "hp": 300,
+              "id": "pea",
+              "layer": "main",
+              "row": 3,
+              "state_timer": 0,
+              "type": "peashooter"
+            }
+          ],
+          "projectiles": [],
+          "rakes": [],
+          "zombies": [
+            {
+              "age": 1,
+              "chilled": 0,
+              "col": 2,
+              "headless": false,
+              "helmet_hp": 1080,
+              "hp": 270,
+              "hypnotized": false,
+              "id": "bucket",
+              "row": 3,
+              "shield_hp": 0,
+              "speed": 0.143,
+              "status": "active",
+              "tool": true,
+              "type": "buckethead",
+              "underground": null,
+              "x": 90.0
+            }
+          ]
+        },
+        "winner": "undecided"
+      },
+      "rust": {
+        "frames": 1,
+        "reason": "max_frames_reached",
+        "state": {
+          "brains": [
+            {
+              "hp": 70,
+              "row": 3
+            }
+          ],
+          "events": {
+            "projectile_fired": 1,
+            "projectile_hit": 1
+          },
+          "frame": 1,
+          "ladders": [],
+          "mode": "ize",
+          "plants": [
+            {
+              "col": 1,
+              "cooldown": 150,
+              "footprint": [
+                1
+              ],
+              "hp": 300,
+              "id": "pea",
+              "layer": "main",
+              "row": 3,
+              "state_timer": 0,
+              "type": "peashooter"
+            }
+          ],
+          "projectiles": [],
+          "rakes": [],
+          "zombies": [
+            {
+              "age": 1,
+              "chilled": 0,
+              "col": 2,
+              "headless": false,
+              "helmet_hp": 1080,
+              "hp": 270,
+              "hypnotized": false,
+              "id": "bucket",
+              "row": 3,
+              "shield_hp": 0,
+              "speed": 0.143,
+              "status": "active",
+              "tool": true,
+              "type": "buckethead",
+              "underground": null,
+              "x": 90.0
+            }
+          ]
+        },
+        "winner": "undecided"
+      },
+      "rust_exit_status": 0,
+      "sha256": "4a6b0db37796e8c24837c5321e91942d48f52f8f81292230fcb371c220eec743",
+      "status": "match",
+      "stderr": ""
+    },
+    {
+      "fixture": "/private/tmp/pvz-ize-simulator.igLHFO/examples/rust_phase12_screen_door_defaults.json",
+      "python": {
+        "frames": 1,
+        "reason": "max_frames_reached",
+        "state": {
+          "brains": [
+            {
+              "hp": 70,
+              "row": 3
+            }
+          ],
+          "events": {
+            "projectile_fired": 1,
+            "projectile_hit": 1
+          },
+          "frame": 1,
+          "ladders": [],
+          "mode": "ize",
+          "plants": [
+            {
+              "col": 1,
+              "cooldown": 150,
+              "footprint": [
+                1
+              ],
+              "hp": 300,
+              "id": "pea",
+              "layer": "main",
+              "row": 3,
+              "state_timer": 0,
+              "type": "peashooter"
+            }
+          ],
+          "projectiles": [],
+          "rakes": [],
+          "zombies": [
+            {
+              "age": 1,
+              "chilled": 0,
+              "col": 2,
+              "headless": false,
+              "helmet_hp": 0,
+              "hp": 270,
+              "hypnotized": false,
+              "id": "screen",
+              "row": 3,
+              "shield_hp": 1080,
+              "speed": 0.143,
+              "status": "active",
+              "tool": true,
+              "type": "screen_door",
+              "underground": null,
+              "x": 90.0
+            }
+          ]
+        },
+        "winner": "undecided"
+      },
+      "rust": {
+        "frames": 1,
+        "reason": "max_frames_reached",
+        "state": {
+          "brains": [
+            {
+              "hp": 70,
+              "row": 3
+            }
+          ],
+          "events": {
+            "projectile_fired": 1,
+            "projectile_hit": 1
+          },
+          "frame": 1,
+          "ladders": [],
+          "mode": "ize",
+          "plants": [
+            {
+              "col": 1,
+              "cooldown": 150,
+              "footprint": [
+                1
+              ],
+              "hp": 300,
+              "id": "pea",
+              "layer": "main",
+              "row": 3,
+              "state_timer": 0,
+              "type": "peashooter"
+            }
+          ],
+          "projectiles": [],
+          "rakes": [],
+          "zombies": [
+            {
+              "age": 1,
+              "chilled": 0,
+              "col": 2,
+              "headless": false,
+              "helmet_hp": 0,
+              "hp": 270,
+              "hypnotized": false,
+              "id": "screen",
+              "row": 3,
+              "shield_hp": 1080,
+              "speed": 0.143,
+              "status": "active",
+              "tool": true,
+              "type": "screen_door",
+              "underground": null,
+              "x": 90.0
+            }
+          ]
+        },
+        "winner": "undecided"
+      },
+      "rust_exit_status": 0,
+      "sha256": "ac37e111521abf59faef0d7f3635fd3ed602083174f4be7592aff06fd10316fe",
+      "status": "match",
+      "stderr": ""
+    },
+    {
+      "fixture": "/private/tmp/pvz-ize-simulator.igLHFO/examples/rust_phase12_armor_order.json",
+      "python": {
+        "frames": 1,
+        "reason": "max_frames_reached",
+        "state": {
+          "brains": [
+            {
+              "hp": 70,
+              "row": 3
+            }
+          ],
+          "events": {
+            "armor_lost": 2,
+            "projectile_fired": 1,
+            "projectile_hit": 1
+          },
+          "frame": 1,
+          "ladders": [],
+          "mode": "ize",
+          "plants": [
+            {
+              "col": 1,
+              "cooldown": 150,
+              "footprint": [
+                1
+              ],
+              "hp": 300,
+              "id": "pea",
+              "layer": "main",
+              "row": 3,
+              "state_timer": 0,
+              "type": "peashooter"
+            }
+          ],
+          "projectiles": [],
+          "rakes": [],
+          "zombies": [
+            {
+              "age": 1,
+              "chilled": 0,
+              "col": 2,
+              "headless": false,
+              "helmet_hp": 0,
+              "hp": 270,
+              "hypnotized": false,
+              "id": "armored",
+              "row": 3,
+              "shield_hp": 0,
+              "speed": 0.143,
+              "status": "active",
+              "tool": true,
+              "type": "screen_door",
+              "underground": null,
+              "x": 90.0
+            }
+          ]
+        },
+        "winner": "undecided"
+      },
+      "rust": {
+        "frames": 1,
+        "reason": "max_frames_reached",
+        "state": {
+          "brains": [
+            {
+              "hp": 70,
+              "row": 3
+            }
+          ],
+          "events": {
+            "armor_lost": 2,
+            "projectile_fired": 1,
+            "projectile_hit": 1
+          },
+          "frame": 1,
+          "ladders": [],
+          "mode": "ize",
+          "plants": [
+            {
+              "col": 1,
+              "cooldown": 150,
+              "footprint": [
+                1
+              ],
+              "hp": 300,
+              "id": "pea",
+              "layer": "main",
+              "row": 3,
+              "state_timer": 0,
+              "type": "peashooter"
+            }
+          ],
+          "projectiles": [],
+          "rakes": [],
+          "zombies": [
+            {
+              "age": 1,
+              "chilled": 0,
+              "col": 2,
+              "headless": false,
+              "helmet_hp": 0,
+              "hp": 270,
+              "hypnotized": false,
+              "id": "armored",
+              "row": 3,
+              "shield_hp": 0,
+              "speed": 0.143,
+              "status": "active",
+              "tool": true,
+              "type": "screen_door",
+              "underground": null,
+              "x": 90.0
+            }
+          ]
+        },
+        "winner": "undecided"
+      },
+      "rust_exit_status": 0,
+      "sha256": "3c6e626b8b31d781be04fa8084f6f70656471ef6d3cf83e89fc60cd80a2bcc06",
+      "status": "match",
+      "stderr": ""
+    }
+  ],
+  "rust_binary": "/private/tmp/pvz-ize-simulator.igLHFO/native_sim/target/release/pvz-ize-native-sim",
+  "schema": "pvz-ize/rust-phase12-armor/v1",
+  "status": "match"
+}
