@@ -10,7 +10,7 @@ import sys
 from .catalog import MODEL, PLANTS, PLANT_ALIASES, WARNINGS, ZOMBIES, ZOMBIE_ALIASES
 from .engine import Simulator
 from .model import ScenarioError, parse_scenario
-from .batch import run_batch
+from .batch import run_batch, run_batch_parallel
 
 
 class Parser(argparse.ArgumentParser):
@@ -30,6 +30,7 @@ def parser():
     run.add_argument("--seed", type=int)
     run.add_argument("--max-frames", type=int)
     run.add_argument("--runs", type=int, help="独立模拟次数；覆盖 JSON runs（默认 1）")
+    run.add_argument("--workers", type=int, help="批量模拟进程数；>1 启用并行加速（默认串行）")
     run.add_argument("--json", action="store_true", help="标准输出为完整 JSON")
     run.add_argument("--output", type=Path, help="另存完整 JSON 结果")
     run.add_argument("--trace", type=Path, help="逐事件 NDJSON 日志（非逐帧快照）")
@@ -44,6 +45,7 @@ def parser():
     # Share the execution options, not run's alternative placement inputs.
     for option in ("--seed", "--max-frames", "--runs"):
         predict.add_argument(option, type=int)
+    predict.add_argument("--workers", type=int, help="批量模拟进程数；>1 启用并行加速（默认串行）")
     predict.add_argument("--json", action="store_true")
     for option in ("--output", "--trace", "--dump-initial"):
         predict.add_argument(option, type=Path)
@@ -187,8 +189,13 @@ def main(argv=None):
                     stream.write(json.dumps(event, ensure_ascii=False, allow_nan=False) + "\n")
             if initial.runs > 1:
                 manifest = [] if args.dump_initial else None
-                result = run_batch(data, event_sink=sink,
-                                   initial_sink=manifest.append if manifest is not None else None)
+                # Streaming traces/replay manifests require deterministic
+                # parent-process ordering, so retain the serial path there.
+                if args.workers and args.workers > 1 and not args.trace and not args.dump_initial:
+                    result = run_batch_parallel(data, workers=args.workers)
+                else:
+                    result = run_batch(data, event_sink=sink,
+                                       initial_sink=manifest.append if manifest is not None else None)
                 if args.dump_initial:
                     save(args.dump_initial, _dump({"batch_replay": True, "runs": manifest}))
             else:

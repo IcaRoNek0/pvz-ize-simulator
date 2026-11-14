@@ -5,7 +5,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from pvz_ize.batch import run_batch, run_seed
+from pvz_ize.batch import run_batch, run_batch_parallel, run_seed
 from pvz_ize.cli import main
 from pvz_ize.model import ScenarioError, parse_scenario
 from pvz_ize.catalog import ZOMBIES
@@ -136,6 +136,17 @@ class V2InputTests(unittest.TestCase):
 
 
 class BatchTests(unittest.TestCase):
+
+    def test_parallel_batch_matches_serial(self):
+        data = {"seed": 2026, "runs": 4, "max_frames": 3000,
+                "brains": [3], "plants": [plant(type="repeater", row=3, col=1)],
+                "zombies": [zombie(type="normal", row=3, col=8)]}
+        serial = run_batch(data)
+        parallel = run_batch_parallel(data, workers=2)
+        self.assertEqual(serial["outcomes"], parallel["outcomes"])
+        self.assertEqual([r["winner"] for r in serial["results"]],
+                         [r["winner"] for r in parallel["results"]])
+        self.assertEqual(parallel["parallel_workers"], 2)
     def test_each_animation_replica_replays_full_state_and_events(self):
         data = {"runs": 3, "seed": -20, "movement_mode": "animation", "max_frames": 30,
                 "plants": [plant(type="garlic", garlic_direction="random"), plant(row=2)],
