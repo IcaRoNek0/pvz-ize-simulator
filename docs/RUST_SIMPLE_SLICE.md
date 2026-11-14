@@ -1,6 +1,6 @@
 # Rust 第一垂直切片
 
-`native_sim` 当前包含一个**不接入默认后端**的极简切片：普通/寒冰豌豆、普通僵尸、固定 tick、直线投射物、命中扣血、普通啃食、坚果/高坚果默认血量、窝瓜一次性近战、寒冷减速和脑子结算。坐标与速度在核心内部使用 1/1000 像素定点整数，JSON 边界仍输出浮点，避免长局累计浮点误差。
+`native_sim` 当前包含一个**不接入默认后端**的极简切片：普通/寒冰豌豆、普通僵尸、固定 tick、直线投射物、命中扣血、普通啃食、坚果/高坚果默认血量、窝瓜一次性近战、土豆雷、樱桃/辣椒瞬发、地刺/地刺王、寒冷减速和脑子结算。坐标与速度在核心内部使用 1/1000 像素定点整数，JSON 边界仍输出浮点，避免长局累计浮点误差。
 
 构建并运行十六份固定 Python/Rust 差分夹具：
 
@@ -36,6 +36,18 @@ python3 scripts/diff_rust_simple.py \
 - `rust_slice_cob_cannon_footprint.json`：玉米加农炮保留 `[col, col+1]` 双格占位。
 - `rust_slice_potato_mine.json`：土豆雷在同一行接触后爆炸，击杀该行僵尸并销毁自身。
 - `rust_migration_cherry_bomb.json`：樱桃炸弹延迟爆炸并击中相邻范围内僵尸。
+- `rust_phase11_spikeweed.json`：地刺接触后等待 25 tick，在 timer=75 脉冲；僵尸不会啃食地刺。
+- `rust_phase11_spikerock.json`：地刺王在 timer=70、32 各脉冲一次；脉冲绕过铁门盾但仍消耗头盔耐久，僵尸不会啃食地刺王。
+
+Phase 11 固定夹具可单独运行 Python/Rust 对照（Rust 从 stdin 读取场景）：
+
+```sh
+cargo build --release --manifest-path native_sim/Cargo.toml
+python3 scripts/compare_phase11_fixtures.py
+```
+
+脚本写入 `docs/rust_phase11_comparison.latest.json`，并比较终局以及地刺专用的
+植物状态、僵尸 HP/头盔和 `damage`/脉冲事件投影；退出码 0 才表示两份夹具均通过。
 
 护甲顺序与 Python `Simulator.damage` 一致：普通投射物先消耗
 `shield_hp`，剩余伤害再消耗 `helmet_hp`，最后作用于 `hp`；每层耐久降到零时

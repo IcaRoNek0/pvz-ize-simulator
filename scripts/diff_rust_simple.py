@@ -91,20 +91,23 @@ def python_reference(data):
         for p in plants:
             if p["hp"]<=0 or p["type"] not in ("spikeweed", "spikerock"): continue
             px_fp=int(round((40+80*(p["col"]-1))*FP)); row=p["row"]
-            def in_range(z):
+            def in_range(z, strict=False):
                 return (z["status"]=="active" and z["hp"]>0 and not z["hypnotized"]
                         and z["row"]==row
-                        and z["x_fp"]+36000 <= px_fp+50000
-                        and z["x_fp"]+78000 >= px_fp+20000)
+                        and ((z["x_fp"]+36000 < px_fp+50000 and z["x_fp"]+78000 > px_fp+20000)
+                             if strict else
+                             (z["x_fp"]+36000 <= px_fp+50000 and z["x_fp"]+78000 >= px_fp+20000)))
             if p["state_timer"] == 0:
-                if any(in_range(z) for z in zombies): p["state_timer"] = 100
+                if any(in_range(z, False) for z in zombies): p["state_timer"] = 100
                 continue
             p["state_timer"] -= 1
             pulse = (p["type"] == "spikeweed" and p["state_timer"] == 75) or \
                     (p["type"] == "spikerock" and p["state_timer"] in (70, 32))
             if pulse:
+                hit = False
                 for z in zombies:
-                    if not in_range(z): continue
+                    if not in_range(z, True): continue
+                    hit = True
                     hazard_damage += 1
                     remaining = max(0, 20)
                     if z["helmet_hp"] > 0:
@@ -113,8 +116,9 @@ def python_reference(data):
                     z["hp"] = max(0, z["hp"] - remaining)
                     if z["hp"] == 0:
                         z["status"] = "dead"; hazard_kills += 1
-                if p["type"] == "spikeweed": spikeweed_pulses += 1
-                else: spikerock_pulses += 1
+                if hit:
+                    if p["type"] == "spikeweed": spikeweed_pulses += 1
+                    else: spikerock_pulses += 1
         for p in plants:
             if p["hp"]<=0 or p["type"]!="squash": continue
             px_fp=int(round((40.0+80.0*(p["col"]-1))*FP))

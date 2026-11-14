@@ -731,21 +731,26 @@ impl SimpleState {
             }
             let px_fp = plant_x_fp(self.plants[pi].col);
             let row = self.plants[pi].row;
-            let in_range = |z: &Zombie| {
+            let in_range = |z: &Zombie, strict: bool| {
                 z.status == UnitStatus::Active
                     && z.hp > 0
                     && !z.hypnotized
                     && z.row == row
                     // Normal/screen-door hitbox in this slice is origin
                     // +[36,78]; use overlap rather than origin-only checks.
-                    && z.x_fp + 36_000 <= px_fp + 50_000
-                    && z.x_fp + 78_000 >= px_fp + 20_000
+                    && if strict {
+                        z.x_fp + 36_000 < px_fp + 50_000
+                            && z.x_fp + 78_000 > px_fp + 20_000
+                    } else {
+                        z.x_fp + 36_000 <= px_fp + 50_000
+                            && z.x_fp + 78_000 >= px_fp + 20_000
+                    }
             };
             // `state_timer == 0` is the public ready state.  A positive
             // timer denotes the private attacking animation; keeping this
             // implicit avoids widening the stable JSON state schema.
             if self.plants[pi].state_timer == 0 {
-                if self.zombies.iter().any(in_range) {
+                if self.zombies.iter().any(|z| in_range(z, false)) {
                     self.plants[pi].state_timer = 100;
                 }
                 continue;
@@ -763,10 +768,10 @@ impl SimpleState {
                     .zombies
                     .iter()
                     .enumerate()
-                    .filter(|(_, z)| in_range(z))
+                    .filter(|(_, z)| in_range(z, true))
                     .map(|(zi, _)| zi)
                     .collect();
-                for zi in ids {
+                for zi in ids.iter().copied() {
                     let z = &mut self.zombies[zi];
                     hazard_damage += 1;
                     let mut remaining = 20_i32;
@@ -781,10 +786,12 @@ impl SimpleState {
                         hazard_kills += 1;
                     }
                 }
-                if kind == "spikeweed" {
-                    spikeweed_pulses += 1;
-                } else {
-                    spikerock_pulses += 1;
+                if !ids.is_empty() {
+                    if kind == "spikeweed" {
+                        spikeweed_pulses += 1;
+                    } else {
+                        spikerock_pulses += 1;
+                    }
                 }
             }
         }
@@ -1339,5 +1346,16 @@ mod tests {
         assert_eq!(s.zombies[0].shield_hp, 1100);
         assert_eq!(s.events.get("spikerock_pulse"), Some(&2));
         assert_eq!(s.events.get("plant_bitten"), None);
+    }
+
+    #[test]
+    fn simple_spike_strict_edge_does_not_pulse() {
+        let text = r#"{"max_frames":30,"plants":[{"type":"spikeweed","row":3,"col":1}],"zombies":[{"type":"normal","row":3,"x":54,"speed":0.0}],"brains":[3]}"#;
+        let mut s = SimpleState::from(parse_scenario(text).unwrap());
+        for _ in 0..30 {
+            s.step();
+        }
+        assert_eq!(s.zombies[0].hp, 270);
+        assert_eq!(s.events.get("spikeweed_pulse"), None);
     }
 }
