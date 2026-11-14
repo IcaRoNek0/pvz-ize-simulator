@@ -27,6 +27,15 @@ class RustCoreBridgeTests(unittest.TestCase):
         self.assertTrue(supports_scenario({
             "plants": [], "zombies": [{"type": "imp", "row": 3, "x": 90}],
         }))
+        # Giant-triggered imp throw/landing has no Rust phase/altitude fields;
+        # keeping the giant outside the gate forces the complete Python path.
+        self.assertFalse(supports_scenario({
+            "plants": [],
+            "zombies": [
+                {"type": "gargantuar", "row": 3, "x": 300},
+                {"type": "imp", "row": 3, "x": 200},
+            ],
+        }))
         self.assertTrue(supports_scenario({
             "plants": [{"type": "wallnut", "row": 3, "col": 1}],
             "zombies": [{"type": "ladder", "row": 3, "x": 90}],
@@ -105,4 +114,43 @@ class RustCoreBridgeTests(unittest.TestCase):
         })
         self.assertEqual(result["backend"], "rust-core-slice")
         self.assertEqual(result["events"]["spikerock_pulse"], 3)
+
+    @unittest.skipUnless(rust_core_available(), "native Rust slice is not built")
+    def test_imp_projectile_runs_through_rust(self):
+        result = run_rust_core({
+            "version": 2,
+            "max_frames": 1,
+            "plants": [{"type": "peashooter", "row": 3, "col": 1, "cooldown": 0}],
+            "zombies": [{"type": "imp", "row": 3, "x": 90}],
+            "brains": [3],
+        })
+        self.assertEqual(result["backend"], "rust-core-slice")
+        self.assertEqual(result["events"]["projectile_fired"], 1)
+        self.assertEqual(result["events"]["projectile_hit"], 1)
+        self.assertEqual(result["zombies"][0]["hp"], 50)
+
+    def test_cob_arming_support_gate_keeps_ballistic_path_on_python(self):
+        self.assertTrue(supports_scenario({
+            "max_frames": 1,
+            "plants": [{"type": "cob_cannon", "row": 3, "col": 2, "cooldown": 500}],
+            "zombies": [{"type": "normal", "row": 3, "x": 600}],
+        }))
+        self.assertFalse(supports_scenario({
+            "max_frames": 1,
+            "plants": [{"type": "cob_cannon", "row": 3, "col": 2, "cooldown": 0}],
+            "zombies": [{"type": "normal", "row": 3, "x": 600}],
+        }))
+
+    @unittest.skipUnless(rust_core_available(), "native Rust slice is not built")
+    def test_cob_arming_counter_runs_through_rust(self):
+        result = run_rust_core({
+            "version": 2,
+            "max_frames": 1,
+            "plants": [{"type": "cob_cannon", "row": 3, "col": 2, "cooldown": 500}],
+            "zombies": [{"type": "normal", "row": 3, "x": 600}],
+            "brains": [3],
+        })
+        self.assertEqual(result["backend"], "rust-core-slice")
+        self.assertEqual(result["plants"][0]["cooldown"], 499)
+        self.assertEqual(result["projectiles"], [])
 

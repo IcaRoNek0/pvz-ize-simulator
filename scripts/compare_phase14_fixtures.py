@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run the Phase 14 newspaper defaults and armor-order fixtures."""
+"""Run the Phase 14 newspaper defaults, armor-order, and shield-break fixtures."""
 from __future__ import annotations
 
 import hashlib
@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 FIXTURES = [
     ROOT / "examples" / "rust_phase14_newspaper_defaults.json",
     ROOT / "examples" / "rust_phase14_newspaper_armor_order.json",
+    ROOT / "examples" / "rust_phase14_newspaper_shield_break.json",
 ]
 RUST = ROOT / "native_sim" / "target" / "release" / "pvz-ize-native-sim"
 

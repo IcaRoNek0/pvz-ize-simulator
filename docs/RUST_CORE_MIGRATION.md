@@ -116,10 +116,33 @@ and `examples/rust_phase14_newspaper_armor_order.json` are checked by
 `scripts/compare_phase14_fixtures.py` and recorded in
 `docs/rust_phase14_comparison.latest.json`.
 
+The additional `rust_phase14_newspaper_shield_break.json` audit fixture uses a
+20-HP shield so one ordinary pea breaks it. Rust records `armor_lost`, leaves
+body HP unchanged, and keeps the catalog speed (0.09) for this one-tick slice.
+The Python oracle then transitions the full model through
+`newspaper_maddening` and eventually speed 0.4; that animation/state-machine
+behavior is intentionally not implemented here. Scenarios whose result depends
+on that transition must continue through the Python fallback.
+
 ### Phase 15：小鬼僵尸基础默认值
 
 Rust simple slice now accepts `imp` with catalog defaults: body HP 70 and
-speed 0.423 px/tick. Throwing/landing animation states remain in Python. The
-fixture `examples/rust_phase15_imp_defaults.json` is checked by
+speed 0.423 px/tick. Its ordinary walk and straight pea projectile path are
+covered by `examples/rust_phase15_imp_defaults.json` and
+`examples/rust_phase15_imp_projectile.json`, checked by
 `scripts/compare_phase15_fixtures.py` and recorded in
-`docs/rust_phase15_comparison.latest.json`.
+`docs/rust_phase15_comparison.latest.json`. The Python model's giant-triggered
+`imp_thrown`/`imp_landing` phases are deliberately not represented in the Rust
+schema (which has no phase/altitude fields); those animation and throw paths
+continue through the Python fallback rather than being approximated.
+
+### Phase 16：玉米加农炮安全状态边界
+
+The existing `[col, col+1]` footprint is extended with one verifiable state:
+the Rust slice applies the catalog's 500-tick COB arming/reload counter. The
+fixture `examples/rust_phase16_cob_arming.json` observes one deterministic
+tick (`500 → 499`) with no projectile or splash event. Target selection,
+parabolic lob, impact timing, and 115px adjacent-row damage remain explicitly
+outside this slice; scenarios that could reach a shot stay on the Python
+fallback. Run `python3 scripts/compare_phase16_fixtures.py` to write
+`docs/rust_phase16_comparison.latest.json`.

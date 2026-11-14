@@ -20,7 +20,8 @@ def python_reference(data):
         if kind == "cob_cannon" and col >= 9:
             raise ValueError("cob_cannon left column must be 1..8")
         default_hp={"wallnut":4000,"tallnut":8000,"spikerock":450}.get(kind,300)
-        plants.append({"id":p.get("id",f"p{i+1}"),"type":kind,"row":int(p.get("row",3)),"col":col,"footprint":[col,col+1] if kind=="cob_cannon" else [col],"hp":int(p.get("hp",default_hp)),"cooldown":int(p.get("cooldown",0)),"state_timer":int(p.get("state_timer",0)),"layer":p.get("layer","main")})
+        default_cooldown = 500 if kind == "cob_cannon" else 0
+        plants.append({"id":p.get("id",f"p{i+1}"),"type":kind,"row":int(p.get("row",3)),"col":col,"footprint":[col,col+1] if kind=="cob_cannon" else [col],"hp":int(p.get("hp",default_hp)),"cooldown":int(p.get("cooldown",default_cooldown)),"state_timer":int(p.get("state_timer",0)),"layer":p.get("layer","main")})
     zombies=[]
     for i,z in enumerate(data.get("zombies", [])):
         kind=z.get("type","normal"); col=z.get("col")
@@ -127,6 +128,10 @@ def python_reference(data):
                 if z["status"]=="active" and z["hp"]>0 and not z["hypnotized"] and z["row"]==p["row"] and z["x_fp"]>=px_fp and z["x_fp"]-px_fp<=120000:
                     z["hp"]=0; z["status"]="dead"; p["hp"]=0; squash_hits+=1; break
         for p in plants:
+            if p["hp"] > 0 and p["type"] == "cob_cannon":
+                if p["cooldown"] > 0:
+                    p["cooldown"] -= 1
+                continue
             if p["hp"]<=0 or p["type"] not in ("peashooter","snow_pea","repeater"): continue
             if p["cooldown"]>0: p["cooldown"]-=1
             if p["cooldown"]==0:

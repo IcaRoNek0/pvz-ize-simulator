@@ -192,6 +192,16 @@ fn plant_default_hp(kind: &str) -> i32 {
     }
 }
 
+fn plant_default_cooldown(kind: &str) -> u64 {
+    match kind {
+        // Native COB cannon starts armed after a 500-tick wind-up.  The
+        // simple slice only migrates this safe arming/reload counter; its
+        // targeted lob and splash remain on the Python fallback.
+        "cob_cannon" => 500,
+        _ => 0,
+    }
+}
+
 fn zombie_default_hp(kind: &str) -> i32 {
     match kind {
         "imp" => 70,
@@ -302,6 +312,7 @@ pub fn parse_scenario(input: &str) -> Result<Scenario, InputError> {
             vec![c]
         };
         let default_hp = plant_default_hp(&kind);
+        let default_cooldown = plant_default_cooldown(&kind);
         plants.push(Plant {
             id,
             kind,
@@ -309,7 +320,7 @@ pub fn parse_scenario(input: &str) -> Result<Scenario, InputError> {
             col: c,
             footprint,
             hp: i64_field(p.get("hp"), i64::from(default_hp), "plant.hp")? as i32,
-            cooldown: u64_field(p.get("cooldown"), 0, "plant.cooldown")? as u32,
+            cooldown: u64_field(p.get("cooldown"), default_cooldown, "plant.cooldown")? as u32,
             state_timer: u64_field(p.get("state_timer"), 0, "plant.state_timer")? as u32,
             layer: string_field(p.get("layer"), "main", "plant.layer")?,
         });
@@ -639,6 +650,15 @@ impl SimpleState {
     /// excluded until their corresponding migration gate is ported.
     pub fn step(&mut self) {
         self.frame += 1;
+        // COB cannon arming/reload is the only part of its attack state that
+        // this slice can verify without reproducing the mouse-targeted lob.
+        // Keep the counter observable and leave projectile/splash behavior to
+        // the Python fallback.
+        for p in &mut self.plants {
+            if p.hp > 0 && p.kind == "cob_cannon" && p.cooldown > 0 {
+                p.cooldown -= 1;
+            }
+        }
         let mut fired = 0_u64;
         let mut squash_hits = 0_u64;
         let mut potato_kills = 0_u64;
@@ -1124,6 +1144,17 @@ mod tests {
     }
 
     #[test]
+    fn simple_cob_cannon_arms_without_ballistic_fire() {
+        let text = r#"{"max_frames":1,"plants":[{"type":"cob_cannon","row":3,"col":2,"cooldown":500}],"zombies":[{"type":"normal","row":3,"x":600}],"brains":[3]}"#;
+        let mut s = SimpleState::from(parse_scenario(text).unwrap());
+        s.step();
+        assert_eq!(s.plants[0].footprint, vec![2, 3]);
+        assert_eq!(s.plants[0].cooldown, 499);
+        assert!(s.projectiles.is_empty());
+        assert!(!s.events.contains_key("cob_fired"));
+    }
+
+    #[test]
     fn rejects_cob_cannon_in_last_column() {
         let text =
             r#"{"plants":[{"type":"cob_cannon","row":3,"col":9}],"zombies":[],"brains":[3]}"#;
@@ -1312,6 +1343,19 @@ mod tests {
     }
 
     #[test]
+    fn simple_newspaper_shield_break_keeps_body_damage_order_without_rage_animation() {
+        let text = r#"{"max_frames":1,"plants":[{"type":"peashooter","row":3,"col":1,"cooldown":0}],"zombies":[{"type":"newspaper","row":3,"x":90,"shield_hp":20}],"brains":[3]}"#;
+        let mut s = SimpleState::from(parse_scenario(text).unwrap());
+        s.step();
+        assert_eq!(s.zombies[0].shield_hp, 0);
+        assert_eq!(s.zombies[0].hp, 270);
+        assert!((s.zombies[0].speed - 0.09).abs() < f64::EPSILON);
+        assert_eq!(s.events.get("armor_lost"), Some(&1));
+        // The simple slice deliberately has no reading/maddening phase field;
+        // animation-driven speed escalation remains on the Python fallback.
+    }
+
+    #[test]
     fn simple_imp_defaults_use_catalog_health_and_speed() {
         let text = r#"{"max_frames":1,"plants":[],"zombies":[{"type":"imp","row":3,"x":500}],"brains":[3]}"#;
         let mut s = SimpleState::from(parse_scenario(text).unwrap());
@@ -1319,6 +1363,16 @@ mod tests {
         assert!((s.zombies[0].speed - 0.423).abs() < f64::EPSILON);
         s.step();
         assert!((s.zombies[0].x - 499.577).abs() < 1e-9);
+    }
+
+    #[test]
+    fn simple_imp_accepts_pea_projectile_damage_without_throw_state() {
+        let text = r#"{"max_frames":1,"plants":[{"type":"peashooter","row":3,"col":1,"cooldown":0}],"zombies":[{"type":"imp","row":3,"x":90}],"brains":[3]}"#;
+        let mut s = SimpleState::from(parse_scenario(text).unwrap());
+        s.step();
+        assert_eq!(s.zombies[0].hp, 50);
+        assert_eq!(s.events.get("projectile_fired"), Some(&1));
+        assert_eq!(s.events.get("projectile_hit"), Some(&1));
     }
 
     #[test]

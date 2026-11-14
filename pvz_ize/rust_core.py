@@ -18,7 +18,7 @@ from typing import Any
 
 from .batch import run_seed, wilson_interval
 
-SUPPORTED_PLANTS = {"peashooter", "repeater", "snow_pea", "wallnut", "tallnut", "squash", "potato_mine", "cherry_bomb", "jalapeno", "spikeweed", "spikerock"}
+SUPPORTED_PLANTS = {"peashooter", "repeater", "snow_pea", "wallnut", "tallnut", "squash", "potato_mine", "cherry_bomb", "jalapeno", "spikeweed", "spikerock", "cob_cannon"}
 SUPPORTED_ZOMBIES = {
     "normal", "digger", "ladder", "conehead", "buckethead", "screen_door", "football", "newspaper", "imp",
 }
@@ -52,6 +52,21 @@ def supports_scenario(data: dict[str, Any]) -> bool:
         return False
     if not all(item.get("type") in SUPPORTED_ZOMBIES for item in zombies):
         return False
+    # The Rust slice currently verifies only COB's two-cell footprint and
+    # arming/reload counter.  Keep targeted lob/splash combat on Python until
+    # its projectile contract has a differential fixture.
+    cob_plants = [item for item in plants if item.get("type") == "cob_cannon"]
+    if cob_plants and zombies:
+        max_frames = int(data.get("max_frames", 100_000))
+        for item in cob_plants:
+            if "cooldown" not in item:
+                return False
+            try:
+                cooldown = int(item["cooldown"])
+            except (TypeError, ValueError):
+                return False
+            if cooldown <= max_frames:
+                return False
     # Python samples an initial firing cooldown when it is omitted.  The Rust
     # slice has no equivalent random wind-up, so only explicitly seeded
     # shooter cooldowns may cross the backend boundary.
