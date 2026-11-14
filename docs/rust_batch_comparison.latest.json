@@ -1,0 +1,110 @@
+{
+  "schema": "pvz-ize/rust-simple-batch/v1",
+  "fixture": "/private/tmp/pvz-ize-simulator.igLHFO/examples/rust_batch_simple.json",
+  "fixture_sha256": "9efb7f28a994f782304eed69fc96dd457275230668d4a76b68880fb765a1bc0b",
+  "workers": 2,
+  "status": "match",
+  "python_rows": [
+    [
+      0,
+      2026,
+      "undecided",
+      2
+    ],
+    [
+      1,
+      2027,
+      "undecided",
+      2
+    ],
+    [
+      2,
+      2028,
+      "undecided",
+      2
+    ],
+    [
+      3,
+      2029,
+      "undecided",
+      2
+    ],
+    [
+      4,
+      2030,
+      "undecided",
+      2
+    ],
+    [
+      5,
+      2031,
+      "undecided",
+      2
+    ],
+    [
+      6,
+      2032,
+      "undecided",
+      2
+    ],
+    [
+      7,
+      2033,
+      "undecided",
+      2
+    ]
+  ],
+  "rust_rows": [
+    [
+      0,
+      2026,
+      "undecided",
+      2
+    ],
+    [
+      1,
+      2027,
+      "undecided",
+      2
+    ],
+    [
+      2,
+      2028,
+      "undecided",
+      2
+    ],
+    [
+      3,
+      2029,
+      "undecided",
+      2
+    ],
+    [
+      4,
+      2030,
+      "undecided",
+      2
+    ],
+    [
+      5,
+      2031,
+      "undecided",
+      2
+    ],
+    [
+      6,
+      2032,
+      "undecided",
+      2
+    ],
+    [
+      7,
+      2033,
+      "undecided",
+      2
+    ]
+  ],
+  "rust_exit_status": 0,
+  "rust_stderr": "",
+  "rust_binary": "/private/tmp/pvz-ize-simulator.igLHFO/native_sim/target/release/pvz-ize-native-sim"
+}

@@ -79,6 +79,29 @@ python3 scripts/compare_phase16_fixtures.py
 
 The guarded report is written to `docs/rust_phase16_comparison.latest.json`.
 
+The native binary also exposes a guarded batch mode for this migrated slice:
+
+```sh
+python3 scripts/compare_rust_batch.py examples/rust_batch_simple.json --workers 2
+```
+
+`--batch` uses a local Rayon pool, wraps the signed 64-bit seed per
+`run_index`, and sorts results before serializing. It is an optional accelerator
+for the tested simple contract only; Python remains the fallback for unsupported
+plants, zombies, animations, and event-stream features.
+
+Phase 19 adds the flag zombie's deterministic catalog speed (0.22 px/tick)
+to the guarded Rust unit set. Its ordinary walk and straight pea damage are
+covered by `examples/rust_phase19_flag_defaults.json`; no flag animation
+equivalence is claimed. Run `python3 scripts/compare_phase19_fixtures.py` to
+write `docs/rust_phase19_comparison.latest.json`.
+
+Phase 18 covers pole-vaulting defaults and direct damage only; a carried pole
+near a same-row plant remains gated to Python because jump/landing state is not
+in the Rust schema. Phase 20 covers the pre-placed rake and ladder-zombie
+placement paths with `scripts/compare_phase20_fixtures.py`; ladder traversal and
+pre-placed ladder animation remain Python.
+
 Phase 15 adds the imp's observable catalog defaults (70 HP, 0.423 px/tick),
 ordinary movement, and direct pea projectile damage. Imp throwing and landing
 animation remains Python because the Rust simple state has no phase/altitude

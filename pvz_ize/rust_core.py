@@ -20,7 +20,7 @@ from .batch import run_seed, wilson_interval
 
 SUPPORTED_PLANTS = {"peashooter", "repeater", "snow_pea", "wallnut", "tallnut", "squash", "potato_mine", "cherry_bomb", "jalapeno", "spikeweed", "spikerock", "cob_cannon"}
 SUPPORTED_ZOMBIES = {
-    "normal", "digger", "ladder", "conehead", "buckethead", "screen_door", "football", "newspaper", "imp",
+    "normal", "digger", "ladder", "conehead", "buckethead", "screen_door", "football", "newspaper", "imp", "pole_vaulting", "flag",
 }
 
 
@@ -52,6 +52,25 @@ def supports_scenario(data: dict[str, Any]) -> bool:
         return False
     if not all(item.get("type") in SUPPORTED_ZOMBIES for item in zombies):
         return False
+    # Pole-vaulting's jump/landing state is not represented by SimpleState.
+    # Permit only clear walking/projectile cases where no same-row plant is in
+    # its vault approach; those cases use the catalog speed/HP defaults. Any
+    # potential vault collision stays on the complete Python engine.
+    for zombie in zombies:
+        if zombie.get("type") != "pole_vaulting":
+            continue
+        if zombie.get("tool", True) is False:
+            continue
+        zx = zombie.get("x")
+        if zx is None:
+            zx = 10.0 + 80.0 * (int(zombie.get("col", 7)) - 1)
+        zrow = int(zombie.get("row", 3))
+        for plant in plants:
+            if int(plant.get("row", 3)) != zrow or plant.get("type") in {"spikeweed", "spikerock"}:
+                continue
+            px = 40.0 + 80.0 * (int(plant.get("col", 1)) - 1)
+            if abs(float(zx) - px) <= 180.0:
+                return False
     # The Rust slice currently verifies only COB's two-cell footprint and
     # arming/reload counter.  Keep targeted lob/splash combat on Python until
     # its projectile contract has a differential fixture.
@@ -133,11 +152,65 @@ def run_rust_core(data: dict[str, Any], *, binary: Path | None = None) -> dict[s
 
 
 def run_batch_rust_core(data: dict[str, Any], workers: int | None = None) -> dict[str, Any]:
-    """Run independent supported replicas concurrently through Rust."""
+    """Run independent supported replicas concurrently through Rust.
+
+    Newer native binaries expose one-process ``--batch``/Rayon execution.  Use
+    that path first so the optional Rust backend does not pay one subprocess
+    startup per replica; retain the older per-run path as a compatibility
+    fallback for binaries built before the batch entry was introduced.
+    """
     if not supports_scenario(data):
         raise ValueError("scenario is outside the migrated Rust slice")
     runs = int(data.get("runs", 1))
     workers = min(runs, max(1, int(workers or (os.cpu_count() or 2))))
+    binary = rust_core_binary()
+    started = time.perf_counter()
+    completed = subprocess.run(
+        [str(binary), "--batch", "--workers", str(workers)],
+        input=json.dumps(data, ensure_ascii=False, allow_nan=False),
+        text=True,
+        capture_output=True,
+        check=False,
+        cwd=str(Path(__file__).resolve().parents[1]),
+    )
+    if completed.returncode == 0:
+        try:
+            raw = json.loads(completed.stdout)
+            raw_rows = raw["results"]
+            if raw.get("batch") is True and len(raw_rows) == runs:
+                per_run_elapsed = (time.perf_counter() - started) / max(1, runs)
+                rows = []
+                for row in raw_rows:
+                    public = _public_result(row["result"], per_run_elapsed)
+                    public.update(run_index=int(row["run_index"]), seed=int(row["seed"]))
+                    rows.append(public)
+                rows.sort(key=lambda row: row["run_index"])
+                counts = {winner: 0 for winner in ("plants", "zombies", "undecided")}
+                for row in rows:
+                    counts[row["winner"]] += 1
+                return {
+                    "batch": True,
+                    "runs": runs,
+                    "seed": int(data.get("seed", 0)),
+                    "model": "rust-simple-slice",
+                    "approximate": True,
+                    "warnings": rows[0]["warnings"] if rows else [],
+                    "seed_strategy": "signed_int64_wrap(base_seed + zero_based_run_index)",
+                    "probability_basis": "empirical fraction of all runs; undecided runs are included in denominator",
+                    "outcomes": {
+                        winner: {"count": count, "probability": count / runs,
+                                 "wilson_95": wilson_interval(count, runs)}
+                        for winner, count in counts.items()
+                    },
+                    "results": rows,
+                    "parallel_workers": workers,
+                    "backend": "rust-core-slice-rayon",
+                }
+        except (KeyError, TypeError, ValueError, json.JSONDecodeError):
+            pass
+
+    # Compatibility fallback for an older native binary or a malformed batch
+    # response.  It preserves the pre-Rayon optional backend contract.
     tasks = []
     for index in range(runs):
         replica = deepcopy(data)

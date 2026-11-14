@@ -1,0 +1,319 @@
+{
+  "fixtures": [
+    {
+      "fixture": "/private/tmp/pvz-ize-simulator.igLHFO/examples/rust_migration_rake.json",
+      "python": {
+        "frames": 1,
+        "reason": "no_on_board_zombies",
+        "state": {
+          "brains": [
+            {
+              "hp": 70,
+              "row": 3
+            }
+          ],
+          "events": {
+            "projectile_fired": 2,
+            "rake_triggered": 1,
+            "zombie_died": 1
+          },
+          "frame": 1,
+          "ladders": [],
+          "mode": "ize",
+          "plants": [
+            {
+              "col": 1,
+              "cooldown": 150,
+              "footprint": [
+                1
+              ],
+              "hp": 300,
+              "id": "p1",
+              "layer": "main",
+              "row": 3,
+              "state_timer": 0,
+              "type": "repeater"
+            }
+          ],
+          "projectiles": [
+            {
+              "active": true,
+              "damage": 20,
+              "kind": "pea",
+              "row": 3,
+              "x": 98.0
+            },
+            {
+              "active": true,
+              "damage": 20,
+              "kind": "pea",
+              "row": 3,
+              "x": 98.0
+            }
+          ],
+          "rakes": [],
+          "zombies": [
+            {
+              "age": 1,
+              "chilled": 0,
+              "col": 9,
+              "headless": false,
+              "helmet_hp": 0,
+              "hp": 0,
+              "hypnotized": false,
+              "id": "z1",
+              "row": 3,
+              "shield_hp": 0,
+              "speed": 0.143,
+              "status": "dead",
+              "tool": true,
+              "type": "normal",
+              "underground": null,
+              "x": 649.857
+            }
+          ]
+        },
+        "winner": "plants"
+      },
+      "rust": {
+        "frames": 1,
+        "reason": "no_on_board_zombies",
+        "state": {
+          "brains": [
+            {
+              "hp": 70,
+              "row": 3
+            }
+          ],
+          "events": {
+            "projectile_fired": 2,
+            "rake_triggered": 1,
+            "zombie_died": 1
+          },
+          "frame": 1,
+          "ladders": [],
+          "mode": "ize",
+          "plants": [
+            {
+              "col": 1,
+              "cooldown": 150,
+              "footprint": [
+                1
+              ],
+              "hp": 300,
+              "id": "p1",
+              "layer": "main",
+              "row": 3,
+              "state_timer": 0,
+              "type": "repeater"
+            }
+          ],
+          "projectiles": [
+            {
+              "active": true,
+              "damage": 20,
+              "kind": "pea",
+              "row": 3,
+              "x": 98.0
+            },
+            {
+              "active": true,
+              "damage": 20,
+              "kind": "pea",
+              "row": 3,
+              "x": 98.0
+            }
+          ],
+          "rakes": [],
+          "zombies": [
+            {
+              "age": 1,
+              "chilled": 0,
+              "col": 9,
+              "headless": false,
+              "helmet_hp": 0,
+              "hp": 0,
+              "hypnotized": false,
+              "id": "z1",
+              "row": 3,
+              "shield_hp": 0,
+              "speed": 0.143,
+              "status": "dead",
+              "tool": true,
+              "type": "normal",
+              "underground": null,
+              "x": 649.857
+            }
+          ]
+        },
+        "winner": "plants"
+      },
+      "rust_exit_status": 0,
+      "sha256": "da9da3ef69bb4900b3f7299ded42951e2c1f40e24a2fc0ad66f83cf4592686a1",
+      "status": "match",
+      "stderr": ""
+    },
+    {
+      "fixture": "/private/tmp/pvz-ize-simulator.igLHFO/examples/rust_migration_ladder.json",
+      "python": {
+        "frames": 1200,
+        "reason": "max_frames_reached",
+        "state": {
+          "brains": [
+            {
+              "hp": 70,
+              "row": 3
+            }
+          ],
+          "events": {
+            "ladder_placed": 1,
+            "projectile_fired": 16,
+            "projectile_hit": 16
+          },
+          "frame": 1200,
+          "ladders": [
+            {
+              "col": 2,
+              "row": 3
+            }
+          ],
+          "mode": "ize",
+          "plants": [
+            {
+              "col": 2,
+              "cooldown": 0,
+              "footprint": [
+                2
+              ],
+              "hp": 4000,
+              "id": "p1",
+              "layer": "main",
+              "row": 3,
+              "state_timer": 0,
+              "type": "wallnut"
+            },
+            {
+              "col": 1,
+              "cooldown": 1,
+              "footprint": [
+                1
+              ],
+              "hp": 300,
+              "id": "p2",
+              "layer": "main",
+              "row": 3,
+              "state_timer": 0,
+              "type": "repeater"
+            }
+          ],
+          "projectiles": [],
+          "rakes": [],
+          "zombies": [
+            {
+              "age": 1200,
+              "chilled": 0,
+              "col": 5,
+              "headless": false,
+              "helmet_hp": 0,
+              "hp": 460,
+              "hypnotized": false,
+              "id": "z1",
+              "row": 3,
+              "shield_hp": 0,
+              "speed": 0.143,
+              "status": "active",
+              "tool": false,
+              "type": "ladder",
+              "underground": null,
+              "x": 158.543
+            }
+          ]
+        },
+        "winner": "undecided"
+      },
+      "rust": {
+        "frames": 1200,
+        "reason": "max_frames_reached",
+        "state": {
+          "brains": [
+            {
+              "hp": 70,
+              "row": 3
+            }
+          ],
+          "events": {
+            "ladder_placed": 1,
+            "projectile_fired": 16,
+            "projectile_hit": 16
+          },
+          "frame": 1200,
+          "ladders": [
+            {
+              "col": 2,
+              "row": 3
+            }
+          ],
+          "mode": "ize",
+          "plants": [
+            {
+              "col": 2,
+              "cooldown": 0,
+              "footprint": [
+                2
+              ],
+              "hp": 4000,
+              "id": "p1",
+              "layer": "main",
+              "row": 3,
+              "state_timer": 0,
+              "type": "wallnut"
+            },
+            {
+              "col": 1,
+              "cooldown": 1,
+              "footprint": [
+                1
+              ],
+              "hp": 300,
+              "id": "p2",
+              "layer": "main",
+              "row": 3,
+              "state_timer": 0,
+              "type": "repeater"
+            }
+          ],
+          "projectiles": [],
+          "rakes": [],
+          "zombies": [
+            {
+              "age": 1200,
+              "chilled": 0,
+              "col": 5,
+              "headless": false,
+              "helmet_hp": 0,
+              "hp": 460,
+              "hypnotized": false,
+              "id": "z1",
+              "row": 3,
+              "shield_hp": 0,
+              "speed": 0.143,
+              "status": "active",
+              "tool": false,
+              "type": "ladder",
+              "underground": null,
+              "x": 158.543
+            }
+          ]
+        },
+        "winner": "undecided"
+      },
+      "rust_exit_status": 0,
+      "sha256": "9d4d533121310eb3065799643651123b6ba5f46ed5183a1431981dc79db115df",
+      "status": "match",
+      "stderr": ""
+    }
+  ],
+  "rust_binary": "/private/tmp/pvz-ize-simulator.igLHFO/native_sim/target/release/pvz-ize-native-sim",
+  "schema": "pvz-ize/rust-phase20-rake-ladder/v1",
+  "status": "match"
+}

@@ -1,4 +1,4 @@
-use pvz_ize_native_sim::{parse_scenario, CoreState, SimpleState};
+use pvz_ize_native_sim::{parse_scenario, run_simple_batch, CoreState, SimpleState};
 use std::io::{self, Read};
 
 fn main() {
@@ -16,7 +16,23 @@ fn main() {
     };
     let max_frames = scenario.max_frames;
     let mode = scenario.mode.clone();
-    if std::env::args().any(|arg| arg == "--slice" || arg == "simple") {
+    let args: Vec<String> = std::env::args().collect();
+    if args.iter().any(|arg| arg == "--batch") {
+        let workers = args
+            .windows(2)
+            .find(|window| window[0] == "--workers")
+            .and_then(|window| window[1].parse::<usize>().ok())
+            .unwrap_or_else(|| {
+                std::thread::available_parallelism()
+                    .map(|n| n.get())
+                    .unwrap_or(1)
+            });
+        let result = run_simple_batch(scenario, workers);
+        println!(
+            "{}",
+            serde_json::to_string(&result).expect("serialize batch result")
+        );
+    } else if args.iter().any(|arg| arg == "--slice" || arg == "simple") {
         let result = SimpleState::from(scenario).run(max_frames);
         println!(
             "{}",

@@ -47,6 +47,26 @@ python3 scripts/benchmark_rust_slice.py \
 
 该数字包含每轮启动 Rust 子进程的开销；未来完整 Rust 核心应改为单进程批量/Rayon 调度后再重新测量。此 slice 仍未接入生产默认后端。
 
+### Rust/Rayon 批量入口（simple slice）
+
+`native_sim --batch` 在已通过差分门的 simple slice 上并行执行独立轮次；每轮
+使用有符号 64 位环绕种子 `base_seed + run_index`，结果按 `run_index` 排序。
+它不改变 Python 默认后端，也不覆盖事件流或未迁移机制；复杂场景仍由 Python
+batch/fallback 处理。构建并检查批量顺序与 Python winner/frames 投影：
+
+```sh
+cargo build --release --manifest-path native_sim/Cargo.toml
+python3 scripts/compare_rust_batch.py examples/rust_batch_simple.json --workers 2
+python3 scripts/benchmark_rust_simple_batch.py examples/rust_batch_simple.json --runs 20 --workers 2
+```
+
+差分报告写入 `docs/rust_batch_comparison.latest.json`；单元测试覆盖 worker
+数限制、种子溢出和稳定排序。这只证明当前 simple slice 的批量调度契约，不能
+据此宣称完整 `Simulator` 已 Rust 等价。
+
+`pvz_ize run --backend rust-core --runs N --workers W` 在该二进制支持批量入口
+时复用同一个 Rayon 进程；旧版二进制仍自动退回逐轮子进程路径。
+
 ## 可选 Rust 后端
 
 `pvz-ize run/predict --backend rust-core` 仅调度已通过差分门的切片单位（包括钉耙、梯子、土豆雷、延迟樱桃炸弹和同排火爆辣椒）；不满足支持门（例如玉米炮弹、未迁移僵尸，或省略射击植物的初始 `cooldown`）时使用 Python `Simulator`，不会套用错误规则。默认后端仍是 Python。
@@ -146,3 +166,27 @@ parabolic lob, impact timing, and 115px adjacent-row damage remain explicitly
 outside this slice; scenarios that could reach a shot stay on the Python
 fallback. Run `python3 scripts/compare_phase16_fixtures.py` to write
 `docs/rust_phase16_comparison.latest.json`.
+
+### Phase 20：钉耙与梯子僵尸对象交互
+
+The existing Rust slice now has a guarded differential for two board-object paths: a pre-placed rake consumes the first overlapping hostile zombie, and a ladder zombie places its ladder on a wallnut before the bite/movement phase. The fixtures `examples/rust_migration_rake.json` and `examples/rust_migration_ladder.json` are checked by `scripts/compare_phase20_fixtures.py` and recorded in `docs/rust_phase20_comparison.latest.json`. Pre-placed ladder objects, ladder traversal animation, and other tool interactions remain on the Python fallback.
+
+### Phase 18：撑杆僵尸安全步行边界
+
+The guarded slice also normalizes pole-vaulting defaults: body HP 500, speed
+0.32 px/tick while the pole is carried, and 0.143 after the tool is spent.
+`examples/rust_phase18_pole_defaults.json` and
+`examples/rust_phase18_pole_projectile.json` exercise ordinary movement and
+direct pea damage. A carried pole approaching a same-row plant is rejected by
+the support gate because `pole_running`/`pole_jumping` collision and landing
+phases are not represented in `SimpleState`; those scenarios continue through
+the Python fallback.
+
+### Phase 19：旗帜僵尸基础速度
+
+The Rust simple slice accepts `flag` with its catalog walk speed (0.22 px/tick)
+and reuses the ordinary straight pea path. The fixture
+`examples/rust_phase19_flag_defaults.json` covers a direct hit and an
+independent walking target; flag animation is not asserted as equivalent.
+Run `python3 scripts/compare_phase19_fixtures.py` to regenerate
+`docs/rust_phase19_comparison.latest.json`.

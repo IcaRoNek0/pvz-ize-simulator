@@ -1,0 +1,164 @@
+{
+  "fixtures": [
+    {
+      "fixture": "/private/tmp/pvz-ize-simulator.igLHFO/examples/rust_phase19_flag_defaults.json",
+      "python": {
+        "frames": 1,
+        "reason": "max_frames_reached",
+        "state": {
+          "brains": [
+            {
+              "hp": 70,
+              "row": 3
+            }
+          ],
+          "events": {
+            "projectile_fired": 1,
+            "projectile_hit": 1
+          },
+          "frame": 1,
+          "ladders": [],
+          "mode": "ize",
+          "plants": [
+            {
+              "col": 1,
+              "cooldown": 150,
+              "footprint": [
+                1
+              ],
+              "hp": 300,
+              "id": "pea",
+              "layer": "main",
+              "row": 3,
+              "state_timer": 0,
+              "type": "peashooter"
+            }
+          ],
+          "projectiles": [],
+          "rakes": [],
+          "zombies": [
+            {
+              "age": 1,
+              "chilled": 0,
+              "col": 2,
+              "headless": false,
+              "helmet_hp": 0,
+              "hp": 250,
+              "hypnotized": false,
+              "id": "flag_near",
+              "row": 3,
+              "shield_hp": 0,
+              "speed": 0.22,
+              "status": "active",
+              "tool": true,
+              "type": "flag",
+              "underground": null,
+              "x": 90.0
+            },
+            {
+              "age": 1,
+              "chilled": 0,
+              "col": 7,
+              "headless": false,
+              "helmet_hp": 0,
+              "hp": 270,
+              "hypnotized": false,
+              "id": "flag_far",
+              "row": 3,
+              "shield_hp": 0,
+              "speed": 0.22,
+              "status": "active",
+              "tool": true,
+              "type": "flag",
+              "underground": null,
+              "x": 499.78
+            }
+          ]
+        },
+        "winner": "undecided"
+      },
+      "rust": {
+        "frames": 1,
+        "reason": "max_frames_reached",
+        "state": {
+          "brains": [
+            {
+              "hp": 70,
+              "row": 3
+            }
+          ],
+          "events": {
+            "projectile_fired": 1,
+            "projectile_hit": 1
+          },
+          "frame": 1,
+          "ladders": [],
+          "mode": "ize",
+          "plants": [
+            {
+              "col": 1,
+              "cooldown": 150,
+              "footprint": [
+                1
+              ],
+              "hp": 300,
+              "id": "pea",
+              "layer": "main",
+              "row": 3,
+              "state_timer": 0,
+              "type": "peashooter"
+            }
+          ],
+          "projectiles": [],
+          "rakes": [],
+          "zombies": [
+            {
+              "age": 1,
+              "chilled": 0,
+              "col": 2,
+              "headless": false,
+              "helmet_hp": 0,
+              "hp": 250,
+              "hypnotized": false,
+              "id": "flag_near",
+              "row": 3,
+              "shield_hp": 0,
+              "speed": 0.22,
+              "status": "active",
+              "tool": true,
+              "type": "flag",
+              "underground": null,
+              "x": 90.0
+            },
+            {
+              "age": 1,
+              "chilled": 0,
+              "col": 7,
+              "headless": false,
+              "helmet_hp": 0,
+              "hp": 270,
+              "hypnotized": false,
+              "id": "flag_far",
+              "row": 3,
+              "shield_hp": 0,
+              "speed": 0.22,
+              "status": "active",
+              "tool": true,
+              "type": "flag",
+              "underground": null,
+              "x": 499.78
+            }
+          ]
+        },
+        "winner": "undecided"
+      },
+      "rust_exit_status": 0,
+      "sha256": "32b537f22eca107c140f785e43831c23227b6e9346c96baa8e295a92d7fcc96a",
+      "status": "match",
+      "stderr": ""
+    }
+  ],
+  "rust_binary": "/private/tmp/pvz-ize-simulator.igLHFO/native_sim/target/release/pvz-ize-native-sim",
+  "schema": "pvz-ize/rust-phase19-flag/v1",
+  "status": "match"
+}

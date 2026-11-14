@@ -4,6 +4,7 @@
 //! frame/state boundary.  The Python Simulator remains the fidelity reference
 //! until each behavior is ported and covered by differential tests.
 
+use rayon::prelude::*;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::collections::HashSet;
@@ -205,6 +206,7 @@ fn plant_default_cooldown(kind: &str) -> u64 {
 fn zombie_default_hp(kind: &str) -> i32 {
     match kind {
         "imp" => 70,
+        "pole_vaulting" => 500,
         "ladder" => 500,
         _ => 270,
     }
@@ -233,7 +235,9 @@ fn zombie_default_speed(kind: &str) -> f64 {
     match kind {
         "football" => 0.32,
         "imp" => 0.423,
+        "pole_vaulting" => 0.32,
         "newspaper" => 0.09,
+        "flag" => 0.22,
         _ => 0.143,
     }
 }
@@ -359,7 +363,14 @@ pub fn parse_scenario(input: &str) -> Result<Scenario, InputError> {
         let default_hp = zombie_default_hp(&kind);
         let default_helmet = zombie_default_helmet(&kind);
         let default_shield = zombie_default_shield(&kind);
-        let default_speed = zombie_default_speed(&kind);
+        let tool = bool_field(z.get("tool"), true, "zombie.tool")?;
+        // A pole without its tool has already spent the vault and walks at
+        // the ordinary zombie speed; the Rust slice does not model the jump.
+        let default_speed = if kind == "pole_vaulting" && !tool {
+            0.143
+        } else {
+            zombie_default_speed(&kind)
+        };
         zombies.push(Zombie {
             id,
             kind,
@@ -385,7 +396,7 @@ pub fn parse_scenario(input: &str) -> Result<Scenario, InputError> {
             chilled: u64_field(z.get("chilled"), 0, "zombie.chilled")? as u32,
             headless: bool_field(z.get("headless"), false, "zombie.headless")?,
             hypnotized: bool_field(z.get("hypnotized"), false, "zombie.hypnotized")?,
-            tool: bool_field(z.get("tool"), true, "zombie.tool")?,
+            tool,
             underground: z.get("underground").and_then(Value::as_bool),
             status: UnitStatus::Active,
         });
@@ -613,6 +624,99 @@ pub struct SimpleResult {
     pub reason: String,
     pub frames: u64,
     pub state: SimpleState,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct SimpleBatchRun {
+    pub run_index: u32,
+    pub seed: i64,
+    pub result: SimpleResult,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct SimpleBatchResult {
+    pub batch: bool,
+    pub runs: u32,
+    pub seed: i64,
+    pub model: String,
+    pub approximate: bool,
+    pub seed_strategy: String,
+    pub parallel_workers: usize,
+    pub outcomes: std::collections::BTreeMap<String, BatchOutcome>,
+    pub results: Vec<SimpleBatchRun>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct BatchOutcome {
+    pub count: u32,
+    pub probability: f64,
+}
+
+/// Run independent replicas of the migrated simple slice in parallel.
+///
+/// Each replica receives the same parsed scenario with a signed-i64 wrapping
+/// seed (`base_seed + run_index`).  Rayon may complete replicas out of order,
+/// so the result vector is explicitly sorted by `run_index` before returning.
+/// This function is intentionally scoped to the differential-tested simple
+/// slice; the Python batch implementation remains the semantic fallback for
+/// unsupported mechanics and richer event streaming.
+pub fn run_simple_batch(scenario: Scenario, workers: usize) -> SimpleBatchResult {
+    let runs = scenario.runs.max(1);
+    let worker_count = workers.max(1).min(runs as usize);
+    let run_indices: Vec<u32> = (0..runs).collect();
+    let execute = || {
+        run_indices
+            .par_iter()
+            .map(|&run_index| {
+                let mut replica = scenario.clone();
+                replica.seed = scenario.seed.wrapping_add(i64::from(run_index));
+                replica.runs = 1;
+                let seed = replica.seed;
+                let result = SimpleState::from(replica).run(scenario.max_frames);
+                SimpleBatchRun {
+                    run_index,
+                    seed,
+                    result,
+                }
+            })
+            .collect::<Vec<_>>()
+    };
+    // Build a local pool so callers can choose a deterministic worker count
+    // without mutating Rayon’s global pool (important for embedding/tests).
+    let mut results = rayon::ThreadPoolBuilder::new()
+        .num_threads(worker_count)
+        .build()
+        .map(|pool| pool.install(execute))
+        .unwrap_or_else(|_| execute());
+    results.sort_by_key(|row| row.run_index);
+
+    let mut counts = std::collections::BTreeMap::<String, u32>::new();
+    for row in &results {
+        *counts.entry(row.result.winner.clone()).or_default() += 1;
+    }
+    let outcomes = counts
+        .into_iter()
+        .map(|(winner, count)| {
+            (
+                winner,
+                BatchOutcome {
+                    count,
+                    probability: f64::from(count) / f64::from(runs),
+                },
+            )
+        })
+        .collect();
+    SimpleBatchResult {
+        batch: true,
+        runs,
+        seed: scenario.seed,
+        model: "rust-simple-slice".into(),
+        approximate: true,
+        seed_strategy: "signed_int64_wrap(base_seed + zero_based_run_index)".into(),
+        parallel_workers: worker_count,
+        outcomes,
+        results,
+    }
 }
 
 fn plant_x_fp(col: u8) -> i64 {
@@ -1376,6 +1480,36 @@ mod tests {
     }
 
     #[test]
+    fn simple_pole_vault_defaults_use_catalog_health_and_speed() {
+        let text = r#"{"max_frames":1,"plants":[],"zombies":[{"type":"pole_vaulting","row":3,"x":500}],"brains":[3]}"#;
+        let mut s = SimpleState::from(parse_scenario(text).unwrap());
+        assert_eq!(s.zombies[0].hp, 500);
+        assert!((s.zombies[0].speed - 0.32).abs() < f64::EPSILON);
+        s.step();
+        assert!((s.zombies[0].x - 499.68).abs() < 1e-9);
+    }
+
+    #[test]
+    fn simple_spent_pole_walks_at_normal_speed() {
+        let text = r#"{"max_frames":1,"plants":[],"zombies":[{"type":"pole_vaulting","row":3,"x":500,"tool":false}],"brains":[3]}"#;
+        let mut s = SimpleState::from(parse_scenario(text).unwrap());
+        assert!((s.zombies[0].speed - 0.143).abs() < f64::EPSILON);
+        s.step();
+        assert!((s.zombies[0].x - 499.857).abs() < 1e-9);
+    }
+
+    #[test]
+    fn simple_flag_defaults_use_catalog_speed_and_straight_pea_damage() {
+        let text = r#"{"max_frames":1,"plants":[{"type":"peashooter","row":3,"col":1,"cooldown":0}],"zombies":[{"type":"flag","row":3,"x":90},{"type":"flag","row":3,"x":500}],"brains":[3]}"#;
+        let mut s = SimpleState::from(parse_scenario(text).unwrap());
+        assert!((s.zombies[0].speed - 0.22).abs() < f64::EPSILON);
+        s.step();
+        assert_eq!(s.events.get("projectile_hit"), Some(&1));
+        assert_eq!(s.zombies[0].hp, 250);
+        assert!((s.zombies[1].x - 499.78).abs() < 1e-9);
+    }
+
+    #[test]
     fn simple_hypnotized_zombie_walks_right_without_attacking() {
         let text = r#"{"max_frames":3,"plants":[],"zombies":[{"id":"friend","type":"normal","row":3,"x":90,"speed":0.143,"hypnotized":true},{"id":"hostile","type":"normal","row":3,"x":500,"speed":0.143}],"brains":[3]}"#;
         let mut s = SimpleState::from(parse_scenario(text).unwrap());
@@ -1477,5 +1611,39 @@ mod tests {
         }
         assert_eq!(s.zombies[0].hp, 270);
         assert_eq!(s.events.get("spikeweed_pulse"), None);
+    }
+
+    #[test]
+    fn simple_batch_is_seeded_and_sorted_by_run_index() {
+        let text = r#"{"seed":9223372036854775807,"runs":4,"max_frames":1,"plants":[],"zombies":[{"type":"normal","row":3,"x":500}],"brains":[3]}"#;
+        let scenario = parse_scenario(text).unwrap();
+        let batch = run_simple_batch(scenario, 2);
+        assert_eq!(batch.runs, 4);
+        assert_eq!(batch.parallel_workers, 2);
+        assert_eq!(
+            batch
+                .results
+                .iter()
+                .map(|row| row.run_index)
+                .collect::<Vec<_>>(),
+            vec![0, 1, 2, 3]
+        );
+        assert_eq!(
+            batch.results.iter().map(|row| row.seed).collect::<Vec<_>>(),
+            vec![i64::MAX, i64::MIN, i64::MIN + 1, i64::MIN + 2]
+        );
+        assert_eq!(batch.results[0].result.frames, 1);
+        assert_eq!(batch.outcomes["undecided"].count, 4);
+    }
+
+    #[test]
+    fn simple_batch_clamps_workers_and_preserves_single_run_state() {
+        let text = r#"{"seed":7,"runs":1,"max_frames":1,"plants":[],"zombies":[{"type":"normal","row":3,"x":500}],"brains":[3]}"#;
+        let scenario = parse_scenario(text).unwrap();
+        let batch = run_simple_batch(scenario, 99);
+        assert_eq!(batch.parallel_workers, 1);
+        assert_eq!(batch.results.len(), 1);
+        assert_eq!(batch.results[0].seed, 7);
+        assert_eq!(batch.results[0].result.winner, "undecided");
     }
 }

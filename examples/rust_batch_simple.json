@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "seed": 2026,
+  "runs": 8,
+  "max_frames": 2,
+  "plants": [
+    {"id": "pea", "type": "peashooter", "row": 3, "col": 1, "cooldown": 0}
+  ],
+  "zombies": [
+    {"id": "near", "type": "normal", "row": 3, "x": 90},
+    {"id": "far", "type": "normal", "row": 3, "x": 500}
+  ],
+  "brains": [3]
+}

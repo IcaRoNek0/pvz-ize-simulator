@@ -27,6 +27,13 @@ class RustCoreBridgeTests(unittest.TestCase):
         self.assertTrue(supports_scenario({
             "plants": [], "zombies": [{"type": "imp", "row": 3, "x": 90}],
         }))
+        self.assertTrue(supports_scenario({
+            "plants": [], "zombies": [{"type": "pole_vaulting", "row": 3, "x": 500}],
+        }))
+        self.assertFalse(supports_scenario({
+            "plants": [{"type": "wallnut", "row": 3, "col": 6}],
+            "zombies": [{"type": "pole_vaulting", "row": 3, "x": 500}],
+        }))
         # Giant-triggered imp throw/landing has no Rust phase/altitude fields;
         # keeping the giant outside the gate forces the complete Python path.
         self.assertFalse(supports_scenario({
@@ -129,6 +136,19 @@ class RustCoreBridgeTests(unittest.TestCase):
         self.assertEqual(result["events"]["projectile_hit"], 1)
         self.assertEqual(result["zombies"][0]["hp"], 50)
 
+    @unittest.skipUnless(rust_core_available(), "native Rust slice is not built")
+    def test_spent_pole_projectile_runs_through_rust(self):
+        result = run_rust_core({
+            "version": 2,
+            "max_frames": 1,
+            "plants": [{"type": "peashooter", "row": 3, "col": 1, "cooldown": 0}],
+            "zombies": [{"type": "pole_vaulting", "row": 3, "x": 90, "tool": False}],
+            "brains": [3],
+        })
+        self.assertEqual(result["backend"], "rust-core-slice")
+        self.assertEqual(result["events"]["projectile_hit"], 1)
+        self.assertEqual(result["zombies"][0]["hp"], 480)
+
     def test_cob_arming_support_gate_keeps_ballistic_path_on_python(self):
         self.assertTrue(supports_scenario({
             "max_frames": 1,
@@ -153,4 +173,22 @@ class RustCoreBridgeTests(unittest.TestCase):
         self.assertEqual(result["backend"], "rust-core-slice")
         self.assertEqual(result["plants"][0]["cooldown"], 499)
         self.assertEqual(result["projectiles"], [])
+
+    @unittest.skipUnless(rust_core_available(), "native Rust slice is not built")
+    def test_batch_bridge_uses_stable_native_rows(self):
+        from pvz_ize.rust_core import run_batch_rust_core
+
+        result = run_batch_rust_core({
+            "version": 2,
+            "seed": 9001,
+            "runs": 3,
+            "max_frames": 2,
+            "plants": [{"type": "peashooter", "row": 3, "col": 1, "cooldown": 0}],
+            "zombies": [{"type": "normal", "row": 3, "x": 90}],
+            "brains": [3],
+        }, workers=2)
+        self.assertEqual(result["backend"], "rust-core-slice-rayon")
+        self.assertEqual([row["run_index"] for row in result["results"]], [0, 1, 2])
+        self.assertEqual([row["seed"] for row in result["results"]], [9001, 9002, 9003])
+        self.assertEqual(sum(item["count"] for item in result["outcomes"].values()), 3)
 
