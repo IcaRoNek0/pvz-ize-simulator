@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "description": "Complete character preview sprites; source is Plants vs. Zombies Wiki.",
+  "description": "Complete PvZ1 character preview sprites. Wiki *1 files are original PvZ1 thumbnails; selected sprites are transparently composed from original PvZ1 reanimation layers.",
   "assets": {
     "backup_dancer": {
       "file": "backup_dancer.png",
@@ -629,5 +629,12 @@
       ],
       "source_file": "Zomboni.png"
     }
-  }
+  },
+  "generated_assets": [
+    "normal",
+    "sunflower",
+    "wallnut",
+    "cob_cannon",
+    "yeti"
+  ]
 }
