@@ -159,6 +159,6 @@
     }
   ],
   "rust_binary": "/private/tmp/pvz-ize-simulator.igLHFO/native_sim/target/release/pvz-ize-native-sim",
-  "schema": "pvz-ize/rust-phase23-fume-shroom/v1",
+  "schema": "pvz-ize/rust-phase28-puff-shroom/v1",
   "status": "match"
 }

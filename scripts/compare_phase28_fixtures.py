@@ -29,7 +29,7 @@ def main() -> int:
             except json.JSONDecodeError:
                 pass
         rows.append({"fixture": str(fixture), "sha256": hashlib.sha256(fixture.read_bytes()).hexdigest(), "status": "match" if completed.returncode == 0 and actual == expected else "mismatch", "python": expected, "rust": actual, "rust_exit_status": completed.returncode, "stderr": completed.stderr})
-    report = {"schema": "pvz-ize/rust-phase23-fume-shroom/v1", "rust_binary": str(RUST.resolve()), "fixtures": rows, "status": "match" if all(row["status"] == "match" for row in rows) else "mismatch"}
+    report = {"schema": "pvz-ize/rust-phase28-puff-shroom/v1", "rust_binary": str(RUST.resolve()), "fixtures": rows, "status": "match" if all(row["status"] == "match" for row in rows) else "mismatch"}
     out = ROOT / "docs" / "rust_phase28_comparison.latest.json"
     out.write_text(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(out)

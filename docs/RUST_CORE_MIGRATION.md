@@ -201,6 +201,19 @@ single 4-HP bite (4000 → 3996). Multi-layer targeting and animation remain
 outside this slice; run `python3 scripts/compare_phase25_fixtures.py` to write
 `docs/rust_phase25_comparison.latest.json`.
 
+### Phase 24：气球僵尸落地边界
+
+An already-popped `balloon` (`tool=false`) uses the ordinary walking defaults
+(HP 270, speed 0.143). Flying and popping phases remain Python because their
+altitude/targetability state is not represented in `SimpleState`; run
+`scripts/compare_phase24_fixtures.py` for the guarded fixture.
+
+### Phase 26：跳跳僵尸失去跳棒边界
+
+An already-spent `pogo` (`tool=false`) is normalized to its catalog walking
+speed (0.45) and HP 500. Bounce, landing, nut-blocking, and tool-removal
+animation remain Python; run `scripts/compare_phase26_fixtures.py`.
+
 ### Phase 27：裂荚射手双向直线投射物
 
 The guarded split-pea slice emits one forward and one backward straight
@@ -209,6 +222,10 @@ projectile using the existing collision/damage pipeline. The fixture
 animation timing and other interactions remain on the Python fallback. Run
 `python3 scripts/compare_phase27_fixtures.py` to regenerate
 `docs/rust_phase27_comparison.latest.json`.
+
+The same Phase 27 report also covers one-tick `dancing` and `backup_dancer`
+catalog walks with no plants or summon targets. Dance timing and backup-dancer
+spawning remain Python fallback.
 
 ### Phase 28：小喷菇近距离直线投射物
 

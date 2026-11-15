@@ -132,7 +132,9 @@ Phase 27 adds a guarded split-pea slice: one forward and one backward
 straight projectile use explicit direction encoded in the projectile kind,
 with ordinary collision/damage rules. The fixture
 `examples/rust_phase27_split_pea.json` checks both hits; animation timing and
-other split-pea interactions remain on the Python fallback. Run
+other split-pea interactions remain on the Python fallback. The same report
+also checks one-tick dancing/backup-dancer catalog walks without summon state.
+Run
 `python3 scripts/compare_phase27_fixtures.py` to write
 `docs/rust_phase27_comparison.latest.json`.
 
