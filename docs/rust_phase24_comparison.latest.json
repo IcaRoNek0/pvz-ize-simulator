@@ -1,0 +1,89 @@
+{
+  "fixture": "/private/tmp/pvz-ize-simulator.igLHFO/examples/rust_phase24_balloon_spent.json",
+  "python": {
+    "frames": 1,
+    "reason": "max_frames_reached",
+    "state": {
+      "brains": [
+        {
+          "hp": 70,
+          "row": 3
+        }
+      ],
+      "events": {},
+      "frame": 1,
+      "ladders": [],
+      "mode": "ize",
+      "plants": [],
+      "projectiles": [],
+      "rakes": [],
+      "zombies": [
+        {
+          "age": 1,
+          "chilled": 0,
+          "col": 7,
+          "headless": false,
+          "helmet_hp": 0,
+          "hp": 270,
+          "hypnotized": false,
+          "id": "balloon",
+          "row": 3,
+          "shield_hp": 0,
+          "speed": 0.143,
+          "status": "active",
+          "tool": false,
+          "type": "balloon",
+          "underground": null,
+          "x": 499.857
+        }
+      ]
+    },
+    "winner": "undecided"
+  },
+  "rust": {
+    "frames": 1,
+    "reason": "max_frames_reached",
+    "state": {
+      "brains": [
+        {
+          "hp": 70,
+          "row": 3
+        }
+      ],
+      "events": {},
+      "frame": 1,
+      "ladders": [],
+      "mode": "ize",
+      "plants": [],
+      "projectiles": [],
+      "rakes": [],
+      "zombies": [
+        {
+          "age": 1,
+          "chilled": 0,
+          "col": 7,
+          "headless": false,
+          "helmet_hp": 0,
+          "hp": 270,
+          "hypnotized": false,
+          "id": "balloon",
+          "row": 3,
+          "shield_hp": 0,
+          "speed": 0.143,
+          "status": "active",
+          "tool": false,
+          "type": "balloon",
+          "underground": null,
+          "x": 499.857
+        }
+      ]
+    },
+    "winner": "undecided"
+  },
+  "rust_binary": "/private/tmp/pvz-ize-simulator.igLHFO/native_sim/target/release/pvz-ize-native-sim",
+  "rust_exit_status": 0,
+  "schema": "pvz-ize/rust-phase24-balloon/v1",
+  "sha256": "d3cd936175558920fdb1f2ece39f19b575d45511298e7554efa8e5974f2f65ba",
+  "status": "match",
+  "stderr": ""
+}

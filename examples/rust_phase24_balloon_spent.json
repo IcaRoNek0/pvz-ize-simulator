@@ -1,0 +1,8 @@
+{
+  "version": 2,
+  "seed": 2401,
+  "max_frames": 1,
+  "brains": [3],
+  "plants": [],
+  "zombies": [{"id": "balloon", "type": "balloon", "row": 3, "x": 500, "tool": false}]
+}
