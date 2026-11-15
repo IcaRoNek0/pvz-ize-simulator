@@ -27,11 +27,11 @@ def python_reference(data):
     for i,z in enumerate(data.get("zombies", [])):
         kind=z.get("type","normal"); col=z.get("col")
         x=float(z["x"]) if "x" in z else 10.0+80.0*(int(col)-1)
-        default_hp = {"ladder": 500, "imp": 70, "pole_vaulting": 500, "zamboni": 1350, "balloon": 270, "pogo": 500}.get(kind, 270)
+        default_hp = {"ladder": 500, "imp": 70, "pole_vaulting": 500, "zamboni": 1350, "balloon": 270, "pogo": 500, "dancing": 500}.get(kind, 270)
         default_helmet = {"digger": 100, "conehead": 370, "buckethead": 1100, "football": 1400}.get(kind, 0)
         default_shield = {"ladder": 500, "screen_door": 1100, "newspaper": 150}.get(kind, 0)
         tool = bool(z.get("tool", True))
-        default_speed = {"football": 0.32, "newspaper": 0.09, "imp": 0.423, "pole_vaulting": 0.32, "flag": 0.22, "zamboni": 0.25, "balloon": 0.2, "pogo": 0.45}.get(kind, 0.143)
+        default_speed = {"football": 0.32, "newspaper": 0.09, "imp": 0.423, "pole_vaulting": 0.32, "flag": 0.22, "zamboni": 0.25, "balloon": 0.2, "pogo": 0.45, "dancing": 0.22, "backup_dancer": 0.22}.get(kind, 0.143)
         if kind == "pogo" and not tool:
             default_speed = 0.45
         elif kind in {"pole_vaulting", "balloon"} and not tool:
@@ -165,7 +165,7 @@ def python_reference(data):
                 if p["cooldown"] > 0:
                     p["cooldown"] -= 1
                 continue
-            if p["hp"]<=0 or p["type"] not in ("peashooter","snow_pea","repeater","threepeater","split_pea"): continue
+            if p["hp"]<=0 or p["type"] not in ("peashooter","snow_pea","repeater","threepeater","split_pea","puff_shroom"): continue
             if p["cooldown"]>0: p["cooldown"]-=1
             if p["cooldown"]==0:
                 px=40.0+80.0*(p["col"]-1)
@@ -173,7 +173,8 @@ def python_reference(data):
                 rows = [row for row in rows if 1 <= row <= 5]
                 for index, row in enumerate(rows):
                     backward = p["type"] == "split_pea" and index == 1
-                    projectiles.append({"row":row,"kind":"ice" if p["type"]=="snow_pea" else ("pea_back" if backward else "pea"),"x_fp":int(round((px-27 if backward else px+50)*FP)),"x":px-27 if backward else px+50,"damage":20,"active":True})
+                    offset = -27 if backward else (40 if p["type"] == "puff_shroom" else 50)
+                    projectiles.append({"row":row,"kind":"ice" if p["type"]=="snow_pea" else ("pea_back" if backward else ("puff" if p["type"] == "puff_shroom" else "pea")),"x_fp":int(round((px+offset)*FP)),"x":px+offset,"damage":20,"active":True})
                 p["cooldown"]=150; ev("projectile_fired",len(rows))
         for q in projectiles:
             if q["active"]: q["x_fp"]+=-8000 if q["kind"]=="pea_back" else 8000; q["x"]=q["x_fp"]/FP
@@ -196,7 +197,7 @@ def python_reference(data):
                     if q["kind"]=="ice": z["chilled"]=300; ev("chill_applied")
                     if z["hp"]==0: z["status"]="dead"; ev("zombie_died")
                     break
-        projectiles=[q for q in projectiles if q["active"] and q["x_fp"]<900000]
+        projectiles=[q for q in projectiles if q["active"] and q["x_fp"]<900000 and (q["kind"]!="puff" or q["x_fp"]<270000)]
         for z in zombies:
             if z["status"]!="active" or z["hp"]<=0: continue
             z["age"]+=1

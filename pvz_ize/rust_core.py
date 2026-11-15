@@ -18,9 +18,9 @@ from typing import Any
 
 from .batch import run_seed, wilson_interval
 
-SUPPORTED_PLANTS = {"peashooter", "repeater", "snow_pea", "threepeater", "split_pea", "fume_shroom", "pumpkin", "wallnut", "tallnut", "squash", "potato_mine", "cherry_bomb", "jalapeno", "spikeweed", "spikerock", "cob_cannon"}
+SUPPORTED_PLANTS = {"peashooter", "repeater", "snow_pea", "threepeater", "split_pea", "puff_shroom", "fume_shroom", "pumpkin", "wallnut", "tallnut", "squash", "potato_mine", "cherry_bomb", "jalapeno", "spikeweed", "spikerock", "cob_cannon"}
 SUPPORTED_ZOMBIES = {
-    "normal", "digger", "ladder", "conehead", "buckethead", "screen_door", "football", "newspaper", "imp", "pole_vaulting", "flag", "zamboni", "balloon", "pogo",
+    "normal", "digger", "ladder", "conehead", "buckethead", "screen_door", "football", "newspaper", "imp", "pole_vaulting", "flag", "zamboni", "balloon", "pogo", "dancing", "backup_dancer",
 }
 
 
@@ -49,6 +49,10 @@ def supports_scenario(data: dict[str, Any]) -> bool:
     if not isinstance(plants, list) or not isinstance(zombies, list):
         return False
     if not all(item.get("type") in SUPPORTED_PLANTS for item in plants):
+        return False
+    # The short-range puff projectile uses a fixed absolute cutoff in this
+    # slice; keep it to column one until source-relative ranges are modeled.
+    if any(item.get("type") == "puff_shroom" and item.get("col", 1) != 1 for item in plants):
         return False
     if not all(item.get("type") in SUPPORTED_ZOMBIES for item in zombies):
         return False
@@ -85,6 +89,11 @@ def supports_scenario(data: dict[str, Any]) -> bool:
             # Bouncing/landing and nut-blocking phases require altitude and
             # phase timers absent from SimpleState; spent pogo sticks walk.
             return False
+        if zombie.get("type") in {"dancing", "backup_dancer"}:
+            # Dancing's summon/timing state is not represented; allow only a
+            # one-tick catalog walk with no plants or neighboring dancers.
+            if plants or len(zombies) != 1 or int(data.get("max_frames", 100_000)) > 1:
+                return False
     # The Rust slice currently verifies only COB's two-cell footprint and
     # arming/reload counter.  Keep targeted lob/splash combat on Python until
     # its projectile contract has a differential fixture.
@@ -104,7 +113,7 @@ def supports_scenario(data: dict[str, Any]) -> bool:
     # slice has no equivalent random wind-up, so only explicitly seeded
     # shooter cooldowns may cross the backend boundary.
     for item in plants:
-        if item.get("type") in {"peashooter", "repeater", "snow_pea", "threepeater", "split_pea", "fume_shroom"} and "cooldown" not in item:
+        if item.get("type") in {"peashooter", "repeater", "snow_pea", "threepeater", "split_pea", "puff_shroom", "fume_shroom"} and "cooldown" not in item:
             return False
     return True
 

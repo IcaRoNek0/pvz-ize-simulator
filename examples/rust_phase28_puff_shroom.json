@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "seed": 2801,
+  "max_frames": 40,
+  "brains": [3],
+  "plants": [
+    {"id": "puff", "type": "puff_shroom", "row": 3, "col": 1, "cooldown": 0}
+  ],
+  "zombies": [
+    {"id": "near", "type": "normal", "row": 3, "x": 200},
+    {"id": "far", "type": "normal", "row": 3, "x": 300}
+  ]
+}

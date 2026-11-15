@@ -209,3 +209,12 @@ projectile using the existing collision/damage pipeline. The fixture
 animation timing and other interactions remain on the Python fallback. Run
 `python3 scripts/compare_phase27_fixtures.py` to regenerate
 `docs/rust_phase27_comparison.latest.json`.
+
+### Phase 28：小喷菇近距离直线投射物
+
+Puff-shroom now has a guarded short-range projectile using the existing
+straight collision path. The column-one fixture
+`examples/rust_phase28_puff_shroom.json` checks a near hit and removal at the
+fixed 230px cutoff; source-relative range and animation timing remain Python
+fallback. Run `python3 scripts/compare_phase28_fixtures.py` to regenerate
+`docs/rust_phase28_comparison.latest.json`.

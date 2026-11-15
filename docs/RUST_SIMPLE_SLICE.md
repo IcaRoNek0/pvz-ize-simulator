@@ -136,6 +136,12 @@ other split-pea interactions remain on the Python fallback. Run
 `python3 scripts/compare_phase27_fixtures.py` to write
 `docs/rust_phase27_comparison.latest.json`.
 
+Phase 28 adds a guarded puff-shroom short-range projectile. The column-one
+fixture `examples/rust_phase28_puff_shroom.json` checks a near hit and expiry
+before the fixed 230px cutoff; source-relative ranges and animation timing
+remain Python fallback. Run `python3 scripts/compare_phase28_fixtures.py` to
+write `docs/rust_phase28_comparison.latest.json`.
+
 Phase 21 adds deterministic `threepeater` fan-out using the existing straight
 projectile model and a zamboni catalog-only walk (HP 1350, speed 0.25). One pea
 is emitted on each valid adjacent row (2–4); ice trails, crushing, and other
