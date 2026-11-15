@@ -18,9 +18,9 @@ from typing import Any
 
 from .batch import run_seed, wilson_interval
 
-SUPPORTED_PLANTS = {"peashooter", "repeater", "snow_pea", "threepeater", "fume_shroom", "pumpkin", "wallnut", "tallnut", "squash", "potato_mine", "cherry_bomb", "jalapeno", "spikeweed", "spikerock", "cob_cannon"}
+SUPPORTED_PLANTS = {"peashooter", "repeater", "snow_pea", "threepeater", "split_pea", "fume_shroom", "pumpkin", "wallnut", "tallnut", "squash", "potato_mine", "cherry_bomb", "jalapeno", "spikeweed", "spikerock", "cob_cannon"}
 SUPPORTED_ZOMBIES = {
-    "normal", "digger", "ladder", "conehead", "buckethead", "screen_door", "football", "newspaper", "imp", "pole_vaulting", "flag", "zamboni", "balloon",
+    "normal", "digger", "ladder", "conehead", "buckethead", "screen_door", "football", "newspaper", "imp", "pole_vaulting", "flag", "zamboni", "balloon", "pogo",
 }
 
 
@@ -81,6 +81,10 @@ def supports_scenario(data: dict[str, Any]) -> bool:
             # Flying/popping phases are animation-driven and have distinct
             # targetability; only an already-popped balloon may use this slice.
             return False
+        if zombie.get("type") == "pogo" and zombie.get("tool", True):
+            # Bouncing/landing and nut-blocking phases require altitude and
+            # phase timers absent from SimpleState; spent pogo sticks walk.
+            return False
     # The Rust slice currently verifies only COB's two-cell footprint and
     # arming/reload counter.  Keep targeted lob/splash combat on Python until
     # its projectile contract has a differential fixture.
@@ -100,7 +104,7 @@ def supports_scenario(data: dict[str, Any]) -> bool:
     # slice has no equivalent random wind-up, so only explicitly seeded
     # shooter cooldowns may cross the backend boundary.
     for item in plants:
-        if item.get("type") in {"peashooter", "repeater", "snow_pea", "threepeater", "fume_shroom"} and "cooldown" not in item:
+        if item.get("type") in {"peashooter", "repeater", "snow_pea", "threepeater", "split_pea", "fume_shroom"} and "cooldown" not in item:
             return False
     return True
 

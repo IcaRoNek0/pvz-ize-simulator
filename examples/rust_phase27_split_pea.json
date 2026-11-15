@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "seed": 2601,
+  "max_frames": 1,
+  "brains": [3],
+  "plants": [
+    {"id": "split", "type": "split_pea", "row": 3, "col": 3, "cooldown": 0}
+  ],
+  "zombies": [
+    {"id": "forward", "type": "normal", "row": 3, "x": 280},
+    {"id": "backward", "type": "normal", "row": 3, "x": 170}
+  ]
+}

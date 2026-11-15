@@ -128,6 +128,14 @@ scenarios continue through Python. Run
 `python3 scripts/compare_phase25_fixtures.py` to write
 `docs/rust_phase25_comparison.latest.json`.
 
+Phase 27 adds a guarded split-pea slice: one forward and one backward
+straight projectile use explicit direction encoded in the projectile kind,
+with ordinary collision/damage rules. The fixture
+`examples/rust_phase27_split_pea.json` checks both hits; animation timing and
+other split-pea interactions remain on the Python fallback. Run
+`python3 scripts/compare_phase27_fixtures.py` to write
+`docs/rust_phase27_comparison.latest.json`.
+
 Phase 21 adds deterministic `threepeater` fan-out using the existing straight
 projectile model and a zamboni catalog-only walk (HP 1350, speed 0.25). One pea
 is emitted on each valid adjacent row (2–4); ice trails, crushing, and other

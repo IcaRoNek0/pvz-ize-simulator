@@ -200,3 +200,12 @@ bite pipeline. The fixture `examples/rust_phase25_pumpkin_shell.json` checks a
 single 4-HP bite (4000 → 3996). Multi-layer targeting and animation remain
 outside this slice; run `python3 scripts/compare_phase25_fixtures.py` to write
 `docs/rust_phase25_comparison.latest.json`.
+
+### Phase 27：裂荚射手双向直线投射物
+
+The guarded split-pea slice emits one forward and one backward straight
+projectile using the existing collision/damage pipeline. The fixture
+`examples/rust_phase27_split_pea.json` checks both directions and hits;
+animation timing and other interactions remain on the Python fallback. Run
+`python3 scripts/compare_phase27_fixtures.py` to regenerate
+`docs/rust_phase27_comparison.latest.json`.

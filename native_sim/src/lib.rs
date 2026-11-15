@@ -218,6 +218,7 @@ fn zombie_default_hp(kind: &str) -> i32 {
         "pole_vaulting" => 500,
         "zamboni" => 1_350,
         "balloon" => 270,
+        "pogo" => 500,
         "ladder" => 500,
         _ => 270,
     }
@@ -249,6 +250,7 @@ fn zombie_default_speed(kind: &str) -> f64 {
         "pole_vaulting" => 0.32,
         "zamboni" => 0.25,
         "balloon" => 0.2,
+        "pogo" => 0.45,
         "newspaper" => 0.09,
         "flag" => 0.22,
         _ => 0.143,
@@ -394,7 +396,9 @@ pub fn parse_scenario(input: &str) -> Result<Scenario, InputError> {
         let tool = bool_field(z.get("tool"), true, "zombie.tool")?;
         // A pole without its tool has already spent the vault and walks at
         // the ordinary zombie speed; the Rust slice does not model the jump.
-        let default_speed = if (kind == "pole_vaulting" || kind == "balloon") && !tool {
+        let default_speed = if kind == "pogo" && !tool {
+            0.45
+        } else if (kind == "pole_vaulting" || kind == "balloon") && !tool {
             0.143
         } else {
             zombie_default_speed(&kind)
@@ -1045,7 +1049,7 @@ impl SimpleState {
             if p.hp <= 0
                 || !matches!(
                     p.kind.as_str(),
-                    "peashooter" | "snow_pea" | "repeater" | "threepeater"
+                    "peashooter" | "snow_pea" | "repeater" | "threepeater" | "split_pea"
                 )
             {
                 continue;
@@ -1061,14 +1065,22 @@ impl SimpleState {
                         .filter(|row| (1..=5).contains(row))
                         .collect()
                 } else {
-                    vec![p.row; if p.kind == "repeater" { 2 } else { 1 }]
+                    vec![
+                        p.row;
+                        if matches!(p.kind.as_str(), "repeater" | "split_pea") {
+                            2
+                        } else {
+                            1
+                        }
+                    ]
                 };
-                for row in rows.iter().copied() {
+                for (shot_index, row) in rows.iter().copied().enumerate() {
+                    let backward = p.kind == "split_pea" && shot_index == 1;
                     self.projectiles.push(SimpleProjectile {
                         row,
-                        kind: kind.into(),
-                        x: p.x() + 50.0,
-                        x_fp: plant_x_fp(p.col) + 50_000,
+                        kind: if backward { "pea_back" } else { kind }.into(),
+                        x: p.x() + if backward { -27.0 } else { 50.0 },
+                        x_fp: plant_x_fp(p.col) + if backward { -27_000 } else { 50_000 },
                         damage: 20,
                         active: true,
                     });
@@ -1079,7 +1091,7 @@ impl SimpleState {
         }
         for q in &mut self.projectiles {
             if q.active {
-                q.x_fp += 8_000;
+                q.x_fp += if q.kind == "pea_back" { -8_000 } else { 8_000 };
                 q.x = q.x_fp as f64 / 1000.0;
             }
         }
@@ -1525,6 +1537,19 @@ mod tests {
     }
 
     #[test]
+    fn simple_split_pea_fires_forward_and_backward_straight_projectiles() {
+        let text = r#"{"max_frames":1,"plants":[{"type":"split_pea","row":3,"col":3,"cooldown":0}],"zombies":[{"type":"normal","row":3,"x":280},{"type":"normal","row":3,"x":170}],"brains":[3]}"#;
+        let mut s = SimpleState::from(parse_scenario(text).unwrap());
+        s.step();
+        assert_eq!(s.events.get("projectile_fired"), Some(&2));
+        assert_eq!(s.events.get("projectile_hit"), Some(&2));
+        assert_eq!(
+            s.zombies.iter().map(|z| z.hp).collect::<Vec<_>>(),
+            vec![250, 250]
+        );
+    }
+
+    #[test]
     fn simple_pea_strips_helmet_before_body_damage() {
         let text = r#"{"plants":[{"type":"peashooter","row":3,"col":1}],"zombies":[{"type":"buckethead","row":3,"x":90,"hp":270,"helmet_hp":10}],"brains":[3]}"#;
         let mut s = SimpleState::from(parse_scenario(text).unwrap());
@@ -1665,6 +1690,16 @@ mod tests {
         assert!((s.zombies[0].speed - 0.143).abs() < f64::EPSILON);
         s.step();
         assert!((s.zombies[0].x - 499.857).abs() < 1e-9);
+    }
+
+    #[test]
+    fn simple_spent_pogo_uses_catalog_walk_defaults() {
+        let text = r#"{"max_frames":1,"plants":[],"zombies":[{"type":"pogo","row":3,"x":500,"tool":false}],"brains":[3]}"#;
+        let mut s = SimpleState::from(parse_scenario(text).unwrap());
+        assert_eq!(s.zombies[0].hp, 500);
+        assert!((s.zombies[0].speed - 0.45).abs() < f64::EPSILON);
+        s.step();
+        assert!((s.zombies[0].x - 499.55).abs() < 1e-9);
     }
 
     #[test]
