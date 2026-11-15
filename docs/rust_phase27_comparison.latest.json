@@ -1,7 +1,7 @@
 {
   "fixtures": [
     {
-      "fixture": "/private/tmp/pvz-ize-simulator.igLHFO/examples/rust_phase27_split_pea.json",
+      "fixture": "/private/tmp/pvz-ize-simulator.igLHFO/examples/rust_phase27_dancing_defaults.json",
       "python": {
         "frames": 1,
         "reason": "max_frames_reached",
@@ -12,66 +12,31 @@
               "row": 3
             }
           ],
-          "events": {
-            "projectile_fired": 2,
-            "projectile_hit": 2
-          },
+          "events": {},
           "frame": 1,
           "ladders": [],
           "mode": "ize",
-          "plants": [
-            {
-              "col": 3,
-              "cooldown": 150,
-              "footprint": [
-                3
-              ],
-              "hp": 300,
-              "id": "split",
-              "layer": "main",
-              "row": 3,
-              "state_timer": 0,
-              "type": "split_pea"
-            }
-          ],
+          "plants": [],
           "projectiles": [],
           "rakes": [],
           "zombies": [
             {
               "age": 1,
               "chilled": 0,
-              "col": 4,
+              "col": 7,
               "headless": false,
               "helmet_hp": 0,
-              "hp": 250,
+              "hp": 500,
               "hypnotized": false,
-              "id": "forward",
+              "id": "dancer",
               "row": 3,
               "shield_hp": 0,
-              "speed": 0.143,
+              "speed": 0.22,
               "status": "active",
               "tool": true,
-              "type": "normal",
+              "type": "dancing",
               "underground": null,
-              "x": 279.857
-            },
-            {
-              "age": 1,
-              "chilled": 0,
-              "col": 3,
-              "headless": false,
-              "helmet_hp": 0,
-              "hp": 250,
-              "hypnotized": false,
-              "id": "backward",
-              "row": 3,
-              "shield_hp": 0,
-              "speed": 0.143,
-              "status": "active",
-              "tool": true,
-              "type": "normal",
-              "underground": null,
-              "x": 169.857
+              "x": 499.78
             }
           ]
         },
@@ -87,78 +52,130 @@
               "row": 3
             }
           ],
-          "events": {
-            "projectile_fired": 2,
-            "projectile_hit": 2
-          },
+          "events": {},
           "frame": 1,
           "ladders": [],
           "mode": "ize",
-          "plants": [
-            {
-              "col": 3,
-              "cooldown": 150,
-              "footprint": [
-                3
-              ],
-              "hp": 300,
-              "id": "split",
-              "layer": "main",
-              "row": 3,
-              "state_timer": 0,
-              "type": "split_pea"
-            }
-          ],
+          "plants": [],
           "projectiles": [],
           "rakes": [],
           "zombies": [
             {
               "age": 1,
               "chilled": 0,
-              "col": 4,
+              "col": 7,
               "headless": false,
               "helmet_hp": 0,
-              "hp": 250,
+              "hp": 500,
               "hypnotized": false,
-              "id": "forward",
+              "id": "dancer",
               "row": 3,
               "shield_hp": 0,
-              "speed": 0.143,
+              "speed": 0.22,
               "status": "active",
               "tool": true,
-              "type": "normal",
+              "type": "dancing",
               "underground": null,
-              "x": 279.857
-            },
-            {
-              "age": 1,
-              "chilled": 0,
-              "col": 3,
-              "headless": false,
-              "helmet_hp": 0,
-              "hp": 250,
-              "hypnotized": false,
-              "id": "backward",
-              "row": 3,
-              "shield_hp": 0,
-              "speed": 0.143,
-              "status": "active",
-              "tool": true,
-              "type": "normal",
-              "underground": null,
-              "x": 169.857
+              "x": 499.78
             }
           ]
         },
         "winner": "undecided"
       },
       "rust_exit_status": 0,
-      "sha256": "20e1e4581850f810980eb2746a020c348569f839c49e64044834035b414ec76f",
+      "sha256": "232bb84274f4fe76db4cf3ef313a397c9331d01c423b0287b3ef4cd1660d6aea",
+      "status": "match",
+      "stderr": ""
+    },
+    {
+      "fixture": "/private/tmp/pvz-ize-simulator.igLHFO/examples/rust_phase27_backup_dancer_defaults.json",
+      "python": {
+        "frames": 1,
+        "reason": "max_frames_reached",
+        "state": {
+          "brains": [
+            {
+              "hp": 70,
+              "row": 3
+            }
+          ],
+          "events": {},
+          "frame": 1,
+          "ladders": [],
+          "mode": "ize",
+          "plants": [],
+          "projectiles": [],
+          "rakes": [],
+          "zombies": [
+            {
+              "age": 1,
+              "chilled": 0,
+              "col": 7,
+              "headless": false,
+              "helmet_hp": 0,
+              "hp": 270,
+              "hypnotized": false,
+              "id": "backup",
+              "row": 3,
+              "shield_hp": 0,
+              "speed": 0.22,
+              "status": "active",
+              "tool": true,
+              "type": "backup_dancer",
+              "underground": null,
+              "x": 499.78
+            }
+          ]
+        },
+        "winner": "undecided"
+      },
+      "rust": {
+        "frames": 1,
+        "reason": "max_frames_reached",
+        "state": {
+          "brains": [
+            {
+              "hp": 70,
+              "row": 3
+            }
+          ],
+          "events": {},
+          "frame": 1,
+          "ladders": [],
+          "mode": "ize",
+          "plants": [],
+          "projectiles": [],
+          "rakes": [],
+          "zombies": [
+            {
+              "age": 1,
+              "chilled": 0,
+              "col": 7,
+              "headless": false,
+              "helmet_hp": 0,
+              "hp": 270,
+              "hypnotized": false,
+              "id": "backup",
+              "row": 3,
+              "shield_hp": 0,
+              "speed": 0.22,
+              "status": "active",
+              "tool": true,
+              "type": "backup_dancer",
+              "underground": null,
+              "x": 499.78
+            }
+          ]
+        },
+        "winner": "undecided"
+      },
+      "rust_exit_status": 0,
+      "sha256": "d8deb5178b88cf04d62245815a634507ac777df02de59d5605923381833f9ca8",
       "status": "match",
       "stderr": ""
     }
   ],
   "rust_binary": "/private/tmp/pvz-ize-simulator.igLHFO/native_sim/target/release/pvz-ize-native-sim",
-  "schema": "pvz-ize/rust-phase23-fume-shroom/v1",
+  "schema": "pvz-ize/rust-phase27-dancing/v2",
   "status": "match"
 }

@@ -1,0 +1,8 @@
+{
+  "version": 2,
+  "seed": 2702,
+  "max_frames": 1,
+  "brains": [3],
+  "plants": [],
+  "zombies": [{"id": "backup", "type": "backup_dancer", "row": 3, "x": 500}]
+}
