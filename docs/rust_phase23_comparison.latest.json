@@ -228,96 +228,9 @@
       "sha256": "79b600e70688288bd60949c1e325ff7393f21c6092144854081a0c25152d27f1",
       "status": "match",
       "stderr": ""
-    },
-    {
-      "fixture": "/private/tmp/pvz-ize-simulator.igLHFO/examples/rust_phase21_zamboni_defaults.json",
-      "python": {
-        "frames": 1,
-        "reason": "max_frames_reached",
-        "state": {
-          "brains": [
-            {
-              "hp": 70,
-              "row": 3
-            }
-          ],
-          "events": {},
-          "frame": 1,
-          "ladders": [],
-          "mode": "ize",
-          "plants": [],
-          "projectiles": [],
-          "rakes": [],
-          "zombies": [
-            {
-              "age": 1,
-              "chilled": 0,
-              "col": 8,
-              "headless": false,
-              "helmet_hp": 0,
-              "hp": 1350,
-              "hypnotized": false,
-              "id": "zamboni",
-              "row": 3,
-              "shield_hp": 0,
-              "speed": 0.25,
-              "status": "active",
-              "tool": true,
-              "type": "zamboni",
-              "underground": null,
-              "x": 599.75
-            }
-          ]
-        },
-        "winner": "undecided"
-      },
-      "rust": {
-        "frames": 1,
-        "reason": "max_frames_reached",
-        "state": {
-          "brains": [
-            {
-              "hp": 70,
-              "row": 3
-            }
-          ],
-          "events": {},
-          "frame": 1,
-          "ladders": [],
-          "mode": "ize",
-          "plants": [],
-          "projectiles": [],
-          "rakes": [],
-          "zombies": [
-            {
-              "age": 1,
-              "chilled": 0,
-              "col": 8,
-              "headless": false,
-              "helmet_hp": 0,
-              "hp": 1350,
-              "hypnotized": false,
-              "id": "zamboni",
-              "row": 3,
-              "shield_hp": 0,
-              "speed": 0.25,
-              "status": "active",
-              "tool": true,
-              "type": "zamboni",
-              "underground": null,
-              "x": 599.75
-            }
-          ]
-        },
-        "winner": "undecided"
-      },
-      "rust_exit_status": 0,
-      "sha256": "ead2259f920e7d24ed8128bd98df117a3b22e89bec19dc186b99c44574dd452d",
-      "status": "match",
-      "stderr": ""
     }
   ],
   "rust_binary": "/private/tmp/pvz-ize-simulator.igLHFO/native_sim/target/release/pvz-ize-native-sim",
-  "schema": "pvz-ize/rust-phase21-threepeater-zamboni/v1",
+  "schema": "pvz-ize/rust-phase23-fume-shroom/v1",
   "status": "match"
 }
