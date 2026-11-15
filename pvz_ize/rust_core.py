@@ -18,9 +18,9 @@ from typing import Any
 
 from .batch import run_seed, wilson_interval
 
-SUPPORTED_PLANTS = {"peashooter", "repeater", "snow_pea", "threepeater", "fume_shroom", "wallnut", "tallnut", "squash", "potato_mine", "cherry_bomb", "jalapeno", "spikeweed", "spikerock", "cob_cannon"}
+SUPPORTED_PLANTS = {"peashooter", "repeater", "snow_pea", "threepeater", "fume_shroom", "pumpkin", "wallnut", "tallnut", "squash", "potato_mine", "cherry_bomb", "jalapeno", "spikeweed", "spikerock", "cob_cannon"}
 SUPPORTED_ZOMBIES = {
-    "normal", "digger", "ladder", "conehead", "buckethead", "screen_door", "football", "newspaper", "imp", "pole_vaulting", "flag", "zamboni",
+    "normal", "digger", "ladder", "conehead", "buckethead", "screen_door", "football", "newspaper", "imp", "pole_vaulting", "flag", "zamboni", "balloon",
 }
 
 
@@ -76,6 +76,10 @@ def supports_scenario(data: dict[str, Any]) -> bool:
             # The machine's tire-crush/ice-trail scheduler is not in the
             # simple state. Keep all board interactions on Python; a
             # no-plant row is a deterministic catalog-speed walk only.
+            return False
+        if zombie.get("type") == "balloon" and zombie.get("tool", True):
+            # Flying/popping phases are animation-driven and have distinct
+            # targetability; only an already-popped balloon may use this slice.
             return False
     # The Rust slice currently verifies only COB's two-cell footprint and
     # arming/reload counter.  Keep targeted lob/splash combat on Python until

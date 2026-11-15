@@ -192,3 +192,11 @@ checks shield/body ordering, strict range, and row exclusion. Run
 `python3 scripts/compare_phase23_fixtures.py` to regenerate
 `docs/rust_phase23_comparison.latest.json`; animation wind-up and unsupported
 scenarios remain on the Python fallback.
+
+### Phase 25：南瓜壳防御层边界
+
+Pumpkin now uses its catalog 4000 HP `shell` layer in the existing deterministic
+bite pipeline. The fixture `examples/rust_phase25_pumpkin_shell.json` checks a
+single 4-HP bite (4000 → 3996). Multi-layer targeting and animation remain
+outside this slice; run `python3 scripts/compare_phase25_fixtures.py` to write
+`docs/rust_phase25_comparison.latest.json`.

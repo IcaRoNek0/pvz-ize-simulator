@@ -32,6 +32,14 @@ fn default_layer() -> String {
     "main".to_owned()
 }
 
+fn plant_default_layer(kind: &str) -> &'static str {
+    match kind {
+        "pumpkin" => "shell",
+        "lily_pad" | "flower_pot" => "base",
+        _ => "main",
+    }
+}
+
 impl Plant {
     pub fn x(&self) -> f64 {
         40.0 + 80.0 * f64::from(self.col - 1)
@@ -188,6 +196,7 @@ fn plant_default_hp(kind: &str) -> i32 {
     match kind {
         "wallnut" => 4_000,
         "tallnut" => 8_000,
+        "pumpkin" => 4_000,
         "spikerock" => 450,
         _ => 300,
     }
@@ -208,6 +217,7 @@ fn zombie_default_hp(kind: &str) -> i32 {
         "imp" => 70,
         "pole_vaulting" => 500,
         "zamboni" => 1_350,
+        "balloon" => 270,
         "ladder" => 500,
         _ => 270,
     }
@@ -238,6 +248,7 @@ fn zombie_default_speed(kind: &str) -> f64 {
         "imp" => 0.423,
         "pole_vaulting" => 0.32,
         "zamboni" => 0.25,
+        "balloon" => 0.2,
         "newspaper" => 0.09,
         "flag" => 0.22,
         _ => 0.143,
@@ -292,6 +303,7 @@ pub fn parse_scenario(input: &str) -> Result<Scenario, InputError> {
     let mode = string_field(obj.get("mode"), "ize", "mode")?;
     let mut plants = Vec::new();
     let mut ids = HashSet::new();
+    let mut occupied_plant_layers: HashSet<(u8, u8, String)> = HashSet::new();
     let plant_values = obj
         .get("plants")
         .and_then(Value::as_array)
@@ -319,6 +331,20 @@ pub fn parse_scenario(input: &str) -> Result<Scenario, InputError> {
         };
         let default_hp = plant_default_hp(&kind);
         let default_cooldown = plant_default_cooldown(&kind);
+        let layer = string_field(p.get("layer"), plant_default_layer(&kind), "plant.layer")?;
+        if !allow_stacking {
+            for footprint_col in &footprint {
+                let slot = (r, *footprint_col, layer.clone());
+                if occupied_plant_layers.contains(&slot) {
+                    return Err(InputError::Invalid(format!(
+                        "plants[{i}]: duplicate plant layer or cob cannon footprint; set allow_stacking=true for explicit same-layer stacking"
+                    )));
+                }
+            }
+            for footprint_col in &footprint {
+                occupied_plant_layers.insert((r, *footprint_col, layer.clone()));
+            }
+        }
         plants.push(Plant {
             id,
             kind,
@@ -328,7 +354,7 @@ pub fn parse_scenario(input: &str) -> Result<Scenario, InputError> {
             hp: i64_field(p.get("hp"), i64::from(default_hp), "plant.hp")? as i32,
             cooldown: u64_field(p.get("cooldown"), default_cooldown, "plant.cooldown")? as u32,
             state_timer: u64_field(p.get("state_timer"), 0, "plant.state_timer")? as u32,
-            layer: string_field(p.get("layer"), "main", "plant.layer")?,
+            layer,
         });
     }
     let mut zombies = Vec::new();
@@ -368,7 +394,7 @@ pub fn parse_scenario(input: &str) -> Result<Scenario, InputError> {
         let tool = bool_field(z.get("tool"), true, "zombie.tool")?;
         // A pole without its tool has already spent the vault and walks at
         // the ordinary zombie speed; the Rust slice does not model the jump.
-        let default_speed = if kind == "pole_vaulting" && !tool {
+        let default_speed = if (kind == "pole_vaulting" || kind == "balloon") && !tool {
             0.143
         } else {
             zombie_default_speed(&kind)
@@ -1312,6 +1338,20 @@ mod tests {
     }
 
     #[test]
+    fn rejects_duplicate_plant_layer_without_stacking() {
+        let bad = r#"{"plants":[{"type":"wallnut","row":3,"col":2},{"type":"peashooter","row":3,"col":2}],"zombies":[],"brains":[3]}"#;
+        let err = parse_scenario(bad).expect_err("same-layer overlap must be rejected");
+        assert!(err.to_string().contains("allow_stacking=true"));
+    }
+
+    #[test]
+    fn allows_duplicate_plant_layer_when_stacking_is_explicit() {
+        let text = r#"{"allow_stacking":true,"plants":[{"type":"wallnut","row":3,"col":2},{"type":"peashooter","row":3,"col":2}],"zombies":[],"brains":[3]}"#;
+        let scenario = parse_scenario(text).expect("explicit stacking should preserve overlap");
+        assert_eq!(scenario.plants.len(), 2);
+    }
+
+    #[test]
     fn preserves_cob_cannon_two_cell_footprint() {
         let text =
             r#"{"plants":[{"type":"cob_cannon","row":3,"col":8}],"zombies":[],"brains":[3]}"#;
@@ -1475,6 +1515,16 @@ mod tests {
     }
 
     #[test]
+    fn simple_pumpkin_shell_uses_catalog_health_and_bite_pipeline() {
+        let text = r#"{"max_frames":1,"plants":[{"type":"pumpkin","row":3,"col":1}],"zombies":[{"type":"normal","row":3,"x":90,"age":3}],"brains":[3]}"#;
+        let mut s = SimpleState::from(parse_scenario(text).unwrap());
+        assert_eq!(s.plants[0].hp, 4000);
+        assert_eq!(s.plants[0].layer, "shell");
+        s.step();
+        assert_eq!(s.plants[0].hp, 3996);
+    }
+
+    #[test]
     fn simple_pea_strips_helmet_before_body_damage() {
         let text = r#"{"plants":[{"type":"peashooter","row":3,"col":1}],"zombies":[{"type":"buckethead","row":3,"x":90,"hp":270,"helmet_hp":10}],"brains":[3]}"#;
         let mut s = SimpleState::from(parse_scenario(text).unwrap());
@@ -1605,6 +1655,16 @@ mod tests {
         assert!((s.zombies[0].speed - 0.25).abs() < f64::EPSILON);
         s.step();
         assert!((s.zombies[0].x - 799.75).abs() < 1e-9);
+    }
+
+    #[test]
+    fn simple_popped_balloon_uses_normal_walk_defaults() {
+        let text = r#"{"max_frames":1,"plants":[],"zombies":[{"type":"balloon","row":3,"x":500,"tool":false}],"brains":[3]}"#;
+        let mut s = SimpleState::from(parse_scenario(text).unwrap());
+        assert_eq!(s.zombies[0].hp, 270);
+        assert!((s.zombies[0].speed - 0.143).abs() < f64::EPSILON);
+        s.step();
+        assert!((s.zombies[0].x - 499.857).abs() < 1e-9);
     }
 
     #[test]

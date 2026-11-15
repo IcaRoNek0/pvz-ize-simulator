@@ -120,6 +120,14 @@ shield armor; strict range and adjacent-row exclusion are covered by
 `docs/rust_phase23_comparison.latest.json`. Animation-driven wind-up remains
 guarded by an explicit cooldown and unsupported scenarios use Python fallback.
 
+Phase 25 adds pumpkin's catalog shell boundary: a default 4000-HP `shell`
+layer participates in the existing deterministic bite pipeline. The fixture
+`examples/rust_phase25_pumpkin_shell.json` observes one 4-HP bite (4000 →
+3996). Multi-layer plant targeting and animation are not expanded; unsupported
+scenarios continue through Python. Run
+`python3 scripts/compare_phase25_fixtures.py` to write
+`docs/rust_phase25_comparison.latest.json`.
+
 Phase 21 adds deterministic `threepeater` fan-out using the existing straight
 projectile model and a zamboni catalog-only walk (HP 1350, speed 0.25). One pea
 is emitted on each valid adjacent row (2–4); ice trails, crushing, and other
@@ -148,6 +156,10 @@ python3 scripts/compare_phase11_fixtures.py
 
 Rust 输入解析器会拒绝 `cob_cannon` 放在第 9 列，并在 `Plant.footprint` 输出左右两格；
 当前仅迁移占位不含玉米炮弹攻击。
+
+Rust 解析器还与 Python 初态契约同步检查植物层占用：默认拒绝同一行列层的
+重叠植物（包括玉米炮的双格 footprint），只有显式 `allow_stacking=true` 才保留
+该重叠。未迁移的动画/特殊字段仍由 Python parser 与 fallback 负责。
 
 土豆雷切片采用已验证的简单接触范围（同一行、植物中心右侧 55 像素内）；复杂地下、撑杆
 和跳跳僵尸的特殊触发条件仍由 Python `Simulator` 处理。

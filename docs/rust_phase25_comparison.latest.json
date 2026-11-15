@@ -1,0 +1,126 @@
+{
+  "fixtures": [
+    {
+      "fixture": "/private/tmp/pvz-ize-simulator.igLHFO/examples/rust_phase25_pumpkin_shell.json",
+      "python": {
+        "frames": 1,
+        "reason": "max_frames_reached",
+        "state": {
+          "brains": [
+            {
+              "hp": 70,
+              "row": 3
+            }
+          ],
+          "events": {
+            "plant_bitten": 1
+          },
+          "frame": 1,
+          "ladders": [],
+          "mode": "ize",
+          "plants": [
+            {
+              "col": 1,
+              "cooldown": 0,
+              "footprint": [
+                1
+              ],
+              "hp": 3996,
+              "id": "pumpkin",
+              "layer": "shell",
+              "row": 3,
+              "state_timer": 0,
+              "type": "pumpkin"
+            }
+          ],
+          "projectiles": [],
+          "rakes": [],
+          "zombies": [
+            {
+              "age": 4,
+              "chilled": 0,
+              "col": 2,
+              "headless": false,
+              "helmet_hp": 0,
+              "hp": 270,
+              "hypnotized": false,
+              "id": "bite",
+              "row": 3,
+              "shield_hp": 0,
+              "speed": 0.143,
+              "status": "active",
+              "tool": true,
+              "type": "normal",
+              "underground": null,
+              "x": 90.0
+            }
+          ]
+        },
+        "winner": "undecided"
+      },
+      "rust": {
+        "frames": 1,
+        "reason": "max_frames_reached",
+        "state": {
+          "brains": [
+            {
+              "hp": 70,
+              "row": 3
+            }
+          ],
+          "events": {
+            "plant_bitten": 1
+          },
+          "frame": 1,
+          "ladders": [],
+          "mode": "ize",
+          "plants": [
+            {
+              "col": 1,
+              "cooldown": 0,
+              "footprint": [
+                1
+              ],
+              "hp": 3996,
+              "id": "pumpkin",
+              "layer": "shell",
+              "row": 3,
+              "state_timer": 0,
+              "type": "pumpkin"
+            }
+          ],
+          "projectiles": [],
+          "rakes": [],
+          "zombies": [
+            {
+              "age": 4,
+              "chilled": 0,
+              "col": 2,
+              "headless": false,
+              "helmet_hp": 0,
+              "hp": 270,
+              "hypnotized": false,
+              "id": "bite",
+              "row": 3,
+              "shield_hp": 0,
+              "speed": 0.143,
+              "status": "active",
+              "tool": true,
+              "type": "normal",
+              "underground": null,
+              "x": 90.0
+            }
+          ]
+        },
+        "winner": "undecided"
+      },
+      "rust_exit_status": 0,
+      "sha256": "34dd7bd40f089c7e73ef580443502bb830e0b51d47371a785a26e98924fe6006",
+      "status": "match",
+      "stderr": ""
+    }
+  ],
+  "rust_binary": "/private/tmp/pvz-ize-simulator.igLHFO/native_sim/target/release/pvz-ize-native-sim",
+  "schema": "pvz-ize/rust-phase23-fume-shroom/v1",
+  "status": "match"
+}

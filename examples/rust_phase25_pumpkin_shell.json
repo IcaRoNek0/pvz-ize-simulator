@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "seed": 2401,
+  "max_frames": 1,
+  "brains": [3],
+  "plants": [
+    {"id": "pumpkin", "type": "pumpkin", "row": 3, "col": 1}
+  ],
+  "zombies": [
+    {"id": "bite", "type": "normal", "row": 3, "x": 90, "age": 3}
+  ]
+}

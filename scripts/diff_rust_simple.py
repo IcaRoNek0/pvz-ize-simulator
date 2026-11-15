@@ -19,19 +19,20 @@ def python_reference(data):
         col=int(p.get("col",1)); kind=p.get("type","peashooter")
         if kind == "cob_cannon" and col >= 9:
             raise ValueError("cob_cannon left column must be 1..8")
-        default_hp={"wallnut":4000,"tallnut":8000,"spikerock":450}.get(kind,300)
+        default_hp={"wallnut":4000,"tallnut":8000,"pumpkin":4000,"spikerock":450}.get(kind,300)
         default_cooldown = 500 if kind == "cob_cannon" else 0
-        plants.append({"id":p.get("id",f"p{i+1}"),"type":kind,"row":int(p.get("row",3)),"col":col,"footprint":[col,col+1] if kind=="cob_cannon" else [col],"hp":int(p.get("hp",default_hp)),"cooldown":int(p.get("cooldown",default_cooldown)),"state_timer":int(p.get("state_timer",0)),"layer":p.get("layer","main")})
+        default_layer = "shell" if kind == "pumpkin" else "main"
+        plants.append({"id":p.get("id",f"p{i+1}"),"type":kind,"row":int(p.get("row",3)),"col":col,"footprint":[col,col+1] if kind=="cob_cannon" else [col],"hp":int(p.get("hp",default_hp)),"cooldown":int(p.get("cooldown",default_cooldown)),"state_timer":int(p.get("state_timer",0)),"layer":p.get("layer",default_layer)})
     zombies=[]
     for i,z in enumerate(data.get("zombies", [])):
         kind=z.get("type","normal"); col=z.get("col")
         x=float(z["x"]) if "x" in z else 10.0+80.0*(int(col)-1)
-        default_hp = {"ladder": 500, "imp": 70, "pole_vaulting": 500, "zamboni": 1350}.get(kind, 270)
+        default_hp = {"ladder": 500, "imp": 70, "pole_vaulting": 500, "zamboni": 1350, "balloon": 270}.get(kind, 270)
         default_helmet = {"digger": 100, "conehead": 370, "buckethead": 1100, "football": 1400}.get(kind, 0)
         default_shield = {"ladder": 500, "screen_door": 1100, "newspaper": 150}.get(kind, 0)
         tool = bool(z.get("tool", True))
-        default_speed = {"football": 0.32, "newspaper": 0.09, "imp": 0.423, "pole_vaulting": 0.32, "flag": 0.22, "zamboni": 0.25}.get(kind, 0.143)
-        if kind == "pole_vaulting" and not tool:
+        default_speed = {"football": 0.32, "newspaper": 0.09, "imp": 0.423, "pole_vaulting": 0.32, "flag": 0.22, "zamboni": 0.25, "balloon": 0.2}.get(kind, 0.143)
+        if kind in {"pole_vaulting", "balloon"} and not tool:
             default_speed = 0.143
         zombies.append({"id":z.get("id",f"z{i+1}"),"type":kind,"row":int(z.get("row",3)),"col":int(round((x-10.0)/80.0))+1,"x":x,"x_fp":int(round(x*FP)),"hp":int(z.get("hp",default_hp)),"helmet_hp":int(z.get("helmet_hp",default_helmet)),"shield_hp":int(z.get("shield_hp",default_shield)),"speed":float(z.get("speed",default_speed)),"age":int(z.get("age",0)),"chilled":int(z.get("chilled",0)),"headless":bool(z.get("headless",False)),"hypnotized":bool(z.get("hypnotized",False)),"tool":tool,"underground":z.get("underground") if isinstance(z.get("underground"),bool) else None,"status":"active"})
     brains=[]

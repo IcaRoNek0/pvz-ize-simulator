@@ -41,6 +41,12 @@ class RustCoreBridgeTests(unittest.TestCase):
             "plants": [{"type": "wallnut", "row": 3, "col": 6}],
             "zombies": [{"type": "zamboni", "row": 3, "x": 800}],
         }))
+        self.assertTrue(supports_scenario({
+            "plants": [], "zombies": [{"type": "balloon", "row": 3, "x": 500, "tool": False}],
+        }))
+        self.assertFalse(supports_scenario({
+            "plants": [], "zombies": [{"type": "balloon", "row": 3, "x": 500}],
+        }))
         # Giant-triggered imp throw/landing has no Rust phase/altitude fields;
         # keeping the giant outside the gate forces the complete Python path.
         self.assertFalse(supports_scenario({
@@ -168,6 +174,19 @@ class RustCoreBridgeTests(unittest.TestCase):
         self.assertEqual(result["backend"], "rust-core-slice")
         self.assertEqual(result["zombies"][0]["hp"], 1350)
         self.assertEqual(result["zombies"][0]["x"], 799.75)
+
+    @unittest.skipUnless(rust_core_available(), "native Rust slice is not built")
+    def test_popped_balloon_defaults_run_through_rust(self):
+        result = run_rust_core({
+            "version": 2,
+            "max_frames": 1,
+            "plants": [],
+            "zombies": [{"type": "balloon", "row": 3, "x": 500, "tool": False}],
+            "brains": [3],
+        })
+        self.assertEqual(result["backend"], "rust-core-slice")
+        self.assertEqual(result["zombies"][0]["hp"], 270)
+        self.assertEqual(result["zombies"][0]["x"], 499.857)
 
     def test_cob_arming_support_gate_keeps_ballistic_path_on_python(self):
         self.assertTrue(supports_scenario({
