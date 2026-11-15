@@ -1,0 +1,8 @@
+{
+  "version": 2,
+  "seed": 2601,
+  "max_frames": 1,
+  "brains": [3],
+  "plants": [],
+  "zombies": [{"id": "pogo", "type": "pogo", "row": 3, "x": 500, "tool": false}]
+}

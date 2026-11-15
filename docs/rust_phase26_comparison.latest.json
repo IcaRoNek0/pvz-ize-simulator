@@ -1,0 +1,89 @@
+{
+  "fixture": "/private/tmp/pvz-ize-simulator.igLHFO/examples/rust_phase26_pogo_spent.json",
+  "python": {
+    "frames": 1,
+    "reason": "max_frames_reached",
+    "state": {
+      "brains": [
+        {
+          "hp": 70,
+          "row": 3
+        }
+      ],
+      "events": {},
+      "frame": 1,
+      "ladders": [],
+      "mode": "ize",
+      "plants": [],
+      "projectiles": [],
+      "rakes": [],
+      "zombies": [
+        {
+          "age": 1,
+          "chilled": 0,
+          "col": 7,
+          "headless": false,
+          "helmet_hp": 0,
+          "hp": 500,
+          "hypnotized": false,
+          "id": "pogo",
+          "row": 3,
+          "shield_hp": 0,
+          "speed": 0.45,
+          "status": "active",
+          "tool": false,
+          "type": "pogo",
+          "underground": null,
+          "x": 499.55
+        }
+      ]
+    },
+    "winner": "undecided"
+  },
+  "rust": {
+    "frames": 1,
+    "reason": "max_frames_reached",
+    "state": {
+      "brains": [
+        {
+          "hp": 70,
+          "row": 3
+        }
+      ],
+      "events": {},
+      "frame": 1,
+      "ladders": [],
+      "mode": "ize",
+      "plants": [],
+      "projectiles": [],
+      "rakes": [],
+      "zombies": [
+        {
+          "age": 1,
+          "chilled": 0,
+          "col": 7,
+          "headless": false,
+          "helmet_hp": 0,
+          "hp": 500,
+          "hypnotized": false,
+          "id": "pogo",
+          "row": 3,
+          "shield_hp": 0,
+          "speed": 0.45,
+          "status": "active",
+          "tool": false,
+          "type": "pogo",
+          "underground": null,
+          "x": 499.55
+        }
+      ]
+    },
+    "winner": "undecided"
+  },
+  "rust_binary": "/private/tmp/pvz-ize-simulator.igLHFO/native_sim/target/release/pvz-ize-native-sim",
+  "rust_exit_status": 0,
+  "schema": "pvz-ize/rust-phase26-pogo/v1",
+  "sha256": "5a9fd3116a2cc51db7d71912d34df85be5656941c0d2b11d140d2b2d1a95d4b8",
+  "status": "match",
+  "stderr": ""
+}
