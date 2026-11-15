@@ -1,0 +1,97 @@
+{
+  "schema": "pvz-ize/python-vs-rust-batch-benchmark/v1",
+  "fixture": "/private/tmp/pvz-ize-simulator.igLHFO/examples/rust_batch_simple.json",
+  "fixture_sha256": "9efb7f28a994f782304eed69fc96dd457275230668d4a76b68880fb765a1bc0b",
+  "runs": 100,
+  "workers": 4,
+  "repeats": 5,
+  "correctness": {
+    "status": "match",
+    "rows_compared_per_repeat": 100
+  },
+  "python": {
+    "backend": "python-processpool",
+    "timing": {
+      "min": 0.014542124990839511,
+      "median": 0.016263208002783358,
+      "max": 0.024065625009825453,
+      "mean": 0.017578141600824892,
+      "runs_per_second_median": 6148.848368838765
+    }
+  },
+  "rust": {
+    "backend": "rust-simple-rayon-batch",
+    "binary": "/private/tmp/pvz-ize-simulator.igLHFO/native_sim/target/release/pvz-ize-native-sim",
+    "timing": {
+      "min": 0.0032367499952670187,
+      "median": 0.0034056669974233955,
+      "max": 0.012237166985869408,
+      "mean": 0.005300650198478252,
+      "runs_per_second_median": 29362.82380974311
+    }
+  },
+  "speedup_python_median_over_rust_median": 4.775337111669319,
+  "repetitions": [
+    {
+      "repeat": 0,
+      "python_seconds": 0.024065625009825453,
+      "rust_seconds": 0.004252042010193691,
+      "rust_exit_status": 0,
+      "rows_match": true,
+      "python_rows": 100,
+      "rust_rows": 100,
+      "rust_stderr": ""
+    },
+    {
+      "repeat": 1,
+      "python_seconds": 0.014542124990839511,
+      "rust_seconds": 0.003371625003637746,
+      "rust_exit_status": 0,
+      "rows_match": true,
+      "python_rows": 100,
+      "rust_rows": 100,
+      "rust_stderr": ""
+    },
+    {
+      "repeat": 2,
+      "python_seconds": 0.016263208002783358,
+      "rust_seconds": 0.012237166985869408,
+      "rust_exit_status": 0,
+      "rows_match": true,
+      "python_rows": 100,
+      "rust_rows": 100,
+      "rust_stderr": ""
+    },
+    {
+      "repeat": 3,
+      "python_seconds": 0.01705500000389293,
+      "rust_seconds": 0.0032367499952670187,
+      "rust_exit_status": 0,
+      "rows_match": true,
+      "python_rows": 100,
+      "rust_rows": 100,
+      "rust_stderr": ""
+    },
+    {
+      "repeat": 4,
+      "python_seconds": 0.015964749996783212,
+      "rust_seconds": 0.0034056669974233955,
+      "rust_exit_status": 0,
+      "rows_match": true,
+      "python_rows": 100,
+      "rust_rows": 100,
+      "rust_stderr": ""
+    }
+  ],
+  "environment": {
+    "platform": "macOS-26.4.1-arm64-arm-64bit-Mach-O",
+    "python": "3.15.0",
+    "rustc": "/Users/fattiger/.cargo/bin/rustc",
+    "cargo": "/Users/fattiger/.cargo/bin/cargo"
+  },
+  "notes": [
+    "Both timings include backend setup and process startup; no warm-cache or startup subtraction is applied.",
+    "This is a simple-slice throughput measurement, not evidence of full Simulator equivalence.",
+    "Unsupported scenarios continue through the Python fallback."
+  ]
+}
